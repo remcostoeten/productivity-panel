@@ -6,7 +6,7 @@
     "author": "Remco Stoeten",
     "scripts": {
         "build": "next build",
-        "start": "next start",
+        "dev": "next dev --turbo",
         "f": "prettier --write \"**/*.{ts,tsx,mdx}\" --cache",
         "db:check": "drizzle-kit check",
         "db:generate": "drizzle-kit generate",
@@ -21,6 +21,8 @@
         "shad": "bunx --bun shadcn-ui@latest add"
     },
     "dependencies": {
+        "@clerk/nextjs": "^5.2.13",
+        "@clerk/themes": "^2.1.17",
         "@radix-ui/react-avatar": "^1.1.0",
         "@radix-ui/react-checkbox": "^1.1.1",
         "@radix-ui/react-dialog": "^1.1.1",
