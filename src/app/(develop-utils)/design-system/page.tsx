@@ -1,3 +1,4 @@
+import React from 'react';
 import ColorShowcase from './components/_all-text';
 
 export default function ColorsPage() {
