@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { useTheme } from 'next-themes';
 import Link from 'next/link';
+import BEZIER_CURVES, { BezierCurve } from 'src/core/helpers/bezier-curves'; // Update path as needed
 
 const getCSSVariableValue = (variableName: string) => {
   if (typeof document !== 'undefined') {
@@ -15,10 +16,12 @@ const getCSSVariableValue = (variableName: string) => {
 
 const ICON_VIEWBOX = '0 0 115.8 46';
 const ANIMATE_LOGO = true;
-const ICON_ANIMATION_DURATION = 2;
-const ICON_ANIMATION_DELAY = 1;
-const DARK_FILL = ' var(--theme-primary)';
-const LIGHT_FILL = 'var(--theme-primary)';
+const ICON_ANIMATION_DURATION = 1;
+const ICON_ANIMATION_DELAY = 0.5;
+const PATH_DELAY_DIFFERENCE = 0.2;
+const LEFT_FILL = 'var(--theme-primary--darker)';
+const RIGHT_FILL = 'var(--theme-primary)';
+const EASING: BezierCurve = BEZIER_CURVES.JUMP;
 
 type LogoProps = {
   full?: boolean;
@@ -41,8 +44,9 @@ const BrandLogo = ({
   const { theme } = useTheme();
   const fill =
     theme === 'light'
-      ? getCSSVariableValue(LIGHT_FILL)
-      : getCSSVariableValue(DARK_FILL);
+      ? getCSSVariableValue(LEFT_FILL)
+      : getCSSVariableValue(RIGHT_FILL);
+  const secondPathFill = getCSSVariableValue(RIGHT_FILL);
   const iconPaths = [
     'M23.885 19.583a13.83 13.83 0 0 0 1.604-3.552c1.474 3.161 4.679 5.36 8.39 5.36v3.219h-.029c-5.098 0-9.25 4.156-9.25 9.265h-3.214c-.01-4.669 2.557-8.743 6.355-10.884a12.485 12.485 0 0 1-3.856-3.408z',
     'M20.499 29.92c-1.426-3.025-4.432-5.156-7.95-5.316-.14.005-.28.005-.426.005V21.37c.14 0 .286.005.426.005a9.175 9.175 0 0 0 6.118-2.697 9.204 9.204 0 0 0 2.707-6.554h3.219c0 3.335-1.296 6.467-3.654 8.825a12.464 12.464 0 0 1-2.673 2.045 12.559 12.559 0 0 1 3.842 3.392A13.93 13.93 0 0 0 20.5 29.92z',
@@ -58,6 +62,26 @@ const BrandLogo = ({
 
   const PathComponent = ANIMATE_LOGO ? motion.path : 'path';
 
+  const path1Animation = {
+    initial: { pathLength: 0, scale: 0, opacity: 0 },
+    animate: { pathLength: 1, scale: 1, opacity: 1 },
+    transition: {
+      duration: ICON_ANIMATION_DURATION,
+      delay: ICON_ANIMATION_DELAY + PATH_DELAY_DIFFERENCE,
+      ease: EASING,
+    },
+  };
+
+  const path2Animation = {
+    initial: { pathLength: 0, scale: 0, opacity: 0 },
+    animate: { pathLength: 1, scale: 1, opacity: 1 },
+    transition: {
+      duration: ICON_ANIMATION_DURATION,
+      delay: ICON_ANIMATION_DELAY,
+      ease: EASING,
+    },
+  };
+
   const svgElement = (
     <svg
       className={className}
@@ -68,24 +92,16 @@ const BrandLogo = ({
     >
       {icon ? (
         <>
-          {iconPaths.map((d, index) => (
-            <PathComponent
-              key={index}
-              d={d}
-              fill={LIGHT_FILL}
-              initial={
-                ANIMATE_LOGO ? { pathLength: 0, scale: 0, opacity: 0 } : {}
-              }
-              animate={
-                ANIMATE_LOGO ? { pathLength: 1, scale: 1, opacity: 1 } : {}
-              }
-              transition={{
-                duration: ICON_ANIMATION_DURATION,
-                delay: ICON_ANIMATION_DELAY,
-                ease: 'easeInOut',
-              }}
-            />
-          ))}
+          <PathComponent
+            d={iconPaths[0]}
+            fill={RIGHT_FILL}
+            {...(ANIMATE_LOGO ? path1Animation : {})}
+          />
+          <PathComponent
+            d={iconPaths[1]}
+            fill={LEFT_FILL}
+            {...(ANIMATE_LOGO ? path2Animation : {})}
+          />
         </>
       ) : (
         <>
