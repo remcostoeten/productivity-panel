@@ -14,8 +14,9 @@
 'use client';
 
 import { UserAuthForm } from '@/app/(marketing)/_components/user-auth-form';
+import BrandLogo from '@/components/theme/BrandLogo';
 import { buttonVariants } from '@/components/ui/button';
-import { cn } from '@/core/helpers/utils';
+import { cn } from '@/core/helpers/cn';
 import { ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
 
@@ -36,9 +37,9 @@ export default function SignUpPage() {
       </Link>
       <div className="mx-auto flex w-full flex-col justify-center gap-6 sm:w-[350px]">
         <div className="flex flex-col gap-2 text-center">
-          {/* <Icons.logo className="mx-auto h-6 w-6" /> */}
+          <BrandLogo />{' '}
           <h1 className="text-2xl font-semibold tracking-tight">
-            Welcome to Nyxb UI
+            Welcome to Remco`s panel.
           </h1>
           <p className="text-muted-foreground text-sm">
             Sign up for an account

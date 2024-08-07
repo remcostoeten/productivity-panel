@@ -1,6 +1,6 @@
 'use client';
 
-import { cn } from '@/core/helpers/utils';
+import { cn } from '@/core/helpers/cn';
 import type * as LabelPrimitive from '@radix-ui/react-label';
 import { Slot } from '@radix-ui/react-slot';
 import * as React from 'react';

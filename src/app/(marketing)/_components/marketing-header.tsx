@@ -1,11 +1,13 @@
 'use client';
 
+import BrandLogo from '@/components/theme/BrandLogo';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { menuItem } from '@/core/data/header-menu-items';
-import { cn } from '@/core/helpers/utils';
+import { cn } from '@/core/helpers/cn';
 import { AnimatePresence, motion } from 'framer-motion';
 import { AlignJustify, XIcon } from 'lucide-react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export function SiteHeader() {
@@ -75,17 +77,34 @@ export function SiteHeader() {
       window.removeEventListener('resize', closeHamburgerNavigation);
     };
   }, [setHamburgerMenuIsOpen]);
+  const pathname = usePathname();
 
   return (
     <>
       <header className="animate-fade-in fixed left-0 top-0 z-50 w-full -translate-y-4 border-b opacity-0 backdrop-blur-md [--animation-delay:600ms]">
         <div className="container flex h-14 items-center justify-between">
           <Link className="text-md flex items-center" href="/">
-            Remco Stoeten
+            <BrandLogo />
           </Link>
+          <nav className="flex justify-center items-center content-center w-full">
+            {menuItem.map((item) => (
+              <Link
+                key={item.id}
+                className={cn(
+                  'mr-6 text-sm hover:scale-105 transition-all duration-500',
+                  pathname === item.href
+                    ? 'text-primary font-semibold'
+                    : 'text-muted-foreground hover:text-foreground',
+                )}
+                href={item.href}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
 
           <div className="ml-auto flex h-full items-center">
-            <Link className="mr-6 text-sm" href="/signin">
+            <Link className="mr-6 text-sm w-max" href="/sign-in">
               Log in
             </Link>
             <Link
@@ -146,9 +165,13 @@ export function SiteHeader() {
                 className="border-grey-dark border-b py-0.5 pl-6 md:border-none"
               >
                 <Link
-                  className={`hover:text-grey flex h-[var(--navigation-height)] w-full items-center text-xl transition-[color,transform] duration-300 md:translate-y-0 md:text-sm md:transition-colors ${
-                    hamburgerMenuIsOpen ? '[&_a]:translate-y-0' : ''
-                  }`}
+                  className={cn(
+                    'flex h-[var(--navigation-height)] w-full items-center text-xl transition-[color,transform] duration-300 md:translate-y-0 md:text-sm md:transition-colors',
+                    pathname === item.href
+                      ? 'text-primary font-semibold'
+                      : 'text-muted-foreground hover:text-foreground',
+                    hamburgerMenuIsOpen ? '[&_a]:translate-y-0' : '',
+                  )}
                   href={item.href}
                 >
                   {item.label}
