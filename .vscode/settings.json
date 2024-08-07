@@ -48,5 +48,6 @@
     "github.copilot.advanced.experimentalFeatures": true,
     "github.copilot.advanced.loggingLevel": "info",
     "github.copilot.advanced.tracking": true
-  }
+  },
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

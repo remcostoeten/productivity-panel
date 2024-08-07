@@ -1,4 +1,4 @@
-import { cn } from '@/core/helpers/utils';
+import { cn } from '@/core/helpers/cn';
 import type { CSSProperties, FC, ReactNode } from 'react';
 
 interface TextShimmerProps {

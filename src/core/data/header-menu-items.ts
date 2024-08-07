@@ -1,22 +1,12 @@
 export const menuItem = [
   {
     id: 1,
-    label: 'Features',
-    href: '/features',
+    label: 'Design System',
+    href: '/design-system',
   },
   {
     id: 2,
-    label: 'Pricing',
-    href: '#',
-  },
-  {
-    id: 3,
-    label: 'Careers',
-    href: '#',
-  },
-  {
-    id: 4,
-    label: 'Contact Us',
-    href: '#',
+    label: 'Blog',
+    href: '/blog',
   },
 ];
