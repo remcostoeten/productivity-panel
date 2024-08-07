@@ -2,7 +2,7 @@
 
 import { buttonVariants } from '@/components/ui/button';
 import Marquee from '@/components/ui/marquee';
-import { cn } from '@/core/helpers/utils';
+import { cn } from '@/core/helpers/cn';
 import { motion, useAnimation, useInView } from 'framer-motion';
 import {
   BarChart,
