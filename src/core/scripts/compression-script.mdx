@@ -1,0 +1,96 @@
+# Image Conversion Script
+
+This script converts images to the WebP format using Python's PIL library. It supports PNG, JPG, and JPEG formats and allows you to specify the quality of the output WebP image. Webp is far smaller size-wise thus optimal for web.
+
+## Installation
+
+Ensure you have the required packages installed. You can install them using pip:
+
+```bash
+pip install pillow pyperclip
+```
+
+## Usage
+
+You can run the script directly from the command line. Below are the usage instructions and examples.
+
+### Basic Usage
+
+To convert a single image to WebP format:
+
+```bash
+python script.py /path/to/your/image.jpg
+```
+
+### Specifying Quality
+
+You can also specify the quality of the output WebP image using the `--quality` parameter (default is 80):
+
+```bash
+python script.py /path/to/your/image.jpg --quality 90
+```
+
+### Converting All Images in the Directory
+
+If you don't provide an input file, the script will process all PNG, JPG, and JPEG files in the current directory:
+
+```bash
+python script.py
+```
+
+### Parameters
+
+- `input_image` (optional): Path to the input image file. If not provided, the script processes all supported images in the current directory.
+- `--quality` (optional): Quality of the output WebP image. Accepts an integer value between 0 and 100. The default value is 80.
+
+## Examples
+
+**Example 1:** Convert a specific image with default quality.
+
+```bash
+python script.py example.jpg
+```
+
+**Example 2:** Convert a specific image with a quality of 60.
+
+```bash
+python script.py example.jpg --quality 60
+```
+
+**Example 3:** Convert all images in the current directory.
+
+```bash
+python script.py
+```
+
+## Output
+
+After conversion, the script provides the following information:
+
+- Input image size
+- Output WebP image size
+- Difference in size
+- Percentage reduction
+
+```bash
+remcostoeten@pop-os:~/development/productivity-panel/src/core/scripts$ python3 compress-images-to-webp.py --quali
+ty 50
+Input Size: 195.24 KB
+Output Size: 48.17 KB
+Difference: 147.06 KB
+Reduction Percentage: 75.33%
+Path of the new image copied to clipboard: input.webp
+```
+
+or
+
+```shell
+python3 compress-images-to-webp.py --input input.jpg --quality 20
+Input Size: 195.24 KB
+Output Size: 35.30 KB
+Difference: 159.94 KB
+Reduction Percentage: 81.92%
+Path of the new image copied to clipboard: /home/remcostoeten/development/productivity-panel/src/core/scripts/input.webp
+```
+
+It also copies the path of the newly created WebP image to the clipboard for easy access: e.g. `open/explorer $CTRL/CMD + V`.
