@@ -1,4 +1,4 @@
-import { TooltipProvider } from '@/components/ui';
+import { Toaster, TooltipProvider } from '@/components/ui';
 import { ClerkProvider } from '@clerk/nextjs';
 import { dark } from '@clerk/themes';
 
@@ -14,7 +14,10 @@ export default function Providers({ children }: PageProps) {
         },
       }}
     >
-      <TooltipProvider>{children}</TooltipProvider>
+      <TooltipProvider>
+        {children}
+        <Toaster />
+      </TooltipProvider>
     </ClerkProvider>
   );
 }
