@@ -1,4 +1,3 @@
-import { SiteFooter } from './_components/marketing-footer';
 import { SiteHeader } from './_components/marketing-header';
 
 interface MarketingLayoutProps {
@@ -12,7 +11,6 @@ export default async function MarketingLayout({
     <>
       <SiteHeader />
       <main className="mx-auto flex-1 overflow-hidden">{children}</main>
-      <SiteFooter />
     </>
   );
 }
