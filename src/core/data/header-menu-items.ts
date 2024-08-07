@@ -6,7 +6,7 @@ export const menuItem = [
   },
   {
     id: 2,
-    label: 'Blog',
-    href: '/blog',
+    label: 'Color UI',
+    href: '/color',
   },
 ];
