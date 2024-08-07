@@ -1,8 +1,9 @@
 'use client';
 
+import Logo from '@/components/theme/Logo';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { menuItem } from '@/core/data/header-menu-items';
-import { cn } from '@/core/helpers/utils';
+import { cn } from '@/core/helpers/cn';
 import { AnimatePresence, motion } from 'framer-motion';
 import { AlignJustify, XIcon } from 'lucide-react';
 import Link from 'next/link';
@@ -81,11 +82,18 @@ export function SiteHeader() {
       <header className="animate-fade-in fixed left-0 top-0 z-50 w-full -translate-y-4 border-b opacity-0 backdrop-blur-md [--animation-delay:600ms]">
         <div className="container flex h-14 items-center justify-between">
           <Link className="text-md flex items-center" href="/">
-            Remco Stoeten
+            <Logo />
           </Link>
+          <nav className="flex justify-center items-center content-center w-full">
+            {menuItem.map((item) => (
+              <Link key={item.id} className="mr-6 text-sm" href={item.href}>
+                {item.label}
+              </Link>
+            ))}
+          </nav>
 
           <div className="ml-auto flex h-full items-center">
-            <Link className="mr-6 text-sm" href="/signin">
+            <Link className="mr-6 text-sm w-max" href="/sign-in">
               Log in
             </Link>
             <Link

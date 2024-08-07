@@ -1,4 +1,4 @@
-import { cn } from '@/core/helpers/utils';
+import { cn } from '@/core/helpers/cn';
 import Providers from '@/core/lib/providers';
 import '@styles/app.scss';
 import type { Metadata } from 'next';

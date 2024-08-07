@@ -1,7 +1,7 @@
 'use client';
 
 import { Button, buttonVariants } from '@/components/ui/button';
-import { cn } from '@/core/helpers/utils';
+import { cn } from '@/core/helpers/cn';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { GitHubLogoIcon } from '@radix-ui/react-icons';
 import { Loader2 } from 'lucide-react';
