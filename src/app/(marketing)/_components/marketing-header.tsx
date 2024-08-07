@@ -1,34 +1,12 @@
 'use client';
 
 import { Button, buttonVariants } from '@/components/ui/button';
+import { menuItem } from '@/core/data/header-menu-items';
 import { cn } from '@/core/helpers/utils';
 import { AnimatePresence, motion } from 'framer-motion';
 import { AlignJustify, XIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-
-const menuItem = [
-  {
-    id: 1,
-    label: 'Features',
-    href: '/features',
-  },
-  {
-    id: 2,
-    label: 'Pricing',
-    href: '#',
-  },
-  {
-    id: 3,
-    label: 'Careers',
-    href: '#',
-  },
-  {
-    id: 4,
-    label: 'Contact Us',
-    href: '#',
-  },
-];
 
 export function SiteHeader() {
   const mobilenavbarVariant = {
