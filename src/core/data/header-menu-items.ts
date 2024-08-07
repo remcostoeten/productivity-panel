@@ -4,4 +4,9 @@ export const menuItem = [
     label: 'Design System',
     href: '/design-system',
   },
+  {
+    id: 2,
+    label: 'Blog',
+    href: '/blog',
+  },
 ];
