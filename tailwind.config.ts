@@ -1,4 +1,3 @@
-import type { Config } from 'tailwindcss';
 import { fontFamily } from 'tailwindcss/defaultTheme';
 
 const config = {
@@ -61,6 +60,15 @@ const config = {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
+      },
+      height: {
+        'marketing-header': 'var(--marketing-header-height)',
+      },
+      margin: {
+        'marketing-header': 'var(--marketing-header-height)',
+      },
+      padding: {
+        'marketing-header': 'var(--marketing-header-height)',
       },
       keyframes: {
         'accordion-down': {

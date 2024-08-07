@@ -11,13 +11,20 @@ export default async function Page() {
       <ClientSection />
       <SphereMask />
       <CallToActionSection />
+      {/* <Particles
+                className="absolute inset-0 -z-10"
+                quantity={25}
+                ease={702}
+                size={0.5}
+                staticity={22}
+            /> */}
       <Particles
-        className="absolute inset-0 -z-10"
+        className="absolute inset-0  opacity-50 -z-10"
         quantity={50}
-        ease={70}
-        size={0.05}
-        staticity={40}
-        color="#ffffff"
+        ease={702}
+        size={0.5}
+        staticity={2}
+        color="#FFFFFF" // All particles will be red
       />
     </>
   );

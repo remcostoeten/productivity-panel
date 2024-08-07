@@ -2,9 +2,16 @@
 
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Copy, PlusCircle } from 'lucide-react';
+import { Copy, Edit, PlusCircle, Trash } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 
 interface ColorItem {
@@ -20,13 +27,30 @@ interface Folder {
 const ImageUploaderAndColorPicker: React.FC = () => {
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [color, setColor] = useState<string | null>(null);
-  const [folders, setFolders] = useState<Folder[]>([
-    { name: 'Default', colors: [] },
-  ]);
-  const [activeFolder, setActiveFolder] = useState<string>('Default');
+  const [folders, setFolders] = useState<Folder[]>([]);
+  const [activeFolder, setActiveFolder] = useState<string>('');
   const [pickingColor, setPickingColor] = useState<boolean>(false);
+  const [newFolderName, setNewFolderName] = useState<string>('');
+  const [editingColor, setEditingColor] = useState<ColorItem | null>(null);
   const imgRef = useRef<HTMLImageElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const savedFolders = localStorage.getItem('colorFolders');
+    if (savedFolders) {
+      const parsedFolders = JSON.parse(savedFolders);
+      setFolders(parsedFolders);
+      setActiveFolder(parsedFolders[0]?.name || '');
+    } else {
+      const defaultFolder = { name: 'Default', colors: [] };
+      setFolders([defaultFolder]);
+      setActiveFolder('Default');
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('colorFolders', JSON.stringify(folders));
+  }, [folders]);
 
   useEffect(() => {
     const handlePaste = (event: ClipboardEvent) => {
@@ -106,7 +130,6 @@ const ImageUploaderAndColorPicker: React.FC = () => {
         const pixelData = ctx.getImageData(x, y, 1, 1).data;
         const hoverColor = `rgb(${pixelData[0]}, ${pixelData[1]}, ${pixelData[2]})`;
 
-        // Update cursor style to show color
         event.currentTarget.style.cursor = `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="${hoverColor}" stroke="white" stroke-width="4"/></svg>') 16 16, auto`;
       }
     }
@@ -166,11 +189,50 @@ const ImageUploaderAndColorPicker: React.FC = () => {
   };
 
   const addFolder = () => {
-    const folderName = prompt('Enter folder name:');
-    if (folderName && !folders.some((folder) => folder.name === folderName)) {
-      setFolders([...folders, { name: folderName, colors: [] }]);
-      setActiveFolder(folderName);
+    if (
+      newFolderName &&
+      !folders.some((folder) => folder.name === newFolderName)
+    ) {
+      setFolders([...folders, { name: newFolderName, colors: [] }]);
+      setActiveFolder(newFolderName);
+      setNewFolderName('');
     }
+  };
+
+  const deleteFolder = (folderName: string) => {
+    setFolders(folders.filter((folder) => folder.name !== folderName));
+    if (activeFolder === folderName) {
+      setActiveFolder(folders[0]?.name || '');
+    }
+  };
+
+  const deleteColor = (folderName: string, colorToDelete: ColorItem) => {
+    setFolders(
+      folders.map((folder) =>
+        folder.name === folderName
+          ? {
+              ...folder,
+              colors: folder.colors.filter((c) => c !== colorToDelete),
+            }
+          : folder,
+      ),
+    );
+  };
+
+  const startEditingColor = (color: ColorItem) => {
+    setEditingColor(color);
+  };
+
+  const saveEditedColor = (oldColor: ColorItem, newCssVar: string) => {
+    setFolders(
+      folders.map((folder) => ({
+        ...folder,
+        colors: folder.colors.map((c) =>
+          c === oldColor ? { ...c, cssVar: newCssVar } : c,
+        ),
+      })),
+    );
+    setEditingColor(null);
   };
 
   const copyToClipboard = (text: string) => {
@@ -178,7 +240,7 @@ const ImageUploaderAndColorPicker: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="p-4">
       <Input
         type="file"
         accept="image/*"
@@ -222,9 +284,24 @@ const ImageUploaderAndColorPicker: React.FC = () => {
                 {folder.name}
               </TabsTrigger>
             ))}
-            <Button variant="ghost" size="sm" onClick={addFolder}>
-              <PlusCircle className="w-4 h-4" />
-            </Button>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="ghost" size="sm">
+                  <PlusCircle className="w-4 h-4" />
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Add New Folder</DialogTitle>
+                </DialogHeader>
+                <Input
+                  value={newFolderName}
+                  onChange={(e) => setNewFolderName(e.target.value)}
+                  placeholder="Folder name"
+                />
+                <Button onClick={addFolder}>Add Folder</Button>
+              </DialogContent>
+            </Dialog>
           </TabsList>
           {folders.map((folder) => (
             <TabsContent key={folder.name} value={folder.name}>
@@ -232,30 +309,65 @@ const ImageUploaderAndColorPicker: React.FC = () => {
                 {folder.colors.map((colorItem, index) => (
                   <Card
                     key={index}
-                    className="w-32 h-32 flex flex-col items-center justify-center relative"
+                    className="w-48 h-48 flex flex-col items-center justify-center relative"
                     style={{ backgroundColor: colorItem.color }}
                   >
                     <span className="text-xs font-mono mb-1">
                       {colorItem.color}
                     </span>
-                    <span className="text-xs font-mono mb-1">
-                      {colorItem.cssVar}
-                    </span>
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      className="absolute top-1 right-1"
-                      onClick={() =>
-                        copyToClipboard(
-                          `${colorItem.color} ${colorItem.cssVar}`,
-                        )
-                      }
-                    >
-                      <Copy className="w-4 h-4" />
-                    </Button>
+                    {editingColor === colorItem ? (
+                      <Input
+                        value={colorItem.cssVar}
+                        onChange={(e) =>
+                          saveEditedColor(colorItem, e.target.value)
+                        }
+                        onBlur={() => setEditingColor(null)}
+                        className="text-xs font-mono mb-1 w-full"
+                      />
+                    ) : (
+                      <span className="text-xs font-mono mb-1">
+                        {colorItem.cssVar}
+                      </span>
+                    )}
+                    <div className="absolute top-1 right-1 flex">
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        onClick={() =>
+                          copyToClipboard(
+                            `${colorItem.color} ${colorItem.cssVar}`,
+                          )
+                        }
+                      >
+                        <Copy className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        onClick={() => startEditingColor(colorItem)}
+                      >
+                        <Edit className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        onClick={() => deleteColor(folder.name, colorItem)}
+                      >
+                        <Trash className="w-4 h-4" />
+                      </Button>
+                    </div>
                   </Card>
                 ))}
               </div>
+              {folder.name !== 'Default' && (
+                <Button
+                  variant="destructive"
+                  onClick={() => deleteFolder(folder.name)}
+                  className="mt-4"
+                >
+                  Delete Folder
+                </Button>
+              )}
             </TabsContent>
           ))}
         </Tabs>
@@ -263,7 +375,7 @@ const ImageUploaderAndColorPicker: React.FC = () => {
 
       {color && (
         <Card
-          className="mt-4 w-32 h-32 flex flex-col items-center justify-center relative"
+          className="mt-4 w-48 h-48 flex flex-col items-center justify-center relative"
           style={{ backgroundColor: color }}
         >
           <span className="text-xs font-mono mb-1">{color}</span>
