@@ -7,7 +7,7 @@ This script converts images to the WebP format using Python's PIL library. It su
 Ensure you have the required packages installed. You can install them using pip:
 
 ```bash
-pip install pillow pyperclip 
+pip install pillow pyperclip
 ```
 
 ## Usage
@@ -66,6 +66,7 @@ python script.py
 ## Output
 
 After conversion, the script provides the following information:
+
 - Input image size
 - Output WebP image size
 - Difference in size
@@ -79,8 +80,10 @@ Output Size: 48.17 KB
 Difference: 147.06 KB
 Reduction Percentage: 75.33%
 Path of the new image copied to clipboard: input.webp
-````
+```
+
 or
+
 ```shell
 python3 compress-images-to-webp.py --input input.jpg --quality 20
 Input Size: 195.24 KB
@@ -90,6 +93,4 @@ Reduction Percentage: 81.92%
 Path of the new image copied to clipboard: /home/remcostoeten/development/productivity-panel/src/core/scripts/input.webp
 ```
 
-
 It also copies the path of the newly created WebP image to the clipboard for easy access: e.g. `open/explorer $CTRL/CMD + V`.
-
