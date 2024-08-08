@@ -16,5 +16,6 @@ export * from './popover';
 export * from './sonner';
 export * from './sphere-mask';
 export * from './switch';
+export * from './tabs';
 export * from './text-shimmer';
 export * from './tooltip';

@@ -1,27 +1,44 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
 import {
+  Button,
   Dialog,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { TrashIcon } from 'lucide-react';
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+  Input,
+  Switch,
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui';
+import CodeHighlight from '@/components/ui/CodeHighlight/CodeHighlight';
+import { DotsVerticalIcon } from '@radix-ui/react-icons';
+import { CopyIcon, EditIcon, MoveIcon, TrashIcon } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import FileUploadUi from '../color/_components/FileUploadUi';
 
-interface ColorItem {
+type ColorItem = {
   color: string;
   cssVar: string;
-}
+};
 
-interface Folder {
+type Folder = {
   name: string;
+  description?: string;
   colors: ColorItem[];
-}
+};
 
 export default function Component() {
   const [imageSrc, setImageSrc] = useState<string | null>(null);
@@ -29,11 +46,14 @@ export default function Component() {
   const [folders, setFolders] = useState<Folder[]>([]);
   const [activeFolder, setActiveFolder] = useState<string>('');
   const [pickingColor, setPickingColor] = useState<boolean>(false);
-  const [newFolderName, setNewFolderName] = useState<string>('');
+  const [newFolderName, setNewFolderName] = useState<string>('Folder name');
   const [isAddFolderDialogOpen, setIsAddFolderDialogOpen] = useState(false);
   const [editingColor, setEditingColor] = useState<ColorItem | null>(null);
   const [editedCssVar, setEditedCssVar] = useState('');
   const [generatedCode, setGeneratedCode] = useState<string>('');
+  const [tailwindCode, setTailwindCode] = useState<string>('');
+  const [newFolderDescription, setNewFolderDescription] = useState<string>('');
+  const [useCssVariables, setUseCssVariables] = useState(true);
   const imgRef = useRef<HTMLImageElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -48,11 +68,21 @@ export default function Component() {
       setFolders([defaultFolder]);
       setActiveFolder('Default');
     }
+
+    const savedImageSrc = localStorage.getItem('uploadedImage');
+    if (savedImageSrc) {
+      setImageSrc(savedImageSrc);
+    }
   }, []);
 
   useEffect(() => {
     localStorage.setItem('colorFolders', JSON.stringify(folders));
-  }, [folders]);
+    if (imageSrc) {
+      localStorage.setItem('uploadedImage', imageSrc);
+    } else {
+      localStorage.removeItem('uploadedImage');
+    }
+  }, [folders, imageSrc]);
 
   useEffect(() => {
     const handlePaste = (event: ClipboardEvent) => {
@@ -63,7 +93,13 @@ export default function Component() {
             const blob = items[i].getAsFile();
             if (blob) {
               const reader = new FileReader();
-              reader.onload = (e) => setImageSrc(e.target?.result as string);
+              reader.onload = (e) => {
+                setImageSrc(e.target?.result as string);
+                localStorage.setItem(
+                  'uploadedImage',
+                  e.target?.result as string,
+                );
+              };
               reader.readAsDataURL(blob);
             }
           }
@@ -79,7 +115,10 @@ export default function Component() {
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = (e) => setImageSrc(e.target?.result as string);
+      reader.onload = (e) => {
+        setImageSrc(e.target?.result as string);
+        localStorage.setItem('uploadedImage', e.target?.result as string);
+      };
       reader.readAsDataURL(file);
     }
   };
@@ -133,6 +172,7 @@ export default function Component() {
         );
 
         setColor(pickedColor);
+        copyToClipboard(pickedColor);
       }
     }
   };
@@ -213,9 +253,13 @@ export default function Component() {
       newFolderName &&
       !folders.some((folder) => folder.name === newFolderName)
     ) {
-      setFolders([...folders, { name: newFolderName, colors: [] }]);
+      setFolders([
+        ...folders,
+        { name: newFolderName, description: newFolderDescription, colors: [] },
+      ]);
       setActiveFolder(newFolderName);
-      setNewFolderName('');
+      setNewFolderName('Folder name');
+      setNewFolderDescription('');
       setIsAddFolderDialogOpen(false);
     }
   };
@@ -300,39 +344,87 @@ export default function Component() {
 
     folders.forEach((folder) => {
       folder.colors.forEach((colorItem) => {
-        tailwindColors += `      '${colorItem.cssVar.slice(2)}': '${colorItem.color}',\n`;
+        if (useCssVariables) {
+          tailwindColors += `      '${colorItem.cssVar.slice(2)}': 'var(${colorItem.cssVar})',\n`;
+        } else {
+          tailwindColors += `      '${colorItem.cssVar.slice(2)}': '${colorItem.color}',\n`;
+        }
       });
     });
 
     const rootCode = `:root {\n${cssVars}}`;
     const tailwindConfigCode = `extend: {\n    colors: {\n${tailwindColors}    },\n  },`;
 
-    setGeneratedCode(
-      `/* CSS Variables */\n${rootCode}\n\n/* Tailwind CSS Configuration */\n${tailwindConfigCode}`,
-    );
+    setGeneratedCode(`${rootCode}\n`);
+    setTailwindCode(`${tailwindConfigCode}`);
   };
 
+  function ButtonBar() {
+    return (
+      <div className="flex items-center gap-2">
+        <Button
+          variant={pickingColor ? 'destructive' : 'outline'}
+          onClick={() => setPickingColor(!pickingColor)}
+        >
+          {pickingColor ? 'Cancel' : 'Pick Color'}
+        </Button>
+        <Button
+          variant="outline"
+          onClick={() => setIsAddFolderDialogOpen(true)}
+        >
+          Add Folder
+        </Button>
+        <Button variant="outline" onClick={generateCode}>
+          Generate Code
+        </Button>
+        <div className="flex flex-col-reverse gap-2">
+          <Switch
+            variant="outline"
+            size="icon"
+            onCheckedChange={() => setUseCssVariables(!useCssVariables)}
+          >
+            {useCssVariables ? (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            ) : (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            )}
+          </Switch>
+          <label className="text-xs text-[#262626] ">Use CSS Variables</label>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="w-full max-w-4xl mx-auto p-6 bg-background text-foreground">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">Color Picker</h1>
-        <div className="flex items-center gap-2">
-          <Button
-            variant={pickingColor ? 'destructive' : 'outline'}
-            onClick={() => setPickingColor(!pickingColor)}
-          >
-            {pickingColor ? 'Cancel' : 'Pick Color'}
-          </Button>
-          <Button
-            variant="outline"
-            onClick={() => setIsAddFolderDialogOpen(true)}
-          >
-            Add Folder
-          </Button>
-          <Button variant="outline" onClick={generateCode}>
-            Generate Code
-          </Button>
-        </div>
+        <ButtonBar />
       </div>
       {isAddFolderDialogOpen && (
         <Dialog
@@ -352,8 +444,16 @@ export default function Component() {
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
                       addFolder();
+                    } else if (e.key === 'Escape') {
+                      setIsAddFolderDialogOpen(false);
                     }
                   }}
+                />
+                <textarea
+                  className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  placeholder="Description (optional)"
+                  value={newFolderDescription}
+                  onChange={(e) => setNewFolderDescription(e.target.value)}
                 />
               </div>
             </div>
@@ -411,95 +511,174 @@ export default function Component() {
             <FileUploadUi handleFileUpload={handleFileUpload} />
           )}
         </div>
-        <div className="bg-[#161717] p-4 rounded-lg shadow-md">
-          <h2 className="text-lg font-bold mb-4">Color Folders</h2>
-          <div className="grid gap-4">
-            {folders.map((folder) => (
-              <div key={folder.name} className="p-4 rounded-lg">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-md font-bold">{folder.name}</h3>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => deleteFolder(folder.name)}
-                  >
-                    <TrashIcon className="w-5 h-5 text-destructive" />
-                  </Button>
-                </div>
-                <div className="grid grid-cols-3 gap-4">
-                  {folder.colors.map((colorItem) => (
-                    <div
-                      key={`${colorItem.color}-${colorItem.cssVar}`}
-                      className="bg-[var(--color-card)] p-2 rounded-lg flex flex-col items-center justify-center"
-                    >
-                      <div
-                        className="w-12 h-12 rounded-full"
-                        style={{ backgroundColor: colorItem.color }}
-                      />
-                      <div className="text-xs mt-2 text-muted-foreground">
-                        {editingColor === colorItem ? (
-                          <Input
-                            value={editedCssVar}
-                            onChange={(e) => setEditedCssVar(e.target.value)}
-                            onKeyDown={(e) => {
-                              if (e.key === 'Enter') {
-                                saveEditedColor();
-                              }
-                            }}
-                            className="w-24 text-xs px-2 py-1 rounded-md bg-muted text-muted-foreground"
-                            autoFocus
-                          />
-                        ) : (
-                          <>
-                            <div>{colorItem.cssVar}</div>
-                            <div className="text-xs">{colorItem.color}</div>
-                          </>
-                        )}
-                      </div>
-                      <div className="mt-2 space-x-2">
-                        <Button
-                          size="icon"
-                          variant="ghost"
-                          onClick={() => copyToClipboard(colorItem.cssVar)}
-                        >
-                          Copy
-                        </Button>
-                        <Button
-                          size="icon"
-                          variant="ghost"
-                          onClick={() => startEditingColor(colorItem)}
-                        >
-                          Edit
-                        </Button>
-                        <Button
-                          size="icon"
-                          variant="ghost"
-                          onClick={() => openMoveColorDialog(colorItem)}
-                        >
-                          Move
-                        </Button>
-                        <Button
-                          size="icon"
-                          variant="ghost"
-                          onClick={() => deleteColor(folder.name, colorItem)}
-                        >
-                          <TrashIcon className="w-4 h-4 text-destructive" />
-                        </Button>
-                      </div>
+
+        <div className="flex flex-col gap-4">
+          {folders.length !== 0 ? (
+            <h2 className="text-lg font-bold mb-4">Color Folders</h2>
+          ) : (
+            <div className="h-[28px] mb-4" />
+          )}
+          <div className="p-4 bg-[#161717] rounded-lg shadow-md">
+            <div className="grid gap-4 w-full">
+              {folders.map((folder) => (
+                <div
+                  key={folder.name}
+                  className="p-4 !pb-0 vercel-card rounded-lg"
+                >
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex flex-col">
+                      <h3 className="text-md font-bold">{folder.name}</h3>
+                      <p className="text-neutral-500 text-xs">
+                        {folder.description}
+                      </p>
                     </div>
-                  ))}
+                    <Tooltip delayDuration={55}>
+                      <TooltipTrigger asChild>
+                        <Button
+                          className="flex items-center justify-center group"
+                          variant="outline"
+                          size="icon"
+                          onClick={() => deleteFolder(folder.name)}
+                        >
+                          <TrashIcon className="w-4 h-4 text-gray-500 group-hover:text-red-500 transition-colors duration-200" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>
+                          Remove the folder <i>'{folder.name}'</i>
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-4">
+                    {folder.colors.map((colorItem) => (
+                      <div
+                        key={`${colorItem.color}-${colorItem.cssVar}`}
+                        className="relative bg-[var(--color-card)] p-2 rounded-lg flex flex-col items-center justify-center"
+                      >
+                        <div
+                          className="w-12 h-12 rounded-full"
+                          style={{
+                            backgroundColor: colorItem.color,
+                          }}
+                        />
+                        <div className="relative text-xs mt-2 text-muted-foreground">
+                          {editingColor === colorItem ? (
+                            <Input
+                              value={editedCssVar}
+                              onChange={(e) => setEditedCssVar(e.target.value)}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                  saveEditedColor();
+                                }
+                              }}
+                              className="w-24 text-xs px-2 py-1 rounded-md bg-muted text-muted-foreground"
+                              autoFocus
+                            />
+                          ) : (
+                            <>
+                              <div>{colorItem.cssVar}</div>
+                              <div className="text-xs">{colorItem.color}</div>
+                            </>
+                          )}
+                        </div>
+                        <div className="absolute top-0 right-0">
+                          <DropdownMenu>
+                            <DropdownMenuTrigger>
+                              <Button
+                                className="bg-black bg-opacity-10 rounded-bl-full"
+                                size="icon"
+                                variant="ghost"
+                              >
+                                <DotsVerticalIcon />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent>
+                              <DropdownMenuLabel>
+                                Color operations
+                              </DropdownMenuLabel>
+                              <DropdownMenuSeparator />
+                              <DropdownMenuItem>
+                                <Button
+                                  size="icon"
+                                  variant="outline"
+                                  onClick={() =>
+                                    copyToClipboard(colorItem.cssVar)
+                                  }
+                                >
+                                  <CopyIcon width={16} />
+                                </Button>
+                              </DropdownMenuItem>
+                              <DropdownMenuItem>
+                                <Button
+                                  size="icon"
+                                  variant="outline"
+                                  onClick={() => startEditingColor(colorItem)}
+                                >
+                                  <EditIcon width={16} />
+                                </Button>
+                              </DropdownMenuItem>
+                              <DropdownMenuItem>
+                                <Button
+                                  size="icon"
+                                  variant="outline"
+                                  onClick={() => openMoveColorDialog(colorItem)}
+                                >
+                                  <MoveIcon width={16} />
+                                </Button>
+                              </DropdownMenuItem>
+                              <DropdownMenuItem>
+                                <Button
+                                  size="icon"
+                                  variant="outline"
+                                  onClick={() =>
+                                    deleteColor(folder.name, colorItem)
+                                  }
+                                >
+                                  <TrashIcon className="w-4 h-4 text-destructive" />
+                                </Button>
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </div>
       {generatedCode && (
-        <div className="mt-6 p-4 bg-card rounded-lg shadow-md">
-          <h2 className="text-lg font-bold mb-4">Generated Code</h2>
-          <pre className="whitespace-pre-wrap">{generatedCode}</pre>
-        </div>
-      )}{' '}
+        <Tabs defaultValue="tailwind">
+          <TabsList>
+            <TabsTrigger value="tailwind">Tailwind Config</TabsTrigger>
+            <TabsTrigger value="variables">CSS Variables</TabsTrigger>
+          </TabsList>
+          <TabsContent value="tailwind">
+            <CodeHighlight
+              language="tsx"
+              title="tailwind.config.js"
+              fileIcon=""
+              avatarSrc=""
+            >
+              {tailwindCode}
+            </CodeHighlight>
+          </TabsContent>
+          <TabsContent value="variables">
+            <CodeHighlight
+              language="css"
+              title="variables.css"
+              fileIcon=""
+              avatarSrc=""
+            >
+              {generatedCode}
+            </CodeHighlight>
+          </TabsContent>
+        </Tabs>
+      )}
       {isMoveColorDialogOpen && (
         <Dialog
           open={isMoveColorDialogOpen}
