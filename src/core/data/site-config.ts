@@ -6,6 +6,6 @@ export const siteConfig = {
     "Manage your personal projects with Remco Stoeten's All-in-One Dashboard.",
   name: 'Remco Stoeten',
   github: 'https://github.com/remcostoeten',
-  repository:
-    'https://github.com/remcostoeten/remcostoeten-all-in-one-dashboard',
+  deployUrl: 'https://productivity.remcostoeten.com',
+  repository: 'hhttps://github.com/remcostoeten/productivity-panel',
 };

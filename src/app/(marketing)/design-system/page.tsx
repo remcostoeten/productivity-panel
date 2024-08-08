@@ -2,8 +2,8 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import React from 'react';
+import ColorConfigPickerPage from '../color-tool/page';
 import ColorShowcase from './components/_all-text';
-import ImageUploaderAndColorPicker from './components/_ImageUploaderAndColorPicker';
 import LogoShowcase from './components/LogoShowCase';
 
 interface TabContentProps {
@@ -22,8 +22,8 @@ const DesignSystemShowcase: React.FC = () => {
     { id: 'logo', label: 'Logo Showcase', component: <LogoShowcase /> },
     {
       id: 'uploader',
-      label: 'Image Uploader & Color Picker',
-      component: <ImageUploaderAndColorPicker />,
+      label: 'Image color picker & config creator',
+      component: <ColorConfigPickerPage />,
     },
     { id: 'colors', label: 'Color Showcase', component: <ColorShowcase /> },
   ];

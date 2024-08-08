@@ -1,8 +1,9 @@
+import ThemeToggle from '@/components/theme/ThemeToggle';
 import { cn } from '@/core/helpers/cn';
+import { ThemeProvider } from '@/core/lib/ next-theme-provider';
 import Providers from '@/core/lib/providers';
 import '@styles/app.scss';
 import type { Metadata } from 'next';
-import { ThemeProvider } from 'next-themes';
 import { Inter as FontSans } from 'next/font/google';
 
 const fontSans = FontSans({
@@ -14,17 +15,13 @@ export const metadata: Metadata = {
   description: 'The startup template from Remco Stoeten',
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  return (
+export default function RootLayout({ children }: PageProps) {
+return (
     <Providers>
       <html lang="en" suppressHydrationWarning>
         <body
           className={cn(
-            'bg-background min-h-screen font-sans antialiased',
+            'bg-background min-h-screen font-sans transition-colors duration-500 antialiased',
             fontSans.variable,
           )}
         >
@@ -34,7 +31,8 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             {children}
-          </ThemeProvider>
+            <ThemeToggle />
+          </ThemeProvider>                                                            
         </body>
       </html>
     </Providers>

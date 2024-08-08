@@ -11,9 +11,10 @@ import { Button } from '../button';
 
 type FileHeaderProps = {
   title?: string;
+  onCopy: () => void;
 };
 
-export default function FileHeader({ title }: FileHeaderProps) {
+export default function FileHeader({ title, onCopy }: FileHeaderProps) {
   if (typeof title !== 'string') {
     console.error('Invalid title prop');
     return null;
@@ -41,7 +42,7 @@ export default function FileHeader({ title }: FileHeaderProps) {
         <Icon />
         <div className="my-auto">{title}</div>
       </div>
-      <Button size="icon" variant="ghost">
+      <Button size="icon" variant="ghost" onClick={onCopy}>
         <CopyIcon width={14} />
       </Button>
     </header>
