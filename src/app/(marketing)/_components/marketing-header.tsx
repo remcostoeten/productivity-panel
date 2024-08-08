@@ -1,7 +1,7 @@
 'use client';
 
 import BrandLogo from '@/components/theme/BrandLogo';
-import { Button, buttonVariants } from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import { menuItem } from '@/core/data/header-menu-items';
 import { cn } from '@/core/helpers/cn';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -100,23 +100,14 @@ export function SiteHeader() {
               >
                 {item.label}
               </Link>
-            ))}
+            ))} 
           </nav>
 
           <div className="ml-auto flex h-full items-center">
             <Link className="mr-6 text-sm w-max" href="/sign-in">
               Log in
             </Link>
-            <Link
-              className={cn(
-                buttonVariants({ variant: 'secondary' }),
-                'mr-6 text-sm',
-              )}
-              href="/sign-up"
-            >
-              Sign up
-            </Link>
-          </div>
+        </div>
           <Button
             className="ml-6 md:hidden"
             onClick={() => setHamburgerMenuIsOpen((open) => !open)}

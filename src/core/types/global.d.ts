@@ -3,9 +3,10 @@ import { ReactNode } from 'react';
 
 declare global {
   type PageProps = {
-    children: ReactNode;
+    children?: ReactNode;
   };
 }
 
 // It's important to include this line to make it a module
-export {};
+export { };
+
