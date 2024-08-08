@@ -18,4 +18,5 @@ export * from './sphere-mask';
 export * from './switch';
 export * from './tabs';
 export * from './text-shimmer';
+export * from './textarea';
 export * from './tooltip';
