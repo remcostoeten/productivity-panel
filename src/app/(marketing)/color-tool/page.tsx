@@ -14,17 +14,21 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
   Input,
-  Switch,
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
+  Textarea,
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui';
 import CodeHighlight from '@/components/ui/CodeHighlight/CodeHighlight';
-import { DotsVerticalIcon } from '@radix-ui/react-icons';
+import NativeSwitch from '@/components/ui/NativeSwitch';
+import {
+  DotsVerticalIcon,
+  QuestionMarkCircledIcon,
+} from '@radix-ui/react-icons';
 import { CopyIcon, EditIcon, MoveIcon, TrashIcon } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import FileUploadUi from '../color/_components/FileUploadUi';
@@ -40,7 +44,7 @@ type Folder = {
   colors: ColorItem[];
 };
 
-export default function Component() {
+export default function ColorConfigPickerPage() {
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [color, setColor] = useState<string | null>(null);
   const [folders, setFolders] = useState<Folder[]>([]);
@@ -56,6 +60,7 @@ export default function Component() {
   const [useCssVariables, setUseCssVariables] = useState(true);
   const imgRef = useRef<HTMLImageElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [cursorScale, setCursorScale] = useState(1);
 
   useEffect(() => {
     const savedFolders = localStorage.getItem('colorFolders');
@@ -126,7 +131,7 @@ export default function Component() {
   const [isMoveColorDialogOpen, setIsMoveColorDialogOpen] = useState(false);
   const [colorToMove, setColorToMove] = useState<ColorItem | null>(null);
   const [selectedTargetFolder, setSelectedTargetFolder] = useState<string>('');
-
+  const [hoverColor, setHoverColor] = useState('rgba(0, 0, 0, 0.5)');
   const openMoveColorDialog = (colorItem: ColorItem) => {
     setColorToMove(colorItem);
     setIsMoveColorDialogOpen(true);
@@ -139,10 +144,17 @@ export default function Component() {
 
   const handleMoveColor = () => {
     if (colorToMove && selectedTargetFolder) {
-      moveColor(activeFolder, selectedTargetFolder, colorToMove);
+      moveColor(activeFolder, selectedTargetFolder, colorToMove, color);
       closeMoveColorDialog();
     }
   };
+
+  function handleClearLocalStorage() {
+    localStorage.clear();
+    setFolders([]);
+    setActiveFolder('');
+    setImageSrc(null);
+  }
 
   const handleColorPick = (event: React.MouseEvent<HTMLImageElement>) => {
     if (pickingColor && imgRef.current && canvasRef.current) {
@@ -155,7 +167,9 @@ export default function Component() {
       if (ctx) {
         ctx.drawImage(imgRef.current, 0, 0, canvas.width, canvas.height);
         const pixelData = ctx.getImageData(x, y, 1, 1).data;
-        const pickedColor = `#${pixelData[0].toString(16).padStart(2, '0')}${pixelData[1].toString(16).padStart(2, '0')}${pixelData[2].toString(16).padStart(2, '0')}`;
+        const pickedColor = pixelData
+          ? `#${pixelData[0]?.toString(16).padStart(2, '0')}${pixelData[1]?.toString(16).padStart(2, '0')}${pixelData[2]?.toString(16).padStart(2, '0')}`
+          : '';
 
         const cssVarName = `--picker-${generateColorName(pickedColor)}`;
         const newColorItem: ColorItem = {
@@ -190,8 +204,17 @@ export default function Component() {
         const pixelData = ctx.getImageData(x, y, 1, 1).data;
         const hoverColor = `rgb(${pixelData[0]}, ${pixelData[1]}, ${pixelData[2]})`;
 
-        event.currentTarget.style.cursor = `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="${hoverColor}" stroke="white" stroke-width="4"/></svg>') 16 16, auto`;
+        event.currentTarget.style.cursor = `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="${64 * cursorScale}" height="${64 * cursorScale}" viewBox="0 0 64 64"><g transform="translate(32, 32)"><circle r="${28 * cursorScale}" fill="${hoverColor}" stroke="white" stroke-width="${6 * cursorScale}"/><line x1="-32" x2="32" y1="0" y2="0" stroke="white" stroke-width="${4 * cursorScale}"/><line x1="0" x2="0" y1="-32" y2="32" stroke="white" stroke-width="${4 * cursorScale}"/></g></svg>') ${32 * cursorScale} ${32 * cursorScale}, auto`;
       }
+    }
+  };
+
+  const handleScroll = (event: React.WheelEvent<HTMLImageElement>) => {
+    if (pickingColor) {
+      const delta = Math.sign(event.deltaY);
+      setCursorScale((prevScale) =>
+        Math.max(0.5, Math.min(2, prevScale + delta * 0.1)),
+      );
     }
   };
 
@@ -209,7 +232,7 @@ export default function Component() {
     }
     const hue = rgbToHsl(r, g, b)[0];
     const hueNames = ['red', 'orange', 'yellow', 'green', 'blue', 'purple'];
-    return hueNames[Math.floor(hue / 60)];
+    return hueNames[Math.floor(hue / 60)] || '';
   };
 
   const rgbToHsl = (
@@ -315,6 +338,7 @@ export default function Component() {
     fromFolder: string,
     toFolder: string,
     colorToMove: ColorItem,
+    currentColor: string | null,
   ) => {
     setFolders((prevFolders) =>
       prevFolders.map((folder) => {
@@ -325,7 +349,13 @@ export default function Component() {
           };
         }
         if (folder.name === toFolder) {
-          return { ...folder, colors: [...folder.colors, colorToMove] };
+          return {
+            ...folder,
+            colors: [
+              ...folder.colors,
+              { ...colorToMove, color: currentColor || colorToMove.color },
+            ],
+          };
         }
         return folder;
       }),
@@ -361,7 +391,10 @@ export default function Component() {
 
   function ButtonBar() {
     return (
-      <div className="flex items-center gap-2">
+      <div className="flex items-end gap-2">
+        <Button variant="outline" onClick={handleClearLocalStorage}>
+          Clear Local Storage
+        </Button>
         <Button
           variant={pickingColor ? 'destructive' : 'outline'}
           onClick={() => setPickingColor(!pickingColor)}
@@ -377,53 +410,56 @@ export default function Component() {
         <Button variant="outline" onClick={generateCode}>
           Generate Code
         </Button>
-        <div className="flex flex-col-reverse gap-2">
-          <Switch
-            variant="outline"
-            size="icon"
-            onCheckedChange={() => setUseCssVariables(!useCssVariables)}
-          >
-            {useCssVariables ? (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-6 h-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-            ) : (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-6 h-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-            )}
-          </Switch>
-          <label className="text-xs text-[#262626] ">Use CSS Variables</label>
+        <div className="flex flex-row-reverse items-center gap-2">
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-medium text-muted-foreground">
+              {useCssVariables === true ? 'CSS vars' : 'HEX value'}
+            </span>
+            <Tooltip delayDuration={55}>
+              <TooltipTrigger asChild>
+                <QuestionMarkCircledIcon className="w-5 h-5 text-muted-foreground" />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>
+                  {useCssVariables === true ? (
+                    <>
+                      Use CSS variables for Tailwind config creation e.g.:{' '}
+                      <br />
+                      <code>colorPicked: &#39;(var(--variableName))&#39;,</code>
+                    </>
+                  ) : (
+                    <>
+                      Use HEX values for Tailwind config creation e.g.: <br />
+                      <code>colorPicked: &#39;#FEFEFE&#39;,</code>
+                    </>
+                  )}
+                </p>
+              </TooltipContent>
+            </Tooltip>
+          </div>
+          <NativeSwitch
+            className="-translate-y-2"
+            size="m"
+            defaultChecked={useCssVariables}
+            onChange={(value) => setUseCssVariables(value)}
+          />
         </div>
       </div>
     );
   }
   return (
     <div className="w-full max-w-4xl mx-auto p-6 bg-background text-foreground">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">Color Picker</h1>
+      <div className="flex flex-col -center justify-between mb-6">
+        <div className="flex flex-col">
+          <h1 className="text-2xl font-bold pb-2">Color Picker</h1>
+          <p className="text-muted-foreground pb-4 border-b border-neutral-700 mb-8">
+            The Color Picker feature streamlines color management with an
+            intuitive interface for uploading images, picking colors, and
+            generating CSS variables. Users can organize colors into folders,
+            manipulate them, and get code snippets for easy integration. All
+            data is saved locally for easy access.
+          </p>
+        </div>
         <ButtonBar />
       </div>
       {isAddFolderDialogOpen && (
@@ -449,7 +485,7 @@ export default function Component() {
                     }
                   }}
                 />
-                <textarea
+                <Textarea
                   className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                   placeholder="Description (optional)"
                   value={newFolderDescription}
@@ -483,6 +519,10 @@ export default function Component() {
                 className="w-full rounded-lg cursor-crosshair"
                 onClick={handleColorPick}
                 onMouseMove={handleMouseMove}
+                onWheel={handleScroll}
+                style={{
+                  cursor: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="${64 * cursorScale}" height="${64 * cursorScale}" viewBox="0 0 64 64"><g transform="translate(32, 32)"><circle r="${28 * cursorScale}" fill="${hoverColor}" stroke="white" stroke-width="${6 * cursorScale}"/><line x1="-32" x2="32" y1="0" y2="0" stroke="white" stroke-width="${4 * cursorScale}"/><line x1="0" x2="0" y1="-32" y2="32" stroke="white" stroke-width="${4 * cursorScale}"/></g></svg>') ${32 * cursorScale} ${32 * cursorScale}, auto`,
+                }}
               />
               <canvas
                 ref={canvasRef}
@@ -491,20 +531,24 @@ export default function Component() {
                 height={imgRef.current?.height}
               />
               {pickingColor && (
-                <div className="mt-4">
-                  <h3 className="text-lg font-semibold mb-2">
-                    Last Picked Color
-                  </h3>
-                  {color && (
-                    <div className="flex items-center space-x-2">
-                      <div
-                        className="w-8 h-8 rounded-full border border-gray-300"
-                        style={{ backgroundColor: color }}
-                      ></div>
-                      <span>{color}</span>
-                    </div>
-                  )}
-                </div>
+                <>
+                  {' '}
+                  <hr />
+                  <div className="mt-4">
+                    <h3 className="text-lg font-semibold mb-2">
+                      Last Picked Color
+                    </h3>
+                    {color && (
+                      <div className="flex items-center space-x-2">
+                        <div
+                          className="w-8 h-8 rounded-full border border-gray-300"
+                          style={{ backgroundColor: color }}
+                        ></div>
+                        <span>{color}</span>
+                      </div>
+                    )}
+                  </div>
+                </>
               )}
             </div>
           ) : (
@@ -518,9 +562,9 @@ export default function Component() {
           ) : (
             <div className="h-[28px] mb-4" />
           )}
-          <div className="p-4 bg-[#161717] rounded-lg shadow-md">
-            <div className="grid gap-4 w-full">
-              {folders.map((folder) => (
+          {folders.map((folder, index) => (
+            <div key={index} className="p-4 bg-[#161717] rounded-lg shadow-md">
+              <div className="grid gap-4 w-full">
                 <div
                   key={folder.name}
                   className="p-4 !pb-0 vercel-card rounded-lg"
@@ -533,7 +577,7 @@ export default function Component() {
                       </p>
                     </div>
                     <Tooltip delayDuration={55}>
-                      <TooltipTrigger asChild>
+                      <TooltipTrigger>
                         <Button
                           className="flex items-center justify-center group"
                           variant="outline"
@@ -545,7 +589,7 @@ export default function Component() {
                       </TooltipTrigger>
                       <TooltipContent>
                         <p>
-                          Remove the folder <i>'{folder.name}'</i>
+                          Remove the folder <i>&apos;{folder.name}&apos;</i>
                         </p>
                       </TooltipContent>
                     </Tooltip>
@@ -585,7 +629,7 @@ export default function Component() {
                         </div>
                         <div className="absolute top-0 right-0">
                           <DropdownMenu>
-                            <DropdownMenuTrigger>
+                            <DropdownMenuTrigger key={folder.name}>
                               <Button
                                 className="bg-black bg-opacity-10 rounded-bl-full"
                                 size="icon"
@@ -646,9 +690,9 @@ export default function Component() {
                     ))}
                   </div>
                 </div>
-              ))}
+              </div>
             </div>
-          </div>
+          ))}
         </div>
       </div>
       {generatedCode && (
