@@ -1,5 +1,6 @@
 export * from './avatar';
 export * from './border-beam';
+export * from './button';
 export * from './card';
 export * from './checkbox';
 export * from './command';
