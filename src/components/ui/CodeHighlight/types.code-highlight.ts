@@ -23,5 +23,6 @@ export type CodeHighlightProps = {
   title: string;
   fileIcon: string;
   avatarSrc: string;
+  language?: string;
   children?: React.ReactNode;
 };
