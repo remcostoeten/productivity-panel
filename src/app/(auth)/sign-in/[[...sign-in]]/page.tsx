@@ -3,6 +3,7 @@
 import EmailSignIn from '@/components/auth/SignInPage/EmailSignIn';
 import SignInButton from '@/components/auth/SignInPage/SignInButton';
 import { siteConfig } from '@/core/data/site-config';
+import { SignIn } from '@clerk/nextjs';
 import { DotsVerticalIcon } from '@radix-ui/react-icons';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -48,6 +49,7 @@ export default function SignUpPage() {
                 </div>
                 <Divider />
                 <EmailSignIn />
+                <SignIn />
                 <SignUpLink />
               </div>
             </div>
