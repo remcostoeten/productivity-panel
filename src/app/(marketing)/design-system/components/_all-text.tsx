@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'sonner';
 import { GetCustomColors } from './tailwindColors';
 
@@ -16,7 +16,7 @@ const ColorShowcase: React.FC = () => {
   };
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 border border-zinc-500 p-4">
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
       {Object.entries(colors).map(([name, value]) => (
         <div
           key={name}
