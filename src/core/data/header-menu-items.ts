@@ -6,7 +6,12 @@ export const menuItem = [
   },
   {
     id: 2,
-    label: 'Color UI',
+    label: 'Color UI (WiP)',
     href: '/color',
+  },
+  {
+    id: 3,
+    label: 'Color tool (Old MVP)',
+    href: '/color-tool',
   },
 ];
