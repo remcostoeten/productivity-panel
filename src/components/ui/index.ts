@@ -1,5 +1,6 @@
 export * from './avatar';
 export * from './border-beam';
+export * from './button';
 export * from './card';
 export * from './checkbox';
 export * from './command';
@@ -17,3 +18,4 @@ export * from './sphere-mask';
 export * from './switch';
 export * from './text-shimmer';
 export * from './tooltip';
+
