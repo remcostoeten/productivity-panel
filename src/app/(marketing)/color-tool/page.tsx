@@ -1,6 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import CodeHighlight from '@/components/ui/CodeHighlight/CodeHighlight';
 import {
   Dialog,
   DialogContent,
@@ -9,6 +10,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { TrashIcon } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import FileUploadUi from '../color/_components/FileUploadUi';
@@ -34,6 +36,7 @@ export default function Component() {
   const [editingColor, setEditingColor] = useState<ColorItem | null>(null);
   const [editedCssVar, setEditedCssVar] = useState('');
   const [generatedCode, setGeneratedCode] = useState<string>('');
+  const [tailwindCode, setTailwindCode] = useState<string>('');
   const imgRef = useRef<HTMLImageElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -307,9 +310,8 @@ export default function Component() {
     const rootCode = `:root {\n${cssVars}}`;
     const tailwindConfigCode = `extend: {\n    colors: {\n${tailwindColors}    },\n  },`;
 
-    setGeneratedCode(
-      `/* CSS Variables */\n${rootCode}\n\n/* Tailwind CSS Configuration */\n${tailwindConfigCode}`,
-    );
+    setGeneratedCode(`/* CSS Variables */\n${rootCode}\n`);
+    setTailwindCode(`/* Tailwind CSS Configuration */\n${tailwindConfigCode}`);
   };
 
   return (
@@ -426,6 +428,7 @@ export default function Component() {
                     <TrashIcon className="w-5 h-5 text-destructive" />
                   </Button>
                 </div>
+
                 <div className="grid grid-cols-3 gap-4">
                   {folder.colors.map((colorItem) => (
                     <div
@@ -495,11 +498,23 @@ export default function Component() {
         </div>
       </div>
       {generatedCode && (
-        <div className="mt-6 p-4 bg-card rounded-lg shadow-md">
-          <h2 className="text-lg font-bold mb-4">Generated Code</h2>
-          <pre className="whitespace-pre-wrap">{generatedCode}</pre>
-        </div>
-      )}{' '}
+        <Tabs defaultValue="tailwind">
+          <TabsList>
+            <TabsTrigger value="tailwind">Tailwind Config</TabsTrigger>
+            <TabsTrigger value="variables">CSS Variables</TabsTrigger>
+          </TabsList>
+          <TabsContent value="tailwind">
+            <CodeHighlight title="tailwind.config.js" fileIcon="" avatarSrc="">
+              {tailwindCode}
+            </CodeHighlight>
+          </TabsContent>
+          <TabsContent value="variables">
+            <CodeHighlight title="variables.css" fileIcon="" avatarSrc="">
+              {generatedCode}
+            </CodeHighlight>
+          </TabsContent>
+        </Tabs>
+      )}
       {isMoveColorDialogOpen && (
         <Dialog
           open={isMoveColorDialogOpen}
