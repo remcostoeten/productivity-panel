@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: PageProps) {
-return (
+  return (
     <Providers>
       <html lang="en" suppressHydrationWarning>
         <body
@@ -32,7 +32,7 @@ return (
           >
             {children}
             <ThemeToggle />
-          </ThemeProvider>                                                            
+          </ThemeProvider>
         </body>
       </html>
     </Providers>

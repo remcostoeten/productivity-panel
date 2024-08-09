@@ -30,8 +30,8 @@ export default function SignUpPage() {
               alt=""
             />
           </div>
-          <div className='z-50'>
-              <SignIn />
+          <div className="z-50">
+            <SignIn />
           </div>
         </div>
       </div>

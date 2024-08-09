@@ -100,14 +100,14 @@ export function SiteHeader() {
               >
                 {item.label}
               </Link>
-            ))} 
+            ))}
           </nav>
 
           <div className="ml-auto flex h-full items-center">
             <Link className="mr-6 text-sm w-max" href="/sign-in">
               Log in
             </Link>
-        </div>
+          </div>
           <Button
             className="ml-6 md:hidden"
             onClick={() => setHamburgerMenuIsOpen((open) => !open)}

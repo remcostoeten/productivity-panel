@@ -1,20 +1,3 @@
-@use 'variables' as vars;
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-/* Components */
-@import './components/_auth-sign-up';
-@import './components/_file-uploader';
-@import './components/_native-switch';
-@import './components/_vercel-card';
-@import './components/ spinner-loader-effect';
-
-/* Utillities */
-@import './utils/_utillity-classes';
-@import './utils/_animations';
-
 .cl-formButtonPrimary {
   @apply inline-flex h-9 items-center justify-center whitespace-nowrap rounded-md bg-primary px-3  font-medium text-primary-foreground !shadow-none ring-offset-background transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
 }
@@ -242,10 +225,4 @@ h1[data-localization-key='userProfile.navbar.title'] {
 
 [data-theme='light'] {
   --fill-color: var(--theme-primary);
-}
-
-@layer base {
-  body {
-    @apply bg-background text-foreground;
-  }
 }
