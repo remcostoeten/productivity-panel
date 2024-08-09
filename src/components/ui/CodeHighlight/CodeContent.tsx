@@ -11,8 +11,8 @@ import {
 import React, { useState } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism"; // Import the desired theme
-import { toast } from "sonner";
 import { CodeContentProps } from "./types.code-highlight";
+import toast from "react-hot-toast";
 
 const CodeContent: React.FC<CodeContentProps> = ({ children, language }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);

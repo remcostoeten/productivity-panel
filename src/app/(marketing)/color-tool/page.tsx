@@ -5,6 +5,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui";
 import CodeHighlight from "@/components/ui/CodeHighlight/CodeHighlight";
 import { Suspense, useEffect, useRef, useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 import { useColorPicker } from "./ _hooks/use-color-picker";
 import useFileUpload from "./ _hooks/use-file-upload";
 import AddFolderDialog from "./_components/AddFolderDialog";
@@ -63,6 +64,8 @@ export default function ColorToolPage() {
     localStorage.clear();
     setFolders([]);
     setActiveFolder("");
+    setGeneratedCode("");
+    toast.success("You did it!"); // Displays a success message
   };
 
   const handleColorPickEvent = (event: React.MouseEvent<HTMLImageElement>) => {
@@ -238,7 +241,17 @@ export default function ColorToolPage() {
           setUseCssVariables={setUseCssVariables}
         />
       </div>
-
+      <Toaster
+        position="bottom-left"
+        reverseOrder={false}
+        toastOptions={{
+          style: {
+            background: "black",
+            color: "white",
+            padding: "16px 20px",
+          },
+        }}
+      />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-card p-4 rounded-lg shadow-md">
           <h2 className="text-lg font-bold mb-4">Upload Image</h2>
