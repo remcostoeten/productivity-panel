@@ -21,7 +21,7 @@ export function CodeSwitcher() {
       organization,
     }[selectedType],
     null,
-    2
+    2,
   );
 
   const typesToShow = organization
@@ -37,7 +37,7 @@ export function CodeSwitcher() {
               "capitalize rounded h-7 text-[0.8125rem] flex-1 hover:text-black font-medium",
               selectedType === type
                 ? "bg-white shadow-sm text-black"
-                : "text-[#5E5F6E]"
+                : "text-[#5E5F6E]",
             )}
             key={type}
             onClick={() => setSelectedType(type)}

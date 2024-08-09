@@ -8,18 +8,16 @@ export const metadata: Metadata = {
   openGraph: { images: ["/og.png"] },
 };
 
-
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-<>
-    
-           {children}
-       {/* <Script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js" /> */}
-       {/* <Script src="https://cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js" /> */}
-</>
+    <>
+      {children}
+      {/* <Script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-core.min.js" /> */}
+      {/* <Script src="https://cdn.jsdelivr.net/npm/prismjs@1/plugins/autoloader/prism-autoloader.min.js" /> */}
+    </>
   );
 }

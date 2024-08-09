@@ -1,5 +1,5 @@
 .native-switch {
-  input[type='checkbox'] {
+  input[type="checkbox"] {
     height: 0;
     width: 0;
     visibility: hidden;
@@ -18,7 +18,7 @@
   }
 
   label:after {
-    content: '';
+    content: "";
     position: absolute;
     top: 2.5px;
     left: 2.5px;

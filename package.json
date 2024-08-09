@@ -70,7 +70,25 @@
     "eslint": "^8",
     "eslint-config-next": "^15.0.0-rc.0",
     "postcss": "^8",
+    "prettier": "^3.3.3",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "all"
+  },
+  "bun": {
+    "install": {
+      "packages": [
+        "clsx",
+        "react",
+        "react-dom",
+        "react-hook-form",
+        "tailwindcss",
+        "tailwind-merge"
+      ]
+    }
   }
 }

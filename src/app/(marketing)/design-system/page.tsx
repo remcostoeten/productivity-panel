@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import ColorConfigPickerPage from '../color-tool/page';
-import ColorShowcase from './components/_all-text';
-import TailwindcssButtons from './components/_button-showcase';
-import LogoShowcase from './components/LogoShowCase';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import ColorConfigPickerPage from "../color-tool/page";
+import ColorShowcase from "./components/_all-text";
+import TailwindcssButtons from "./components/_button-showcase";
+import LogoShowcase from "./components/LogoShowCase";
 
 interface TabContentProps {
   children: React.ReactNode;
@@ -20,16 +20,20 @@ function TabContent({ children, value }: TabContentProps) {
 }
 
 const tabs = [
-  { id: 'logo', label: 'Logo Showcase', component: <LogoShowcase /> },
+  { id: "logo", label: "Logo Showcase", component: <LogoShowcase /> },
   {
-    id: 'uploader',
-    label: 'Color picker & config creator',
+    id: "uploader",
+    label: "Color picker & config creator",
     component: <ColorConfigPickerPage />,
   },
-  { id: 'colors', label: 'Color Showcase', component: <ColorShowcase /> },
-  { id: 'buttons', label: 'Tailwindcss Buttons', component: <TailwindcssButtons /> },
+  { id: "colors", label: "Color Showcase", component: <ColorShowcase /> },
+  {
+    id: "buttons",
+    label: "Tailwindcss Buttons",
+    component: <TailwindcssButtons />,
+  },
 ];
-        
+
 function DesignSystemShowcase() {
   return (
     <div className="container mx-auto mt-4 p-4 text-2xl">
@@ -54,4 +58,3 @@ function DesignSystemShowcase() {
 }
 
 export default DesignSystemShowcase;
- 

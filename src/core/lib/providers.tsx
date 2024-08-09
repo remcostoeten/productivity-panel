@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
-import { Toaster, TooltipProvider } from '@/components/ui';
-import { ClerkProvider } from '@clerk/nextjs';
-import { dark } from '@clerk/themes';
-import posthog from 'posthog-js';
-import { PostHogProvider } from 'posthog-js/react';
+import { TooltipProvider } from "@/components/ui";
+import { ClerkProvider } from "@clerk/nextjs";
+import posthog from "posthog-js";
+import { PostHogProvider } from "posthog-js/react";
+import { Toaster } from "sonner";
 
 export default function Providers({ children }: PageProps) {
-  if (typeof window !== 'undefined') {
+  if (typeof window !== "undefined") {
     if (
       !process.env.NEXT_PUBLIC_POSTHOG_KEY ||
       !process.env.NEXT_PUBLIC_POSTHOG_HOST
     ) {
       console.error(
-        'Environment variables NEXT_PUBLIC_POSTHOG_KEY and NEXT_PUBLIC_POSTHOG_HOST are not defined',
+        "Environment variables NEXT_PUBLIC_POSTHOG_KEY and NEXT_PUBLIC_POSTHOG_HOST are not defined",
       );
     } else {
       posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY, {
@@ -34,7 +34,7 @@ export default function Providers({ children }: PageProps) {
           },
         }}
       > */}
-         <ClerkProvider
+      <ClerkProvider
         appearance={{
           variables: { colorPrimary: "#000000" },
           elements: {
@@ -49,7 +49,8 @@ export default function Providers({ children }: PageProps) {
               "bg-black border border-black border-solid hover:bg-white hover:text-black",
             card: "bg-[#fafafa]",
           },
-        }}>
+        }}
+      >
         <TooltipProvider>
           {children}
           <Toaster />

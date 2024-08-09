@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { Button, buttonVariants } from '@/components/ui/button';
-import { cn } from '@/core/helpers/cn';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { GitHubLogoIcon } from '@radix-ui/react-icons';
-import { Loader2 } from 'lucide-react';
-import * as React from 'react';
-import { toast } from 'sonner';
-import * as z from 'zod';
+import { Button, buttonVariants } from "@/components/ui/button";
+import { cn } from "@/core/helpers/cn";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { GitHubLogoIcon } from "@radix-ui/react-icons";
+import { Loader2 } from "lucide-react";
+import * as React from "react";
+import { toast } from "sonner";
+import * as z from "zod";
 
 import {
   Form,
@@ -15,9 +15,9 @@ import {
   FormField,
   FormItem,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from 'postcss';
-import { useForm } from 'react-hook-form';
+} from "@/components/ui/form";
+import { Input } from "postcss";
+import { useForm } from "react-hook-form";
 export const userAuthSchema = z.object({
   email: z.string().email(),
   password: z.string().optional(),
@@ -30,7 +30,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const form = useForm<FormData>({
     resolver: zodResolver(userAuthSchema),
     defaultValues: {
-      email: '',
+      email: "",
     },
   });
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
@@ -46,13 +46,13 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     setIsLoading(false);
 
     if (!signInResult?.ok) {
-      return toast.error('Something went wrong.', {
-        description: 'Your sign in request failed. Please try again.',
+      return toast.error("Something went wrong.", {
+        description: "Your sign in request failed. Please try again.",
       });
     }
 
-    return toast.success('Check your email', {
-      description: 'We sent you a login link. Be sure to check your spam too.',
+    return toast.success("Check your email", {
+      description: "We sent you a login link. Be sure to check your spam too.",
     });
   }
 
@@ -64,7 +64,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   }
 
   return (
-    <div className={cn('grid gap-6', className)} {...props}>
+    <div className={cn("grid gap-6", className)} {...props}>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="grid gap-4">
@@ -118,7 +118,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       </div>
       <Button
         type="button"
-        className={cn(buttonVariants({ variant: 'outline' }))}
+        className={cn(buttonVariants({ variant: "outline" }))}
         onClick={() => {
           onSignInGithub();
         }}
@@ -128,7 +128,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           <Loader2 className="mr-2 size-4 animate-spin" />
         ) : (
           <GitHubLogoIcon className="mr-2 size-4" />
-        )}{' '}
+        )}{" "}
         Github
       </Button>
     </div>

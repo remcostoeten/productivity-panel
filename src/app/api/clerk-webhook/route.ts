@@ -1,14 +1,14 @@
-import { createOrUpdateUser } from '@/core/server/server-actions/userActions';
-import { WebhookEvent } from '@clerk/nextjs/server';
-import { headers } from 'next/headers';
-import { NextResponse } from 'next/server';
-import { Webhook } from 'svix';
+import { createOrUpdateUser } from "@/core/server/server-actions/userActions";
+import { WebhookEvent } from "@clerk/nextjs/server";
+import { headers } from "next/headers";
+import { NextResponse } from "next/server";
+import { Webhook } from "svix";
 
 export async function POST(req: Request) {
   const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
 
   if (!WEBHOOK_SECRET) {
-    throw new Error('Please add WEBHOOK_SECRET to .env.local');
+    throw new Error("Please add WEBHOOK_SECRET to .env.local");
   }
 
   // Get the headers
@@ -19,8 +19,8 @@ export async function POST(req: Request) {
 
   // If there are no headers, error out
   if (!svix_id || !svix_timestamp || !svix_signature) {
-    return new NextResponse('Error occurred -- no svix headers', {
-      status: 400
+    return new NextResponse("Error occurred -- no svix headers", {
+      status: 400,
     });
   }
 
@@ -41,21 +41,30 @@ export async function POST(req: Request) {
       "svix-signature": svix_signature,
     }) as WebhookEvent;
   } catch (err) {
-    console.error('Error verifying webhook:', err);
-    return new NextResponse('Error occurred', {
-      status: 400
+    console.error("Error verifying webhook:", err);
+    return new NextResponse("Error occurred", {
+      status: 400,
     });
   }
 
   // Handle the webhook
   const eventType = evt.type;
 
-  if (eventType === 'user.created' || eventType === 'user.updated') {
-    const { id, email_addresses, first_name, last_name, image_url, primary_email_address_id } = evt.data;
-    
-    if ('email_addresses' in evt.data) {
-      const primaryEmail = email_addresses.find(email => email.id === primary_email_address_id);
-      
+  if (eventType === "user.created" || eventType === "user.updated") {
+    const {
+      id,
+      email_addresses,
+      first_name,
+      last_name,
+      image_url,
+      primary_email_address_id,
+    } = evt.data;
+
+    if ("email_addresses" in evt.data) {
+      const primaryEmail = email_addresses.find(
+        (email) => email.id === primary_email_address_id,
+      );
+
       if (primaryEmail) {
         await createOrUpdateUser({
           id,
@@ -68,15 +77,15 @@ export async function POST(req: Request) {
 
         console.log(`User ${id} ${eventType}`);
 
-        return new NextResponse('User created or updated', {
-          status: 200
+        return new NextResponse("User created or updated", {
+          status: 200,
         });
       }
     }
   }
 
-  console.log('Webhook received', eventType);
-  return new NextResponse('Webhook received', {
-    status: 200
+  console.log("Webhook received", eventType);
+  return new NextResponse("Webhook received", {
+    status: 200,
   });
 }

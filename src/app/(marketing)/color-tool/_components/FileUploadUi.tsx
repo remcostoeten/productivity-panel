@@ -1,4 +1,4 @@
-import { UploadIcon } from 'lucide-react';
+import { UploadIcon } from "lucide-react";
 
 export default function FileUploadUi({
   handleFileUpload,
