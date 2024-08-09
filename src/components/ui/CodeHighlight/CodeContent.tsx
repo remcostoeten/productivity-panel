@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Button,
   Dialog,
@@ -5,18 +7,18 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui';
-import React, { useState } from 'react';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism'; // Import the desired theme
-import { toast } from 'sonner';
-import { CodeContentProps } from './types.code-highlight';
+} from "@/components/ui";
+import React, { useState } from "react";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism"; // Import the desired theme
+import { CodeContentProps } from "./types.code-highlight";
+import toast from "react-hot-toast";
 
 const CodeContent: React.FC<CodeContentProps> = ({ children, language }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [inputText, setInputText] = useState('');
+  const [inputText, setInputText] = useState("");
   const [codeString, setCodeString] = useState(
-    React.Children.toArray(children).join('\n'),
+    React.Children.toArray(children).join("\n"),
   );
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

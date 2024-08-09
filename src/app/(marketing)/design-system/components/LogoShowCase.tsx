@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import BrandLogo from '@/components/theme/BrandLogo';
-import { Button } from '@/components/ui/button';
-import { useTheme } from 'next-themes';
-import { useState } from 'react';
+import BrandLogo from "@/components/theme/BrandLogo";
+import { Button } from "@/components/ui/button";
+import { useTheme } from "next-themes";
+import { useState } from "react";
 
 const LogoShowcase = () => {
   const [animate, setAnimate] = useState(true);
   const { theme, setTheme } = useTheme();
 
   const toggleTheme = () => {
-    setTheme(theme === 'light' ? 'dark' : 'light');
+    setTheme(theme === "light" ? "dark" : "light");
   };
 
   return (
@@ -22,7 +22,7 @@ const LogoShowcase = () => {
           onClick={() => setAnimate(!animate)}
           className="bg-blue-500 text-white px-4 py-2 rounded mr-4"
         >
-          Toggle Animation: {animate ? 'On' : 'Off'}
+          Toggle Animation: {animate ? "On" : "Off"}
         </Button>
         <Button
           onClick={toggleTheme}

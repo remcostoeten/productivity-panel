@@ -5,9 +5,9 @@ import {
   PythonIcon,
   ReactIcon,
   TypescriptIcon,
-} from '@/components/theme/icons';
-import { CopyIcon } from 'lucide-react';
-import { Button } from '../button';
+} from "@/components/theme/icons";
+import { CopyIcon } from "lucide-react";
+import { Button } from "../button";
 
 type FileHeaderProps = {
   title?: string;
@@ -15,24 +15,24 @@ type FileHeaderProps = {
 };
 
 export default function FileHeader({ title, onCopy }: FileHeaderProps) {
-  if (typeof title !== 'string') {
-    console.error('Invalid title prop');
+  if (typeof title !== "string") {
+    console.error("Invalid title prop");
     return null;
   }
 
   let Icon = ReactIcon;
 
-  if (title.endsWith('.js')) {
+  if (title.endsWith(".js")) {
     Icon = JavascriptIcon;
-  } else if (title.endsWith('.ts') || title.endsWith('.tsx')) {
+  } else if (title.endsWith(".ts") || title.endsWith(".tsx")) {
     Icon = TypescriptIcon;
-  } else if (title.endsWith('.py')) {
+  } else if (title.endsWith(".py")) {
     Icon = PythonIcon;
-  } else if (title.endsWith('.json')) {
+  } else if (title.endsWith(".json")) {
     Icon = JsonIcon;
-  } else if (title.endsWith('.jsx')) {
+  } else if (title.endsWith(".jsx")) {
     Icon = ReactIcon;
-  } else if (title.endsWith('.css')) {
+  } else if (title.endsWith(".css")) {
     Icon = CssIcon;
   }
 

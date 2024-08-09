@@ -1,12 +1,12 @@
-import { ElementType, HTMLAttributes, ReactNode } from 'react';
-import { twMerge } from 'tailwind-merge';
+import { ElementType, HTMLAttributes, ReactNode } from "react";
+import { twMerge } from "tailwind-merge";
 
-type CenterProps<T extends ElementType = 'div'> = {
+type CenterProps<T extends ElementType = "div"> = {
   as?: T;
   className?: string;
   children?: ReactNode;
   fullScreen?: boolean;
-  center?: 'middle' | 'vertical' | 'horizontal';
+  center?: "middle" | "vertical" | "horizontal";
 } & HTMLAttributes<HTMLElement>;
 
 /**
@@ -17,23 +17,23 @@ type CenterProps<T extends ElementType = 'div'> = {
  *   <p>Centered content</p>
  * </Center>
  */
-export const Center = <T extends ElementType = 'div'>({
+export const Center = <T extends ElementType = "div">({
   as,
   className,
   fullScreen = false,
   children,
-  center = 'middle',
+  center = "middle",
   ...props
 }: CenterProps<T>) => {
-  const Component = as || 'div';
+  const Component = as || "div";
 
   const classes = twMerge(
-    fullScreen ? 'w-screen h-screen' : '',
-    center === 'middle'
-      ? 'grid place-items-center'
-      : center === 'vertical'
-        ? 'flex items-center'
-        : 'flex justify-center',
+    fullScreen ? "w-screen h-screen" : "",
+    center === "middle"
+      ? "grid place-items-center"
+      : center === "vertical"
+        ? "flex items-center"
+        : "flex justify-center",
     className,
   );
 
@@ -52,23 +52,23 @@ export const Center = <T extends ElementType = 'div'>({
  *   <p>Absolutely centered content</p>
  * </AbsoluteCenter>
  */
-export const AbsoluteCenter = <T extends ElementType = 'div'>({
+export const AbsoluteCenter = <T extends ElementType = "div">({
   as,
   className,
   fullScreen = false,
   children,
-  center = 'middle',
+  center = "middle",
   ...props
 }: CenterProps<T>) => {
-  const Component = as || 'div';
+  const Component = as || "div";
 
   const classes = twMerge(
-    fullScreen ? 'w-screen h-screen' : '',
-    center === 'middle'
-      ? 'absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'
-      : center === 'vertical'
-        ? 'absolute top-1/2 transform -translate-y-1/2'
-        : 'absolute left-1/2 transform -translate-x-1/2',
+    fullScreen ? "w-screen h-screen" : "",
+    center === "middle"
+      ? "absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+      : center === "vertical"
+        ? "absolute top-1/2 transform -translate-y-1/2"
+        : "absolute left-1/2 transform -translate-x-1/2",
     className,
   );
 

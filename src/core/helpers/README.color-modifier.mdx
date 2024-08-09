@@ -30,7 +30,7 @@ Lightens a color by a specified percentage.
 First, import the functions in your component:
 
 ```typescript
-import { darken, lighten, adjustColorLightness } from './colorUtils';
+import { darken, lighten, adjustColorLightness } from "./colorUtils";
 ```
 
 ### Examples
@@ -38,51 +38,51 @@ import { darken, lighten, adjustColorLightness } from './colorUtils';
 1. Darkening a hex color:
 
 ```typescript
-const darkRed = darken('#FF0000', 20);
+const darkRed = darken("#FF0000", 20);
 console.log(darkRed); // Outputs: #CC0000
 ```
 
 2. Lightening an RGB color:
 
 ```typescript
-const lightBlue = lighten('rgb(0, 0, 255)', 15);
+const lightBlue = lighten("rgb(0, 0, 255)", 15);
 console.log(lightBlue); // Outputs: #2626FF
 ```
 
 3. Adjusting lightness of an RGBA color:
 
 ```typescript
-const adjustedGreen = adjustColorLightness('rgba(0, 255, 0, 0.5)', -0.1);
+const adjustedGreen = adjustColorLightness("rgba(0, 255, 0, 0.5)", -0.1);
 console.log(adjustedGreen); // Outputs an adjusted rgba value
 ```
 
 4. Using with CSS color names:
 
 ```typescript
-const darkerTomato = darken('tomato', 10);
+const darkerTomato = darken("tomato", 10);
 console.log(darkerTomato); // Outputs a darker version of tomato
 ```
 
 5. In a React component:
 
 ```tsx
-import React from 'react';
-import { darken, lighten } from './colorUtils';
+import React from "react";
+import { darken, lighten } from "./colorUtils";
 
 const ColorDemo: React.FC = () => {
-  const baseColor = '#3498db';
+  const baseColor = "#3498db";
   const darkColor = darken(baseColor, 20);
   const lightColor = lighten(baseColor, 20);
 
   return (
     <div>
-      <div style={{ backgroundColor: baseColor, padding: '10px' }}>
+      <div style={{ backgroundColor: baseColor, padding: "10px" }}>
         Base Color
       </div>
-      <div style={{ backgroundColor: darkColor, padding: '10px' }}>
+      <div style={{ backgroundColor: darkColor, padding: "10px" }}>
         Darkened Color
       </div>
-      <div style={{ backgroundColor: lightColor, padding: '10px' }}>
+      <div style={{ backgroundColor: lightColor, padding: "10px" }}>
         Lightened Color
       </div>
     </div>
@@ -95,11 +95,11 @@ export default ColorDemo;
 6. Dynamic color adjustment:
 
 ```tsx
-import React, { useState } from 'react';
-import { adjustColorLightness } from './colorUtils';
+import React, { useState } from "react";
+import { adjustColorLightness } from "./colorUtils";
 
 const DynamicColor: React.FC = () => {
-  const [baseColor, setBaseColor] = useState('#3498db');
+  const [baseColor, setBaseColor] = useState("#3498db");
   const [adjustment, setAdjustment] = useState(0);
 
   const adjustedColor = adjustColorLightness(baseColor, adjustment / 100);
@@ -118,7 +118,7 @@ const DynamicColor: React.FC = () => {
         value={adjustment}
         onChange={(e) => setAdjustment(Number(e.target.value))}
       />
-      <div style={{ backgroundColor: adjustedColor, padding: '20px' }}>
+      <div style={{ backgroundColor: adjustedColor, padding: "20px" }}>
         Adjusted Color
       </div>
     </div>

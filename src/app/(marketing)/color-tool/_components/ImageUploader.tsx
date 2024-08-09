@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import FileUploadUi from './FileUploadUi';
+import { useEffect } from "react";
+import FileUploadUi from "./FileUploadUi";
 
 interface ImageUploaderProps {
   imageSrc: string | null;
@@ -36,7 +36,7 @@ export default function ImageUploader({
       const items = event.clipboardData?.items;
       if (items) {
         for (let i = 0; i < items.length; i++) {
-          if (items[i].type.indexOf('image') !== -1) {
+          if (items[i].type.indexOf("image") !== -1) {
             const blob = items[i].getAsFile();
             if (blob) {
               const reader = new FileReader();
@@ -48,8 +48,8 @@ export default function ImageUploader({
       }
     };
 
-    window.addEventListener('paste', handlePaste);
-    return () => window.removeEventListener('paste', handlePaste);
+    window.addEventListener("paste", handlePaste);
+    return () => window.removeEventListener("paste", handlePaste);
   }, [setImageSrc]);
 
   return (
