@@ -8,7 +8,7 @@
   &:hover {
     svg {
       transform: scale(1.2);
-      color: $theme-primary;
+      color: var(--theme-primary);
     }
   }
 }
