@@ -1,0 +1,13 @@
+$theme-colors: (
+  "theme-primary": #ff6a00a2,
+  "theme-primary--darker": #ff5b00,
+  "color-one": rgba(255, 106, 0, 0.8),
+  "color-two": #fe8bbb,
+  "color-three": #9e7aff,
+);
+
+@mixin apply-theme-colors {
+  @each $key, $value in $theme-colors {
+    --#{$key}: #{$value};
+  }
+}
