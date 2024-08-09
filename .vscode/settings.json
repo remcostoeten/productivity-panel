@@ -49,6 +49,7 @@
     "github.copilot.advanced.loggingLevel": "info",
     "github.copilot.advanced.tracking": true
   },
-"typescript.tsdk": "node_modules/typescript/lib",
-"findUnusedExports.detectCircularImports": true
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "findUnusedExports.detectCircularImports": true,
+  "cSpell.words": ["Utillities"]
 }

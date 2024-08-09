@@ -1,0 +1,135 @@
+# Color Utility Functions
+
+This module provides utility functions for manipulating colors in various formats. It allows you to darken or lighten colors, supporting hex codes, RGB/RGBA values, and CSS color names.
+
+## Functions
+
+### `adjustColorLightness(color: string, amount: number): string`
+
+Adjusts the lightness of a given color.
+
+- `color`: The color to adjust (hex, rgb, rgba, or color name)
+- `amount`: The amount to adjust by (between -1 and 1)
+
+### `darken(color: string, percentage: number): string`
+
+Darkens a color by a specified percentage.
+
+- `color`: The color to darken
+- `percentage`: The percentage to darken by (0-100)
+
+### `lighten(color: string, percentage: number): string`
+
+Lightens a color by a specified percentage.
+
+- `color`: The color to lighten
+- `percentage`: The percentage to lighten by (0-100)
+
+## Usage
+
+First, import the functions in your component:
+
+```typescript
+import { darken, lighten, adjustColorLightness } from './colorUtils';
+```
+
+### Examples
+
+1. Darkening a hex color:
+
+```typescript
+const darkRed = darken('#FF0000', 20);
+console.log(darkRed); // Outputs: #CC0000
+```
+
+2. Lightening an RGB color:
+
+```typescript
+const lightBlue = lighten('rgb(0, 0, 255)', 15);
+console.log(lightBlue); // Outputs: #2626FF
+```
+
+3. Adjusting lightness of an RGBA color:
+
+```typescript
+const adjustedGreen = adjustColorLightness('rgba(0, 255, 0, 0.5)', -0.1);
+console.log(adjustedGreen); // Outputs an adjusted rgba value
+```
+
+4. Using with CSS color names:
+
+```typescript
+const darkerTomato = darken('tomato', 10);
+console.log(darkerTomato); // Outputs a darker version of tomato
+```
+
+5. In a React component:
+
+```tsx
+import React from 'react';
+import { darken, lighten } from './colorUtils';
+
+const ColorDemo: React.FC = () => {
+  const baseColor = '#3498db';
+  const darkColor = darken(baseColor, 20);
+  const lightColor = lighten(baseColor, 20);
+
+  return (
+    <div>
+      <div style={{ backgroundColor: baseColor, padding: '10px' }}>
+        Base Color
+      </div>
+      <div style={{ backgroundColor: darkColor, padding: '10px' }}>
+        Darkened Color
+      </div>
+      <div style={{ backgroundColor: lightColor, padding: '10px' }}>
+        Lightened Color
+      </div>
+    </div>
+  );
+};
+
+export default ColorDemo;
+```
+
+6. Dynamic color adjustment:
+
+```tsx
+import React, { useState } from 'react';
+import { adjustColorLightness } from './colorUtils';
+
+const DynamicColor: React.FC = () => {
+  const [baseColor, setBaseColor] = useState('#3498db');
+  const [adjustment, setAdjustment] = useState(0);
+
+  const adjustedColor = adjustColorLightness(baseColor, adjustment / 100);
+
+  return (
+    <div>
+      <input
+        type="color"
+        value={baseColor}
+        onChange={(e) => setBaseColor(e.target.value)}
+      />
+      <input
+        type="range"
+        min="-100"
+        max="100"
+        value={adjustment}
+        onChange={(e) => setAdjustment(Number(e.target.value))}
+      />
+      <div style={{ backgroundColor: adjustedColor, padding: '20px' }}>
+        Adjusted Color
+      </div>
+    </div>
+  );
+};
+
+export default DynamicColor;
+```
+
+## Note
+
+These functions work best with hex and RGB/RGBA colors. For named colors and CSS variables, the functions will return the original value as they cannot be directly manipulated.
+
+For Tailwind CSS classes (e.g., 'text-red-500'), you'll need to implement a mapping to actual color values for full functionality.
