@@ -1,0 +1,11 @@
+/**
+ * This SCSS file defines the base layer styles.
+ * It includes root-level custom variables for in the tailwind config.
+ * Custom sizes and spacing variables only
+ */
+
+@layer base {
+  :root {
+    --marketing-header-height: 56px;
+  }
+}

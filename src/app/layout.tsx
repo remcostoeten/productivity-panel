@@ -39,7 +39,7 @@ export default function RootLayout({ children }: PageProps) {
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"
-            disableTransitionOnChange={false}
+            disableTransitionOnChange={true}
           >
             {children}
             <ThemeToggle />
