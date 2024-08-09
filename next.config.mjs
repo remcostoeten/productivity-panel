@@ -17,6 +17,6 @@ const nextConfig = {
       compilationMode: 'annotation',
     },
   },
-};
+}
 
-export default nextConfig;
+export default nextConfig

@@ -3,9 +3,9 @@
 // Helper function to parse color strings
 const parseColor = (color: string): string => {
   // Check if it's a Tailwind-style class
-  if (color.startsWith('text-') || color.startsWith('bg-')) {
+  if (color.startsWith("text-") || color.startsWith("bg-")) {
     // This is a simplified approach. You might need to map Tailwind colors to actual values
-    const parts = color.split('-');
+    const parts = color.split("-");
     const shade = parts[parts.length - 1];
     const baseColor = parts[parts.length - 2];
     // This is a placeholder. You'd need a proper Tailwind color mapping here
@@ -13,12 +13,12 @@ const parseColor = (color: string): string => {
   }
 
   // Check if it's a hex value
-  if (color.startsWith('#')) {
+  if (color.startsWith("#")) {
     return color;
   }
 
   // Check if it's an RGB or RGBA value
-  if (color.startsWith('rgb')) {
+  if (color.startsWith("rgb")) {
     const vals = color.match(/\d+/g);
     if (vals) {
       return vals.length === 3
@@ -135,7 +135,7 @@ export const adjustColorLightness = (color: string, amount: number): string => {
   const parsedColor = parseColor(color);
 
   // If it's a CSS variable or named color, we can't modify it
-  if (parsedColor.startsWith('var(') || !parsedColor.startsWith('#')) {
+  if (parsedColor.startsWith("var(") || !parsedColor.startsWith("#")) {
     return parsedColor;
   }
 

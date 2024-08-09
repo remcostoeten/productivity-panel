@@ -224,7 +224,7 @@ function UploadIcon(props) {
   );
 }
 
-function DiscordIcon({ className = '' }) {
+function DiscordIcon({ className = "" }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -244,7 +244,7 @@ function DiscordIcon({ className = '' }) {
   );
 }
 
-function TwitterIcon({ className = '' }) {
+function TwitterIcon({ className = "" }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

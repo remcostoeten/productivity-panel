@@ -1,22 +1,22 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { toast } from 'sonner';
-import { GetCustomColors } from './tailwindColors';
+import { useState } from "react";
+import { GetCustomColors } from "./tailwindColors";
+import toast from "react-hot-toast";
 
 const ColorShowcase: React.FC = () => {
   const colors = GetCustomColors();
-  const [copiedText, setCopiedText] = useState('');
+  const [copiedText, setCopiedText] = useState("");
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
     setCopiedText(text);
-    setTimeout(() => setCopiedText(''), 2000);
-    toast('Copied the color to clipboard!');
+    setTimeout(() => setCopiedText(""), 2000);
+    toast("Copied the color to clipboard!");
   };
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 border border-zinc-500 p-4">
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
       {Object.entries(colors).map(([name, value]) => (
         <div
           key={name}

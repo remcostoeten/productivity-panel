@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from "react";
 
 interface MousePosition {
   x: number;
@@ -18,10 +18,10 @@ function MousePosition(): MousePosition {
       setMousePosition({ x: event.clientX, y: event.clientY });
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener("mousemove", handleMouseMove);
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener("mousemove", handleMouseMove);
     };
   }, []);
 
@@ -41,7 +41,7 @@ interface ParticlesProps {
 }
 
 function hexToRgb(hex: string): number[] {
-  hex = hex.replace('#', '');
+  hex = hex.replace("#", "");
   const hexInt = Number.parseInt(hex, 16);
   const red = (hexInt >> 16) & 255;
   const green = (hexInt >> 8) & 255;
@@ -50,7 +50,7 @@ function hexToRgb(hex: string): number[] {
 }
 
 const Particles: React.FC<ParticlesProps> = ({
-  className = '',
+  className = "",
   quantity = 100,
   staticity = 50,
   ease = 50,
@@ -67,18 +67,18 @@ const Particles: React.FC<ParticlesProps> = ({
   const mousePosition = MousePosition();
   const mouse = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const canvasSize = useRef<{ w: number; h: number }>({ w: 0, h: 0 });
-  const dpr = typeof window !== 'undefined' ? window.devicePixelRatio : 1;
+  const dpr = typeof window !== "undefined" ? window.devicePixelRatio : 1;
 
   useEffect(() => {
     if (canvasRef.current) {
-      context.current = canvasRef.current.getContext('2d');
+      context.current = canvasRef.current.getContext("2d");
     }
     initCanvas();
     animate();
-    window.addEventListener('resize', initCanvas);
+    window.addEventListener("resize", initCanvas);
 
     return () => {
-      window.removeEventListener('resize', initCanvas);
+      window.removeEventListener("resize", initCanvas);
     };
   }, [color]);
 
@@ -173,7 +173,7 @@ const Particles: React.FC<ParticlesProps> = ({
       context.current.beginPath();
       context.current.arc(x, y, size, 0, 2 * Math.PI);
       const rgb = hexToRgb(color);
-      context.current.fillStyle = `rgba(${rgb.join(', ')}, ${alpha})`;
+      context.current.fillStyle = `rgba(${rgb.join(", ")}, ${alpha})`;
       context.current.fill();
       context.current.setTransform(dpr, 0, 0, dpr, 0, 0);
 

@@ -1,5 +1,4 @@
-import { Config } from 'tailwind-merge';
-import { fontFamily } from 'tailwindcss/defaultTheme';
+import { Config } from 'tailwind-merge'
 
 const config = {
   darkMode: ['class'],
@@ -20,7 +19,9 @@ const config = {
     },
     extend: {
       fontFamily: {
-        sans: ['var(--font-sans)', ...fontFamily.sans],
+        sans: ['var(--font-geist-sans)'],
+        mono: ['var(--font-geist-mono)'],
+        // sans: ['var(--font-sans)', ...fontFamily.sans],
       },
       colors: {
         'theme-primary': 'var(--theme-primary)',
@@ -138,6 +139,6 @@ const config = {
     },
   },
   plugins: [require('tailwindcss-animate')],
-} satisfies Config;
+} satisfies Config
 
-export default config;
+export default config

@@ -1,5 +1,5 @@
 // src/core/types/global.d.ts
-import { ReactNode } from 'react';
+import { ReactNode } from "react";
 
 declare global {
   type PageProps = {

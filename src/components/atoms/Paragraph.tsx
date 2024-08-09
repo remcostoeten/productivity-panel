@@ -1,11 +1,11 @@
-import { ElementType, HTMLAttributes, ReactNode } from 'react';
-import { twMerge } from 'tailwind-merge';
+import { ElementType, HTMLAttributes, ReactNode } from "react";
+import { twMerge } from "tailwind-merge";
 
-type TextAlign = 'left' | 'center' | 'right' | 'justify';
-type FontWeight = 'normal' | 'medium' | 'semibold' | 'bold';
-type TextSize = 'xs' | 'sm' | 'base' | 'lg' | 'xl' | '2xl';
+type TextAlign = "left" | "center" | "right" | "justify";
+type FontWeight = "normal" | "medium" | "semibold" | "bold";
+type TextSize = "xs" | "sm" | "base" | "lg" | "xl" | "2xl";
 
-type ParagraphProps<T extends ElementType = 'p'> = {
+type ParagraphProps<T extends ElementType = "p"> = {
   as?: T;
   align?: TextAlign;
   weight?: FontWeight;
@@ -14,16 +14,16 @@ type ParagraphProps<T extends ElementType = 'p'> = {
   children: ReactNode;
 } & HTMLAttributes<HTMLParagraphElement>;
 
-export default function Paragraph<T extends ElementType = 'p'>({
+export default function Paragraph<T extends ElementType = "p">({
   as,
-  align = 'left',
-  weight = 'normal',
-  size = 'base',
+  align = "left",
+  weight = "normal",
+  size = "base",
   className,
   children,
   ...props
 }: ParagraphProps<T>) {
-  const Component = as || 'p';
+  const Component = as || "p";
 
   const classes = twMerge(
     `text-${align}`,

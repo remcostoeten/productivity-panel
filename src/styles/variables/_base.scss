@@ -1,7 +1,7 @@
-@use 'colors/light' as light;
-@use 'colors/dark' as dark;
-@use 'colors/theme' as theme;
-@use 'sizes' as sizes;
+@use "colors/light" as light;
+@use "colors/dark" as dark;
+@use "colors/theme" as theme;
+@use "sizes" as sizes;
 
 @layer base {
   :root {
@@ -23,10 +23,10 @@
   }
 }
 
-[data-theme='dark'] {
+[data-theme="dark"] {
   --fill-color: var(--theme-primary);
 }
 
-[data-theme='light'] {
+[data-theme="light"] {
   --fill-color: var(--theme-primary);
 }

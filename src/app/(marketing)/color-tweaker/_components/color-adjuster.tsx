@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import CodeHighlight from '@/components/ui/CodeHighlight/CodeHighlight';
-import { darken, lighten } from '@/core/helpers/color-modifier';
-import { useState } from 'react';
-import { ColorInput } from '../types.color-tweaker';
+import CodeHighlight from "@/components/ui/CodeHighlight/CodeHighlight";
+import { darken, lighten } from "@/core/helpers/color-modifier";
+import { useState } from "react";
+import { ColorInput } from "../types.color-tweaker";
 
 const ColorAdjuster: React.FC = () => {
   const [colorInputs, setColorInputs] = useState<ColorInput[]>([
-    { id: 1, color: '', percentage: 5, operation: 'darken' },
+    { id: 1, color: "", percentage: 5, operation: "darken" },
   ]);
   const [output, setOutput] = useState<string[]>([]);
 
@@ -27,13 +27,13 @@ const ColorAdjuster: React.FC = () => {
     const newId = colorInputs.length + 1;
     setColorInputs([
       ...colorInputs,
-      { id: newId, color: '', percentage: 5, operation: 'darken' },
+      { id: newId, color: "", percentage: 5, operation: "darken" },
     ]);
   };
 
   const handleSubmit = () => {
     const newOutput = colorInputs.map((input) => {
-      const adjustColor = input.operation === 'darken' ? darken : lighten;
+      const adjustColor = input.operation === "darken" ? darken : lighten;
       return adjustColor(input.color, input.percentage);
     });
     setOutput(newOutput);
@@ -47,7 +47,7 @@ const ColorAdjuster: React.FC = () => {
             type="text"
             value={input.color}
             onChange={(e) =>
-              handleInputChange(input.id, 'color', e.target.value)
+              handleInputChange(input.id, "color", e.target.value)
             }
             placeholder="Color (hex, rgb, or name)"
             className="border p-2 rounded"
@@ -56,7 +56,7 @@ const ColorAdjuster: React.FC = () => {
             type="number"
             value={input.percentage}
             onChange={(e) =>
-              handleInputChange(input.id, 'percentage', Number(e.target.value))
+              handleInputChange(input.id, "percentage", Number(e.target.value))
             }
             min="0"
             max="100"
@@ -67,8 +67,8 @@ const ColorAdjuster: React.FC = () => {
             onChange={(e) =>
               handleInputChange(
                 input.id,
-                'operation',
-                e.target.value as 'darken' | 'lighten',
+                "operation",
+                e.target.value as "darken" | "lighten",
               )
             }
             className="border p-2 rounded"
@@ -99,7 +99,7 @@ const ColorAdjuster: React.FC = () => {
                 (color, index) =>
                   `const adjustedColor${index + 1} = '${color}';`,
               )
-              .join('\n')}
+              .join("\n")}
           </CodeHighlight>
         </div>
       )}

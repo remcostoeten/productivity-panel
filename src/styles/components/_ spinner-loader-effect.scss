@@ -1,6 +1,6 @@
 // https://codepen.io/konstantindenerz/pen/QWVoVrG
 @property --progress {
-  syntax: '<percentage>';
+  syntax: "<percentage>";
   inherits: true;
   initial-value: 0%;
 }
@@ -71,7 +71,7 @@
 }
 
 .spinner-CP-container:after {
-  content: '@🧙‍♂️✨';
+  content: "@🧙‍♂️✨";
   font-weight: bold;
   position: absolute;
   font-size: 2.5vmin;

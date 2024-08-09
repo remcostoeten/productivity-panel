@@ -1,44 +1,51 @@
-'use client';
+"use client";
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import React from 'react';
-import ColorConfigPickerPage from '../color-tool/page';
-import ColorShowcase from './components/_all-text';
-import LogoShowcase from './components/LogoShowCase';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import ColorConfigPickerPage from "../color-tool/page";
+import ColorShowcase from "./components/_all-text";
+import TailwindcssButtons from "./components/_button-showcase";
+import LogoShowcase from "./components/LogoShowCase";
 
 interface TabContentProps {
   children: React.ReactNode;
   value: string;
 }
 
-const TabContent: React.FC<TabContentProps> = ({ children, value }) => (
-  <TabsContent value={value} className="mt-6">
-    {children}
-  </TabsContent>
-);
+function TabContent({ children, value }: TabContentProps) {
+  return (
+    <TabsContent value={value} className="mt-6">
+      {children}
+    </TabsContent>
+  );
+}
 
-const DesignSystemShowcase: React.FC = () => {
-  const tabs = [
-    { id: 'logo', label: 'Logo Showcase', component: <LogoShowcase /> },
-    {
-      id: 'uploader',
-      label: 'Image color picker & config creator',
-      component: <ColorConfigPickerPage />,
-    },
-    { id: 'colors', label: 'Color Showcase', component: <ColorShowcase /> },
-  ];
+const tabs = [
+  { id: "logo", label: "Logo Showcase", component: <LogoShowcase /> },
+  {
+    id: "uploader",
+    label: "Color picker & config creator",
+    component: <ColorConfigPickerPage />,
+  },
+  { id: "colors", label: "Color Showcase", component: <ColorShowcase /> },
+  {
+    id: "buttons",
+    label: "Tailwindcss Buttons",
+    component: <TailwindcssButtons />,
+  },
+];
 
+function DesignSystemShowcase() {
   return (
     <div className="container mx-auto mt-4 p-4 text-2xl">
       <Tabs defaultValue="logo" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-4">
           {tabs.map((tab) => (
             <TabsTrigger key={tab.id} value={tab.id}>
               {tab.label}
             </TabsTrigger>
           ))}
         </TabsList>
-        <div className="bg-[#262626] p-8 my-8 ">
+        <div className="bg-[#262626] p-8 my-8">
           {tabs.map((tab) => (
             <TabContent key={tab.id} value={tab.id}>
               {tab.component}
@@ -48,6 +55,6 @@ const DesignSystemShowcase: React.FC = () => {
       </Tabs>
     </div>
   );
-};
+}
 
 export default DesignSystemShowcase;
