@@ -4,12 +4,11 @@ import { SignIn } from '@clerk/nextjs';
 import Image from 'next/image';
 import Link from 'next/link';
 
-export default function SignUpPage() {
+export default function SignInPage() {
   return (
     <>
       <Particles
-        className="absolute  inset-0 pointer-events-none
-         opacity-50 z-10"
+        className="absolute inset-0 pointer-events-none opacity-50 z-10"
         quantity={50}
         ease={702}
         size={0.5}
@@ -17,7 +16,7 @@ export default function SignUpPage() {
         color="#FFFFFF"
       />
       <div className="auth !max-h-screen relative">
-        <Button className="z-50 underlie opacity-30 hover:opacity-100 transition-all duration-500 text-white absolute top-4 left-4">
+        <Button className="z-50 underline opacity-30 hover:opacity-100 transition-all duration-500 text-white absolute top-4 left-4">
           <Link href="/">Back home </Link>
         </Button>
         <div className="scroll-container">
@@ -31,7 +30,7 @@ export default function SignUpPage() {
             />
           </div>
           <div className='z-50'>
-              <SignIn />
+            <SignIn afterSignInUrl="/dashboard" />
           </div>
         </div>
       </div>
