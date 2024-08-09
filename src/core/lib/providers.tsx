@@ -1,12 +1,15 @@
 "use client";
 
-import { TooltipProvider } from "@/components/ui";
 import { ClerkProvider } from "@clerk/nextjs";
+import { TooltipProvider } from "@radix-ui/react-tooltip";
 import posthog from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
-import { Toaster } from "sonner";
 
-export default function Providers({ children }: PageProps) {
+interface ProvidersProps {
+  children: React.ReactNode;
+}
+
+export default function Providers({ children }: ProvidersProps) {
   if (typeof window !== "undefined") {
     if (
       !process.env.NEXT_PUBLIC_POSTHOG_KEY ||
@@ -24,16 +27,6 @@ export default function Providers({ children }: PageProps) {
 
   return (
     <PostHogProvider client={posthog}>
-      {/* <ClerkProvider
-        appearance={{
-          baseTheme: [dark],
-          elements: {
-            userButtonPopoverMain: 'bg-gray-subtle',
-            navbar: 'bg-gradient-to-r from-gray-subtle to-gray-subtle',
-            pageScrollBox: 'bg-gray-subtle',
-          },
-        }}
-      > */}
       <ClerkProvider
         appearance={{
           variables: { colorPrimary: "#000000" },
@@ -51,10 +44,7 @@ export default function Providers({ children }: PageProps) {
           },
         }}
       >
-        <TooltipProvider>
-          {children}
-          <Toaster />
-        </TooltipProvider>
+        <TooltipProvider>{children}</TooltipProvider>
       </ClerkProvider>
     </PostHogProvider>
   );

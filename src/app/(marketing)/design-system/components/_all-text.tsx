@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { toast } from "sonner";
 import { GetCustomColors } from "./tailwindColors";
+import toast from "react-hot-toast";
 
 const ColorShowcase: React.FC = () => {
   const colors = GetCustomColors();
