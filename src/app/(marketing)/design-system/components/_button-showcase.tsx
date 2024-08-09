@@ -2,7 +2,6 @@
 import reactElementToJSXString from "react-element-to-jsx-string";
 import { ButtonsCard } from "./_tailwindcss-buttons";
 
-
 export default function TailwindcssButtons() {
   const copy = (button: any) => {
     if (button.code) {
@@ -30,8 +29,8 @@ export default function TailwindcssButtons() {
       });
   };
   return (
-    <div className="pb-40 px-4 w-full"> 
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 w-full  max-w-7xl mx-auto gap-10">
+    <div className="pb-40 px-4 w-full">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 w-full  max-w-7xl mx-auto gap-10">
         {buttons.map((button, idx) => (
           <ButtonsCard key={idx} onClick={() => copy(button)}>
             {button.component}

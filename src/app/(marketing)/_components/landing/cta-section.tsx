@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { buttonVariants } from '@/components/ui/button';
-import Marquee from '@/components/ui/marquee';
-import { cn } from '@/core/helpers/cn';
-import { motion, useAnimation, useInView } from 'framer-motion';
+import { buttonVariants } from "@/components/ui/button";
+import Marquee from "@/components/ui/marquee";
+import { cn } from "@/core/helpers/cn";
+import { motion, useAnimation, useInView } from "framer-motion";
 import {
   BarChart,
   ChevronRight,
@@ -12,9 +12,9 @@ import {
   HeartHandshake,
   Rss,
   Shield,
-} from 'lucide-react';
-import Link from 'next/link';
-import { useEffect, useId, useRef, useState } from 'react';
+} from "lucide-react";
+import Link from "next/link";
+import { useEffect, useId, useRef, useState } from "react";
 
 const tiles = [
   {
@@ -82,7 +82,7 @@ function Card(card: { icon: JSX.Element; bg: JSX.Element }) {
     if (inView) {
       controls.start({
         opacity: 1,
-        transition: { delay: Math.random() * 2, ease: 'easeOut', duration: 1 },
+        transition: { delay: Math.random() * 2, ease: "easeOut", duration: 1 },
       });
     }
   }, [controls, inView]);
@@ -94,11 +94,11 @@ function Card(card: { icon: JSX.Element; bg: JSX.Element }) {
       initial={{ opacity: 0 }}
       animate={controls}
       className={cn(
-        'relative size-20 cursor-pointer overflow-hidden rounded-2xl border p-4',
+        "relative size-20 cursor-pointer overflow-hidden rounded-2xl border p-4",
         // light styles
-        'bg-white [box-shadow:0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)]',
+        "bg-white [box-shadow:0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)]",
         // dark styles
-        'transform-gpu dark:bg-transparent dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]',
+        "transform-gpu dark:bg-transparent dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]",
       )}
     >
       {card.icon}
@@ -114,7 +114,7 @@ export default function CallToActionSection() {
   const [randomTiles4, setRandomTiles4] = useState<typeof tiles>([]);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       // Ensures this runs client-side
       setRandomTiles1(shuffleArray([...tiles]));
       setRandomTiles2(shuffleArray([...tiles]));
@@ -186,10 +186,10 @@ export default function CallToActionSection() {
                   href="#"
                   className={cn(
                     buttonVariants({
-                      size: 'lg',
-                      variant: 'outline',
+                      size: "lg",
+                      variant: "outline",
                     }),
-                    'group mt-4 rounded-[2rem] px-6',
+                    "group mt-4 rounded-[2rem] px-6",
                   )}
                 >
                   Get Started

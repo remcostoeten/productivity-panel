@@ -29,6 +29,6 @@ const config = {
     '.css$',
   ],
   importOrderTypeScriptVersion: '5.4.5',
-};
+}
 
-export default config;
+export default config

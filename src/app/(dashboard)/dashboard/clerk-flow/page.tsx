@@ -2,7 +2,6 @@ import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
 import { CodeSwitcher } from "./_components/code-switcher";
 import { UserDetails } from "./_components/user-details";
 
-
 export default async function DashboardPage() {
   return (
     <>
@@ -10,8 +9,7 @@ export default async function DashboardPage() {
         <div className="grid grid-cols-[1fr_20.5rem] gap-10 pb-10">
           <div>
             <header className="flex items-center justify-between w-full h-16 gap-4">
-              <div className="flex gap-4">
-              </div>
+              <div className="flex gap-4"></div>
               <div className="flex items-center gap-2">
                 <OrganizationSwitcher
                   appearance={{

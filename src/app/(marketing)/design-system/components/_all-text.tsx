@@ -1,18 +1,18 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { toast } from 'sonner';
-import { GetCustomColors } from './tailwindColors';
+import { useState } from "react";
+import { toast } from "sonner";
+import { GetCustomColors } from "./tailwindColors";
 
 const ColorShowcase: React.FC = () => {
   const colors = GetCustomColors();
-  const [copiedText, setCopiedText] = useState('');
+  const [copiedText, setCopiedText] = useState("");
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
     setCopiedText(text);
-    setTimeout(() => setCopiedText(''), 2000);
-    toast('Copied the color to clipboard!');
+    setTimeout(() => setCopiedText(""), 2000);
+    toast("Copied the color to clipboard!");
   };
 
   return (

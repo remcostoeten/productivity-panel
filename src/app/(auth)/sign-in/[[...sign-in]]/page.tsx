@@ -1,8 +1,8 @@
-import { Button } from '@/components/ui';
-import Particles from '@/components/ui/particles';
-import { SignIn } from '@clerk/nextjs';
-import Image from 'next/image';
-import Link from 'next/link';
+import { Button } from "@/components/ui";
+import Particles from "@/components/ui/particles";
+import { SignIn } from "@clerk/nextjs";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function SignInPage() {
   return (
@@ -29,7 +29,7 @@ export default function SignInPage() {
               alt=""
             />
           </div>
-          <div className='z-50'>
+          <div className="z-50">
             <SignIn afterSignInUrl="/dashboard" />
           </div>
         </div>

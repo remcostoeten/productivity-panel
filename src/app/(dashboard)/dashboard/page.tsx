@@ -1,13 +1,13 @@
-import { updateLastSignIn } from '@/core/server/server-actions/userActions';
-import { auth, currentUser } from '@clerk/nextjs/server';
-import { redirect } from 'next/navigation';
+import { updateLastSignIn } from "@/core/server/server-actions/userActions";
+import { auth, currentUser } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
 export default async function DashboardPage() {
   const { userId } = auth();
   const user = await currentUser();
 
   if (!userId || !user) {
-    redirect('/sign-in');
+    redirect("/sign-in");
   }
 
   // Update last sign in time
