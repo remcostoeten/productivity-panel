@@ -31,7 +31,7 @@ import {
 } from '@radix-ui/react-icons';
 import { CopyIcon, EditIcon, MoveIcon, TrashIcon } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import FileUploadUi from '../color/_components/FileUploadUi';
+import FileUploadUi from './_components/FileUploadUi';
 
 type ColorItem = {
   color: string;
@@ -448,7 +448,7 @@ export default function ColorConfigPickerPage() {
     );
   }
   return (
-    <div className="w-full max-w-4xl mx-auto p-6 bg-background text-foreground">
+    <div className="w-full mx-auto p-6 container bg-background text-foreground">
       <div className="flex flex-col -center justify-between mb-6">
         <div className="flex flex-col">
           <h1 className="text-2xl font-bold pb-2">Color Picker</h1>
