@@ -1,49 +1,35 @@
-import {
-  createOrUpdateUser,
-  getUserProfile,
-  updateLastSignIn,
-} from "@/core/server/server-actions/userActions";
-import { auth, currentUser } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
+import clsx, { ClassValue } from "clsx";
+import { JSX } from "react/jsx-runtime";
+import { twMerge } from "tailwind-merge";
 
-export default async function DashboardPage() {
-  const { userId } = auth();
-  const user = await currentUser();
+export function cn(...inputs: ClassValue[]): string {
+  return twMerge(clsx(inputs));
+}
 
-  if (!userId || !user) {
-    redirect("/sign-in");
-  }
-
-  try {
-    // Create or update user in the database
-    await createOrUpdateUser({
-      id: userId,
-      email: user.emailAddresses[0].emailAddress,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      profileImageUrl: user.profileImageUrl,
-      emailVerified: user.emailAddresses[0].verification.status === "verified",
-    });
-
-    // Update last sign-in time (but don't increment count)
-    await updateLastSignIn();
-
-    // Fetch updated user profile
-    const userProfile = await getUserProfile();
-
-    return (
-      <div>
-        <h1>Welcome to your dashboard, {userProfile.firstName}!</h1>
-        <p>You have signed in {userProfile.signInCount} times.</p>
-        <p>
-          Last sign-in:{" "}
-          {new Date(userProfile.lastSignIn * 1000).toLocaleString()}
-        </p>
-        {/* Rest of your dashboard component */}
+export default function RetroGrid({
+  className,
+}: {
+  className?: string;
+}): JSX.Element {
+  return (
+    <div
+      className={cn(
+        "absolute h-full w-full overflow-hidden [perspective:200px]",
+        className,
+      )}
+    >
+      <div className="absolute inset-0 [transform:rotateX(45deg)]">
+        <div
+          className={cn(
+            "gradient-text",
+            "animate-grid",
+            "[background-repeat:repeat] [background-size:60px_60px] [height:300vh] [inset:0%_0px] [margin-left:-50%] [transform-origin:100%_0_0] [width:300vw]",
+            "[background-image:linear-gradient(to_right,rgba(0,0,0,0.3)_1px,transparent_0),linear-gradient(to_bottom,rgba(0,0,0,0.3)_1px,transparent_0)]",
+            "dark:[background-image:linear-gradient(to_right,rgba(255,255,255,0.2)_1px,transparent_0),linear-gradient(to_bottom,rgba(255,255,255,0.2)_1px,transparent_0)]",
+          )}
+        />
       </div>
-    );
-  } catch (error) {
-    console.error("Error in DashboardPage:", error);
-    return <div>An error occurred. Please try again later.</div>;
-  }
+      <div className="absolute inset-0 bg-gradient-to-b from-white to-transparent to-60% dark:from-black" />
+    </div>
+  );
 }

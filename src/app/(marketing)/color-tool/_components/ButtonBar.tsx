@@ -19,8 +19,13 @@ export default function ButtonBar({
 }: ButtonBarProps) {
   return (
     <div className="flex items-end gap-2">
-      <Button variant="outline" onClick={handleClearLocalStorage}>
-        Clear Local Storage
+      <Button size="ion" variant="outline" onClick={handleClearLocalStorage}>
+        <Tooltip delayDuration={0.55}>
+          <tooltipTrigger>
+            <TooltipContent>Clear all the local storage</TooltipContent>
+            <QuestionMarkCircledIcon className="w-5 h-5 text-muted-foreground" />
+          </tooltipTrigger>{" "}
+        </Tooltip>
       </Button>
       <Button
         variant={pickingColor ? "destructive" : "outline"}

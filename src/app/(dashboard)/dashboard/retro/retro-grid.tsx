@@ -1,3 +1,5 @@
+"use client";
+
 import clsx, { ClassValue } from "clsx";
 import { JSX } from "react/jsx-runtime";
 import { twMerge } from "tailwind-merge";
@@ -6,11 +8,7 @@ export function cn(...inputs: ClassValue[]): string {
   return twMerge(clsx(inputs));
 }
 
-export default function RetroGrid({
-  className,
-}: {
-  className?: string;
-}): JSX.Element {
+export function RetroGrid({ className }: { className?: string }): JSX.Element {
   return (
     <div
       className={cn(

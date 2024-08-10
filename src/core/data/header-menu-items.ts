@@ -15,6 +15,6 @@ export const dropdownMenuItems = [
   { href: "/design-system", label: "Design System" },
   { href: "/color-tool", label: "Color UI picker" },
   { href: "/color-array", label: "Color Array" },
+  { href: "/retro", label: "Retro background" },
   { href: "/color-tweaker", label: "Color Tweaker" },
-  { href: "/", label: "Landing Page" },
 ];

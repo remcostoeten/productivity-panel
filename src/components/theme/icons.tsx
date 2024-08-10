@@ -18,8 +18,37 @@ function CopyIcon(props) {
   );
 }
 
-// icons.tsx
-
+function ClearStoratgeIcon({ className }) {
+  return (
+    <svg
+      className={className}
+      xmlns="http://www.w3.org/2000/svg"
+      x="0"
+      y="0"
+      viewBox="0 0 64 80"
+    >
+      <path d="M32 56.999c-13.785 0-25-11.214-25-24.998 0-13.785 11.215-25 25-25 13.784 0 24.998 11.215 24.998 25a1 1 0 11-2 0c0-12.682-10.316-23-22.998-23-12.683 0-23 10.318-23 23 0 12.681 10.317 22.998 23 22.998a1 1 0 110 2z"></path>
+      <path d="M44 46.998H20.002a1 1 0 01-1-1V29.997a1 1 0 011-1H44a1 1 0 011 1v16.001a1 1 0 01-1 1zm-22.998-2H43V30.997H21.002v14.001z"></path>
+      <path d="M32.002 46.998a1 1 0 01-1-1v-4a1 1 0 112 0v4a1 1 0 01-1 1zM37.998 46.998a1 1 0 01-1-1v-8a1 1 0 112 0v8a1 1 0 01-1 1zM26.003 46.996a1 1 0 01-1-1V34.001a1 1 0 112 0v11.995a1 1 0 01-1 1zM44 30.997H20a1 1 0 01-1-1v-2a3.002 3.002 0 012.998-2.999h7.003V16a3.001 3.001 0 012.997-2.998c1.654 0 3 1.345 3 2.998v8.998h7.004A3.002 3.002 0 0145 27.997v2a1 1 0 01-1 1zm-23-2h22v-1a1 1 0 00-.998-.999h-8.004a1 1 0 01-1-1V16a.999.999 0 00-1.997 0v9.998a1 1 0 01-1 1h-8.003a1 1 0 00-.998.999v1z"></path>
+      <text
+        y="79"
+        fontFamily="'Helvetica Neue', Helvetica, Arial-Unicode, Arial, Sans-serif"
+        fontSize="5"
+        fontWeight="bold"
+      >
+        Created by Fluff Studio
+      </text>
+      <text
+        y="84"
+        fontFamily="'Helvetica Neue', Helvetica, Arial-Unicode, Arial, Sans-serif"
+        fontSize="5"
+        fontWeight="bold"
+      >
+        from the Noun Project
+      </text>
+    </svg>
+  );
+}
 export const ReactIcon = ({ className }: { className?: string }) => {
   return (
     <svg

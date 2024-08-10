@@ -88,6 +88,10 @@ const config = {
         'marketing-header': 'var(--marketing-header-height)',
       },
       keyframes: {
+        grid: {
+          '0%': { transform: 'translateY(0)' },
+          '100%': { transform: 'translateY(-100%)' },
+        },
         'accordion-down': {
           from: { height: '0' },
           to: { height: 'var(--radix-accordion-content-height)' },
@@ -152,6 +156,7 @@ const config = {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         'border-beam': 'border-beam calc(var(--duration)*1s) infinite linear',
+        grid: 'grid 20s linear infinite',
         'image-glow': 'image-glow 4100ms 600ms ease-out forwards',
         'fade-in':
           'fade-in 1000ms var(--animation-delay, 0ms                                     ) ease forwards',

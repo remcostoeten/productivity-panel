@@ -86,7 +86,7 @@ export default function SiteHeader() {
   return (
     <>
       <header className="animate-fade-in fixed left-0 top-0 z-50 w-full -translate-y-4 border-b opacity-0 backdrop-blur-md [--animation-delay:600ms]">
-        <div className="px-2 lg:px-0 sm:container flex h-14 items-center justify-between">
+        <div className="px-2 lg:px-0 sm:container flex h-14 items-center justify-between z-20">
           <Link
             className="text-md flex items-center transition-all duration-500 origin-top"
             href="/"

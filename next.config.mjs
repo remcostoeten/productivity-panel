@@ -17,6 +17,9 @@ const nextConfig = {
       compilationMode: 'annotation',
     },
   },
+  images: {
+    domains: ['via.placeholder.com'],
+  },
 }
 
 export default nextConfig
