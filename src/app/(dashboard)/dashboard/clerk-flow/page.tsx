@@ -2,7 +2,7 @@ import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
 import { CodeSwitcher } from "./_components/code-switcher";
 import { UserDetails } from "./_components/user-details";
 
-export default async function DashboardPage() {
+export default async function DashboardClerkPage() {
   return (
     <>
       <main className="max-w-[75rem] w-full mx-auto">

@@ -30,14 +30,18 @@ export default function HeroSection() {
         A platform for keeping <br className="hidden md:block" /> track of{" "}
         <i>anything</i>.
       </h1>
-      <p className="animate-fade-in mb-12 -translate-y-4 text-balance text-lg tracking-tight text-gray-400 opacity-0 [--animation-delay:400ms] md:text-xl">
+      <p className="animate-fade-in mb-12 -translate-y-4 text-pretty text-lg tracking-tight text-gray-400 opacity-0 [--animation-delay:400ms] md:text-xl">
         Because who wants to use Excel or Google Sheets? 🤷‍♂️
-        <br /> All data is stored for you as an individual user. Sign up with
-        ease.{" "}
+        <br className="hidden sm:block" /> All data is stored for you as an
+        individual user. Sign up with ease.{" "}
       </p>
-      <Button className="animate-fade-in -translate-y-4 gap-1 rounded-lg text-white opacity-0 ease-in-out [--animation-delay:600ms] dark:text-black">
-        <Link href="/dashboard">Go to dashboard </Link>
-        <ArrowRightIcon className="ml-1 size-4 transition-transform duration-300 ease-in-out group-hover:translate-x-1" />
+      <Button
+        variant="shimmer"
+        withArrow={true}
+        arrowPosition="right"
+        href="/dashboard"
+      >
+        Go to dashboard
       </Button>
       <div
         ref={ref}

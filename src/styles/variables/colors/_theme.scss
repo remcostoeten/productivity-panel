@@ -6,6 +6,27 @@ $theme-colors: (
   "color-three": #9e7aff,
 );
 
+// Brand colors as CSS variables
+:root {
+  --theme-primary: #ff6c00;
+  --text: #f3f3f3;
+  --text-accent: #909090;
+  --text-dimmed: #cccccc;
+  --border-hover: #252525;
+  --badge-border: var(--border-hover);
+  --body: #040404;
+  --section: #0c0c0c;
+  --active-state: #1b1b1b;
+  --section-hover: var(--section-state);
+  --card: var(--section);
+  --card-hover: #161616;
+  --pill: var(--card-hover);
+  --cubic: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration: 0.3s;
+  --transition-property: color, background-color, border-color,
+    text-decoration-color, fill, stroke, -webkit-text-decoration-color;
+}
+
 @mixin apply-theme-colors {
   @each $key, $value in $theme-colors {
     --#{$key}: #{$value};

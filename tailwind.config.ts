@@ -58,6 +58,20 @@ const config = {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
+        // New color definitions
+        text: {
+          DEFAULT: 'var(--text)',
+          accent: 'var(--text-accent)',
+          dimmed: 'var(--text-dimmed)',
+        },
+        'border-hover': 'var(--border-hover)',
+        'badge-border': 'var(--badge-border)',
+        body: 'var(--body)',
+        section: 'var(--section)',
+        'active-state': 'var(--active-state)',
+        'section-hover': 'var(--section-hover)',
+        'card-hover': 'var(--card-hover)',
+        pill: 'var(--pill)',
       },
       borderRadius: {
         lg: 'var(--radius)',
@@ -108,6 +122,14 @@ const config = {
           from: { opacity: '0', transform: 'translateY(20px)' },
           to: { opacity: '1', transform: 'none' },
         },
+        'shimmer-btn': {
+          from: {
+            backgroundPosition: '0 0',
+          },
+          to: {
+            backgroundPosition: '-200% 0',
+          },
+        },
         shimmer: {
           '0%, 90%, 100%': {
             'background-position': 'calc(-100% - var(--shimmer-width)) 0',
@@ -126,19 +148,53 @@ const config = {
         },
       },
       animation: {
+        'shimmer-btn': 'shimmer-btn 2s linear infinite',
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         'border-beam': 'border-beam calc(var(--duration)*1s) infinite linear',
         'image-glow': 'image-glow 4100ms 600ms ease-out forwards',
-        'fade-in': 'fade-in 1000ms var(--animation-delay, 0ms) ease forwards',
+        'fade-in':
+          'fade-in 1000ms var(--animation-delay, 0ms                                     ) ease forwards',
         'fade-up': 'fade-up 1000ms var(--animation-delay, 0ms) ease forwards',
         shimmer: 'shimmer 8s infinite',
         marquee: 'marquee var(--duration) infinite linear',
         'marquee-vertical': 'marquee-vertical var(--duration) linear infinite',
       },
+      // New custom properties
+      transitionProperty: {
+        custom: 'var(--transition-property)',
+      },
+      transitionTimingFunction: {
+        custom: 'var(--cubic)',
+      },
+      transitionDuration: {
+        custom: 'var(--duration)',
+      },
     },
   },
   plugins: [require('tailwindcss-animate')],
 } satisfies Config
+
+const cssVariables = `
+:root {
+  --theme-primary: #ff6c00;
+  --text: #f3f3f3;
+  --text-accent: #909090;
+  --text-dimmed: #cccccc;
+  --border-hover: #252525;
+  --badge-border: var(--border-hover);
+  --body: #040404;
+  --section: #0c0c0c;
+  --active-state: #1b1b1b;
+  --section-hover: var(--section-state);
+  --card: var(--section);
+  --card-hover: #161616;
+  --pill: var(--card-hover);
+  --cubic: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration: 0.3s;
+  --transition-property: color, background-color, border-color,
+    text-decoration-color, fill, stroke, -webkit-text-decoration-color;
+}
+`
 
 export default config

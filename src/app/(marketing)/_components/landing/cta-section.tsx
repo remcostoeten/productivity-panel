@@ -170,13 +170,13 @@ export default function CallToActionSection() {
                 <Card key={idx} {...review} />
               ))}
             </Marquee>
-            <div className="absolute z-10">
+            <div className="absolute z-10 mx-.5 px-2 text-balance">
               <div className="mx-auto size-24 rounded-[2rem] border bg-white/10 p-3 shadow-2xl backdrop-blur-md lg:size-32 dark:bg-black/10">
                 <HeartHandshake className="mx-auto size-16 text-black lg:size-24 dark:text-white" />
               </div>
               <div className="text-primary z-10 mt-4 flex flex-col items-center text-center">
                 <h1 className="text-3xl font-bold lg:text-4xl">
-                  Stop wasting time on manually creating sheets.
+                  Stop wasting time on manually tasks.
                 </h1>
                 <p className="mt-2">
                   Sign up with e-mail, Google, Github or Facebook and start

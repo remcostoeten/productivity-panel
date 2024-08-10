@@ -1,1 +1,19 @@
 $theme-primary: #ff6c00;
+
+$text: #f3f3f3;
+$text-accent: #909090;
+$text-dimmed: #cccccc;
+// card
+$border-hover: #252525;
+$badge-border: $border-hover;
+
+// Theme layout
+$body: #040404;
+$section: #0c0c0c;
+$active-state: #1b1b1b;
+$section-hover: $section;
+$card: $section;
+
+$card-hover: #161616;
+
+$pill: $card-hover; // (or badge)

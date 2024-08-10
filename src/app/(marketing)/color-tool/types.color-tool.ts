@@ -47,3 +47,8 @@ export type ColorFolderProps = {
   copyToClipboard: (text: string) => void;
   openMoveColorDialog: (colorItem: ColorItem) => void;
 };
+
+export type ThemeColorObject = {
+  name: string;
+  value: string;
+};

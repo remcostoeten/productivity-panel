@@ -1,5 +1,4 @@
 // https://codepen.io/davideast/pen/MWxvzjm
-
 @keyframes sheen {
   100% {
     transform: rotateZ(60deg) translate(1em, -9em);
@@ -10,11 +9,45 @@
   animation: sheen var(--ease-elastic-in-1) 1s infinite;
 }
 /*______________________________________________*/
+// card/section animation config
+$cubic: cubic-bezier(0.4, 0, 0.2, 1);
+$duration: 0.3s;
+$transition-property:
+  color,
+  background-color,
+  border-color,
+  text-decoration-color,
+  fill,
+  stroke,
+  -webkit-text-decoration-color;
+
+/*_____________page transition_________________________________*/
+body {
+  transition-property: opacity, transform, filter, background;
+  transition-timing-function: ease-in-out;
+  transition-duration: 500ms;
+}
+
+.page-transition {
+  opacity: 0;
+  background: black;
+  transform: translateY(40px);
+  filter: blur(12px);
+}
 
 /*______________________________________________*/
+.shimmer-btn {
+  border-color: darken($theme-primary, 60%);
+  box-shadow: rgba($theme-primary, 0.1) 0px 1px 25px;
 
-/*______________________________________________*/
-
+  transition-duration: 0.6s;
+  &:hover {
+    box-shadow: rgba($theme-primary, 0.7) 0px 1px 25px;
+    background-color: $theme-primary !important;
+    transition-property: box-shadow, border;
+    border: 1px solid rgba($theme-primary, 0.4);
+  }
+}
 /*______________________________________________*/
 
 /*______________________________________________*/

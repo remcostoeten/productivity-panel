@@ -64,8 +64,8 @@ export function UserDetails() {
   if (!user || !session) return null;
 
   return (
-    <div className="p-16 rounded-lg border border-[#EDEDED] bg-[#F1F1F2] background relative">
-      <div className="p-8 rounded-xl bg-white shadow-[0_5px_15px_rgba(0,0,0,0.08),0_15px_35px_-5px_rgba(25,28,33,0.2)] ring-1 ring-gray-950/5 max-w-[25rem]">
+    <div className="p-16 rounded-lg border border-[#EDEDED] bg-[#252525] background relative">
+      <div className="p-8 rounded-xl bg-[#0c0c0c] shadow-[0_5px_15px_rgba(0,0,0,0.08),0_15px_35px_-5px_rgba(25,28,33,0.2)] ring-1 ring-gray-950/5 max-w-[25rem]">
         <div className="flex flex-col items-center gap-2 mb-6">
           <div className="w-full relative flex justify-center">
             <img src={user.imageUrl} className="size-20 rounded-full" />
@@ -100,7 +100,7 @@ export function UserDetails() {
           )}
         </div>
 
-        <div className="px-2.5 bg-[#FAFAFB] rounded-lg divide-y divide-[#EEEEF0]">
+        <div className="px-2.5 bg-[#252525] rounded-lg divide-y divide-[#EEEEF0]">
           <Row desc="Email" value={user.emailAddresses[0].emailAddress}>
             <PointerC label="user.emailAddresses[0].emailAddress" />
           </Row>
@@ -117,7 +117,7 @@ export function UserDetails() {
         <h2 className="mt-6 mb-4 text-[0.9375rem] font-semibold">
           Session details
         </h2>
-        <div className="px-2.5 bg-[#FAFAFB] rounded-lg divide-y divide-[#EEEEF0]">
+        <div className="px-2.5 bg-[#252525] rounded-lg divide-y divide-[#EEEEF0]">
           <Row desc="Session ID" value={session.id}>
             <PointerC label="session.id" />
           </Row>
@@ -142,7 +142,7 @@ export function UserDetails() {
             <h2 className="mt-6 mb-4 text-[0.9375rem] font-semibold">
               Organization detail
             </h2>
-            <div className="px-2.5 bg-[#FAFAFB] rounded-lg divide-y divide-[#EEEEF0]">
+            <div className="px-2.5 bg-[#252525] rounded-lg divide-y divide-[#EEEEF0]">
               <Row desc="Organization ID" value={organization.id}>
                 <PointerC label="organization.id" />
               </Row>

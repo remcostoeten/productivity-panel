@@ -1,13 +1,15 @@
 {
+  "cSpell.enable": false,
+  "editor.foldingImportsByDefault": true,
   "editor.tabSize": 4,
   "editor.insertSpaces": true,
   "editor.detectIndentation": false,
-  "files.autoSave": "onFocusChange",
   "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "files.autoSave": "onFocusChange",
   "editor.formatOnSaveMode": "file",
   "editor.codeActionsOnSave": {
-    "source.organizeImports": "explicit",
-    "source.addMissingImports": "explicit"
+    // Removed "source.organizeImports" and "source.addMissingImports"
   },
   "files.exclude": {
     "**/.DS_Store": true,
@@ -35,7 +37,7 @@
   "git.enableSmartCommit": true,
   "terminal.integrated.enableMultiLinePasteWarning": "auto",
   "vscode_custom_css.imports": [
-    "file:///home/remcostoeten/.vscode/extensions/brandonkirbyson.vscode-animations-2.0.3/dist/updateHandler.js"
+    "file:///home/remcostoeten/.vscode/extensions/brandonkirbyson.vscode-animations-2.0.3/dist/updateHHHandler.js"
   ],
   "github.copilot.advanced": {
     "github.copilot.enable": true,

@@ -36,8 +36,8 @@ const tabs = [
 
 function DesignSystemShowcase() {
   return (
-    <div className="container mx-auto mt-4 p-4 text-2xl">
-      <Tabs defaultValue="logo" className="w-full">
+    <div className="container mx-auto mt-4 p text-2xl">
+      <Tabs defaultValue="logo" className="w-full !inline">
         <TabsList className="grid w-full grid-cols-4">
           {tabs.map((tab) => (
             <TabsTrigger key={tab.id} value={tab.id}>
@@ -45,7 +45,7 @@ function DesignSystemShowcase() {
             </TabsTrigger>
           ))}
         </TabsList>
-        <div className="bg-[#262626] p-8 my-8">
+        <div className="bg-[#262626] py-8 my-8">
           {tabs.map((tab) => (
             <TabContent key={tab.id} value={tab.id}>
               {tab.component}
