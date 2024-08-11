@@ -7,7 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { dAropdownMenuItems, dropdownMenuItems } from "@/core/data/header-menu-items";
+import { dropdownMenuItems } from "@/core/data/header-menu-items";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import React from "react";
@@ -21,15 +21,7 @@ const DashNavigationMenu: React.FC<DashNavigationMenuProps> = ({
   animationVariant = "elegant",
 }) => {
   const [isOpen, setIsOpen] = React.useState(false);
-
-  const menuItems = [
-    { href: "/design-system", label: "Design System" },
-    { href: "/color-tool", label: "Color UI picker" },
-    { href: "/color-array", label: "Color Array" },
-    { href: "/color-tweaker", label: "Color Tweaker" },
-    { href: "/", label: "Landing Page" },
-  ];
-
+  
   const currentVariant = menuAnimationVariants[animationVariant];
 
   return (
@@ -61,7 +53,7 @@ const DashNavigationMenu: React.FC<DashNavigationMenuProps> = ({
               animate="visible"
               exit="exit"
             >
-              {dAropdownMenuItems.map((item, index) => (
+              {dropdownMenuItems.map((item, index) => (
                 <DropdownMenuItem key={item.href} asChild>
                   <motion.a
                     href={item.href}

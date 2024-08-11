@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import NavigationMenu from "./marketing-header-dropdown";
 import { HamburgerMenuIcon } from "@radix-ui/react-icons";
 import { BorderMagicButton, BorderMagicButtonAlt } from "@/components/ui";
+import DashNavigationMenu from "./marketing-header-dropdown";
 
 export default function SiteHeader() {
   const mobilenavbarVariant = {
@@ -109,6 +110,7 @@ export default function SiteHeader() {
               </Link>
             ))}
             <NavigationMenu animationVariant="dropdownMenu" />
+            <DashNavigationMenu animationVariant="dropdownMenu" />
           </nav>
 
           <div className="hidden md:flex ml-auto h-full items-center">

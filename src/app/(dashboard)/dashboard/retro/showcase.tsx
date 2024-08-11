@@ -1,10 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
-import Wyze from "https://via.placeholder.com/150";
-import HackClub from "https://via.placeholder.com/150";
-import DonaAI from "https://via.placeholder.com/150";
-import LLMReport from "https://via.placeholder.com/150";
-import Texts from "https://via.placeholder.com/150";
+import Wyze from "@/../public/15.png";
+import HackClub from "@/../public/15.png";;
+import DonaAI from "@/../public/15.png";;
+import LLMReport from "@/../public/15.png";;
+import Texts from "@/../public/15.png";;
 import Container from "./container";
 
 const entries = [
@@ -77,15 +77,7 @@ export const ShowcaseSlider = () => {
             rel="noopener noreferrer"
             className="pr-10 space-y-6 text-center w-[24rem] relative grayscale-[50%] opacity-90 hover:opacity-100 transition duration-200 hover:grayscale-0"
           >
-            <Image
-              src={image}
-              alt={name}
-              width={256}
-              height={288}
-              className={`mx-auto h-32 w-72 md:h-40 md:w-24 lg:h-32 lg:w-72 rounded-lg object-cover object-top hover:rotate-0 ${
-                i % 2 === 0 ? "-rotate-1" : " rotate-1"
-              } hover:scale-110 hover:shadow-lg lg:hover:shadow-2xl transition`}
-            />
+           
             <div>
               <h4 className="text-2xl text-gray-700 dark:text-white">{name}</h4>
               <span className="block text-sm text-gray-500">{url}</span>

@@ -1,12 +1,24 @@
-import { ShimmerButtonProps } from "@/core/types/types.buttons";
-import { CSSProperties } from "react";
+
+import type { CSSProperties } from 'react';
+
+interface ShimmerButtonProps {
+  shimmerColor?: string;
+  shimmerSize?: string;
+  borderRadius?: string;
+  shimmerDuration?: string;
+  background?: string;
+  className?: string;
+  children?: React.ReactNode;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- props
+  [key: string]: any; // ...props
+}
 
 export const ShimmerButton = ({
-  shimmerColor = "#ffffff",
-  shimmerSize = "1px",
-  shimmerDuration = "1.5s",
-  borderRadius = "100px",
-  background = "radial-gradient(ellipse 80% 50% at 50% 120%,rgba(62, 61, 117),rgba(18, 18, 38))",
+  shimmerColor = '#ffffff',
+  shimmerSize = '1px',
+  shimmerDuration = '1.5s',
+  borderRadius = '100px',
+  background = 'radial-gradient(ellipse 80% 50% at 50% 120%,rgba(62, 61, 117),rgba(18, 18, 38))',
   className,
   children,
   ...props
@@ -15,17 +27,17 @@ export const ShimmerButton = ({
     <button
       style={
         {
-          "--spread": "90deg",
-          "--shimmer-color": shimmerColor,
-          "--radius": borderRadius,
-          "--speed": shimmerDuration,
-          "--cut": shimmerSize,
-          "--bg": background,
+          '--spread': '90deg',
+          '--shimmer-color': shimmerColor,
+          '--radius': borderRadius,
+          '--speed': shimmerDuration,
+          '--cut': shimmerSize,
+          '--bg': background,
         } as CSSProperties
       }
       className={`
         flex text-white dark:text-black group relative cursor-pointer overflow-hidden whitespace-nowrap h-11 px-6  [background:var(--bg)] [border-radius:var(--radius)] transition-all shadow-[0_0_0_3px_rgba(255,255,255,0.3)_inset] hover:scale-105 duration-300 ${
-          className || ""
+          className || ''
         }
       `}
       {...props}

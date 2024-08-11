@@ -1,15 +1,13 @@
 import { About } from "./about";
 import { CTA } from "./cta";
-import Hero from "./hero";
-import Blur from "./hero";
+import { Hero } from "./hero";
+import { Showcase } from "./showcase";
 
-export default function Page() {
+export function Home() {
   return (
     <main className="space-y-40 mb-40">
       <Hero />
-      <Blur />
-
-      <CTA />
+      <Showcase />
     </main>
   );
 }
