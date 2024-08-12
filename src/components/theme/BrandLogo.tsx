@@ -3,7 +3,9 @@
 import { motion } from "framer-motion";
 import { useTheme } from "next-themes";
 import Link from "next/link";
-import BEZIER_CURVES, { BezierCurve } from "src/core/helpers/bezier-curves"; // Update path as needed
+import BEZIER_CURVES, {
+  BezierCurve,
+} from "@/core/helpers/animations/bezier-curves"; // Update path as needed
 
 const getCSSVariableValue = (variableName: string) => {
   if (typeof document !== "undefined") {

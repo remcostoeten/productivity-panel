@@ -1,5 +1,6 @@
 "use server";
 
+import { ADMIN_EMAILS } from "@/core/data/site-config";
 import { db } from "@/core/server/db";
 import { users } from "@/core/server/db/schema";
 import { auth } from "@clerk/nextjs/server";
@@ -12,8 +13,6 @@ export async function updateLastSignIn() {
     throw new Error("Not authenticated");
   }
 
-  // Log the users object to check its structure
-  console.log("Users schema:", users);
 
   await db.update(users).set({ lastSignIn: sql`(strftime('%s', 'now'))` });
 
@@ -62,7 +61,7 @@ export async function createOrUpdateUser(userData: {
       lastName,
       profileImageUrl,
       emailVerified: emailVerified ? 1 : 0,
-      isAdmin: 0, // Default to non-admin
+      isAdmin:ADMIN_EMAILS.MAIN === email || ADMIN_EMAILS.SECONDARY === email ? 1 : 0,
       lastSignIn: sql`(strftime('%s', 'now'))`,
       createdAt: sql`(strftime('%s', 'now'))`,
       updatedAt: sql`(strftime('%s', 'now'))`,
