@@ -1,61 +1,25 @@
 "use client";
 
 import BrandLogo from "@/components/theme/BrandLogo";
-import { Button } from "@/components/ui/button";
-import { menuItem } from "@/core/data/header-menu-items";
+import menuItem from "@/core/data/header-menu-items";
 import { cn } from "@/core/helpers/cn";
+import { UserButton } from "@clerk/nextjs";
 import { AnimatePresence, motion } from "framer-motion";
 import { AlignJustify, XIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-export function SiteHeader() {
-  const mobilenavbarVariant = {
-    initial: {
-      opacity: 0,
-      scale: 1,
-    },
-    animate: {
-      scale: 1,
-      opacity: 1,
-      transition: {
-        duration: 0.2,
-        ease: "easeOut",
-      },
-    },
-    exit: {
-      opacity: 0,
-      transition: {
-        duration: 0.2,
-        delay: 0.2,
-        ease: "easeOut",
-      },
-    },
-  };
+import NavigationMenu from "./marketing-header-dropdown";
+import { HamburgerMenuIcon } from "@radix-ui/react-icons";
+import { BorderMagicButton } from "@/components/ui";
+import DashNavigationMenu from "./marketing-header-dropdown";
+import {
+  mobilenavbarVariant,
+  containerVariants,
+  mobileLinkVar,
+} from "@/core/helpers/animations/ menu-animations";
 
-  const mobileLinkVar = {
-    initial: {
-      y: "-20px",
-      opacity: 0,
-    },
-    open: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.3,
-        ease: "easeOut",
-      },
-    },
-  };
-
-  const containerVariants = {
-    open: {
-      transition: {
-        staggerChildren: 0.06,
-      },
-    },
-  };
-
+export default function SiteHeader() {
   const [hamburgerMenuIsOpen, setHamburgerMenuIsOpen] = useState(false);
 
   useEffect(() => {
@@ -76,20 +40,20 @@ export function SiteHeader() {
       window.removeEventListener("resize", closeHamburgerNavigation);
     };
   }, [setHamburgerMenuIsOpen]);
+
   const pathname = usePathname();
 
   return (
     <>
       <header className="animate-fade-in fixed left-0 top-0 z-50 w-full -translate-y-4 border-b opacity-0 backdrop-blur-md [--animation-delay:600ms]">
-        <div className="container flex h-14 items-center justify-between">
+        <div className="px-2 lg:px-0 sm:container flex h-14 items-center justify-between z-20">
           <Link
-            className="text-md flex items-center  transition-all duration-500 origin-top
-          "
+            className="text-md flex items-center transition-all duration-500 origin-top"
             href="/"
           >
             <BrandLogo />
           </Link>
-          <nav className="flex justify-center items-center content-center w-full">
+          <nav className="hidden md:flex justify-center items-center content-center w-full">
             {menuItem.map((item) => (
               <Link
                 key={item.id}
@@ -104,29 +68,28 @@ export function SiteHeader() {
                 {item.label}
               </Link>
             ))}
+            <NavigationMenu animationVariant="dropdownMenu" />
+            <DashNavigationMenu animationVariant="dropdownMenu" />
           </nav>
 
-          <div className="ml-auto flex h-full items-center">
-            <Link
-              href="/sign-in"
-              role="button"
-              className="relative inline-flex h-9 overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50"
-            >
-              <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#ff6c00_0%,#ff6a0016_50%,#ff6c00_100%)] opacity-50" />
-              <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 px-3 py-1 text-xs font-medium text-white backdrop-blur-3xl">
-                Dashboard
-              </span>
-            </Link>
+          <div className="hidden md:flex ml-auto h-full items-center mr-4">
+            <UserButton />
+            <BorderMagicButton href="/dashboard"> Dashboard</BorderMagicButton>
           </div>
-          <Button
+          <button
             className="ml-6 md:hidden"
             onClick={() => setHamburgerMenuIsOpen((open) => !open)}
           >
             <span className="sr-only">Toggle menu</span>
-            {hamburgerMenuIsOpen ? <XIcon /> : <AlignJustify />}
-          </Button>
+            {hamburgerMenuIsOpen ? (
+              <XIcon className="text-red-400" />
+            ) : (
+              <HamburgerMenuIcon className="text-text size-5" />
+            )}
+          </button>
         </div>
       </header>
+
       <AnimatePresence>
         <motion.nav
           initial="initial"
@@ -145,13 +108,13 @@ export function SiteHeader() {
               Remco Stoeten
             </Link>
 
-            <Button
+            <button
               className="ml-6 md:hidden"
               onClick={() => setHamburgerMenuIsOpen((open) => !open)}
             >
               <span className="sr-only">Toggle menu</span>
               {hamburgerMenuIsOpen ? <XIcon /> : <AlignJustify />}
-            </Button>
+            </button>
           </div>
           <motion.ul
             className="flex flex-col uppercase ease-in md:flex-row md:items-center md:normal-case"

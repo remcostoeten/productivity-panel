@@ -1,4 +1,5 @@
 export * from "./avatar";
+export * from "./scroll-area";
 export * from "./border-beam";
 export * from "./button";
 export * from "./card";
