@@ -1,37 +1,46 @@
 "use client";
 
-import BrandLogo from "@/components/theme/BrandLogo";
-import menuItem from "@/core/data/header-menu-items";
-import { cn } from "@/core/helpers/cn";
-import { UserButton } from "@clerk/nextjs";
+import { useState, use, useCallback, useTransition } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import { AlignJustify, XIcon } from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-import NavigationMenu from "./marketing-header-dropdown";
+import { UserButton } from "@clerk/nextjs";
+import { XIcon, AlignJustify } from "lucide-react";
 import { HamburgerMenuIcon } from "@radix-ui/react-icons";
-import { BorderMagicButton } from "@/components/ui";
+import Link from "next/link";
+import BrandLogo from "@/components/theme/BrandLogo";
+import menuItems from "@/core/data/header-menu-items";
+import { cn } from "@/core/helpers/cn";
+import NavigationMenu from "./marketing-header-dropdown";
 import DashNavigationMenu from "./marketing-header-dropdown";
+import { BorderMagicButton, BorderMagicButtonAlt } from "@/components/ui";
 import {
-  mobilenavbarVariant,
   containerVariants,
   mobileLinkVar,
-} from "@/core/helpers/animations/ menu-animations";
+  mobilenavbarVariant,
+} from "@/core/helpers/animations/menu-animations";
 
 export default function SiteHeader() {
-  const [hamburgerMenuIsOpen, setHamburgerMenuIsOpen] = useState(false);
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
-  useEffect(() => {
+  const [hamburgerMenuIsOpen, setHamburgerMenuIsOpen] = use(useState(false));
+
+  const toggleHamburgerMenu = useCallback(() => {
+    startTransition(() => {
+      setHamburgerMenuIsOpen((prev) => !prev);
+    });
+  }, []);
+
+  const closeHamburgerNavigation = useEffectEvent(() => {
+    setHamburgerMenuIsOpen(false);
+  });
+
+  use(() => {
     const html = document.querySelector("html");
-
     if (html) {
       html.classList.toggle("overflow-hidden", hamburgerMenuIsOpen);
     }
-  }, [hamburgerMenuIsOpen]);
 
-  useEffect(() => {
-    const closeHamburgerNavigation = () => setHamburgerMenuIsOpen(false);
     window.addEventListener("orientationchange", closeHamburgerNavigation);
     window.addEventListener("resize", closeHamburgerNavigation);
 
@@ -39,9 +48,9 @@ export default function SiteHeader() {
       window.removeEventListener("orientationchange", closeHamburgerNavigation);
       window.removeEventListener("resize", closeHamburgerNavigation);
     };
-  }, [setHamburgerMenuIsOpen]);
+  });
 
-  const pathname = usePathname();
+  const pathname = use(usePathname());
 
   return (
     <>
@@ -54,7 +63,7 @@ export default function SiteHeader() {
             <BrandLogo />
           </Link>
           <nav className="hidden md:flex justify-center items-center content-center w-full">
-            {menuItem.map((item) => (
+            {menuItems.map((item) => (
               <Link
                 key={item.id}
                 className={cn(
@@ -74,12 +83,9 @@ export default function SiteHeader() {
 
           <div className="hidden md:flex ml-auto h-full items-center mr-4">
             <UserButton />
-            <BorderMagicButton href="/dashboard"> Dashboard</BorderMagicButton>
+            <BorderMagicButtonAlt href="/dashboard"> Dashboard</BorderMagicButtonAlt>
           </div>
-          <button
-            className="ml-6 md:hidden"
-            onClick={() => setHamburgerMenuIsOpen((open) => !open)}
-          >
+          <button className="ml-6 md:hidden" onClick={toggleHamburgerMenu}>
             <span className="sr-only">Toggle menu</span>
             {hamburgerMenuIsOpen ? (
               <XIcon className="text-red-400" />
@@ -97,7 +103,7 @@ export default function SiteHeader() {
           variants={mobilenavbarVariant}
           animate={hamburgerMenuIsOpen ? "animate" : "exit"}
           className={cn(
-            `bg-background/70 fixed left-0 top-0 z-50 h-screen w-full overflow-auto backdrop-blur-md `,
+            `bg-background/70 fixed left-0 top-0 z-50 h-screen w-full overflow-auto backdrop-blur-md`,
             {
               "pointer-events-none": !hamburgerMenuIsOpen,
             },
@@ -108,10 +114,7 @@ export default function SiteHeader() {
               Remco Stoeten
             </Link>
 
-            <button
-              className="ml-6 md:hidden"
-              onClick={() => setHamburgerMenuIsOpen((open) => !open)}
-            >
+            <button className="ml-6 md:hidden" onClick={toggleHamburgerMenu}>
               <span className="sr-only">Toggle menu</span>
               {hamburgerMenuIsOpen ? <XIcon /> : <AlignJustify />}
             </button>
@@ -122,7 +125,7 @@ export default function SiteHeader() {
             initial="initial"
             animate={hamburgerMenuIsOpen ? "open" : "exit"}
           >
-            {menuItem.map((item) => (
+            {menuItems.map((item) => (
               <motion.li
                 variants={mobileLinkVar}
                 key={item.id}
