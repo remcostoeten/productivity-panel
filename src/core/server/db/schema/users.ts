@@ -8,10 +8,11 @@ const users = sqliteTable("users", {
   lastName: text("last_name"),
   isAdmin: integer("is_admin", { mode: "boolean" }).notNull().default(0),
   lastSignIn: integer("last_sign_in", { mode: "timestamp" }),
+  signInCount: integer("sign_in_count").notNull().default(0),
   profileImageUrl: text("profile_image_url"),
   emailVerified: integer("email_verified", { mode: "boolean" })
     .notNull()
-    .default(0),
+    .default(false),
   createdAt: integer("created_at", { mode: "timestamp" })
     .notNull()
     .default(sql`(strftime('%s', 'now'))`),

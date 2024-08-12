@@ -9,3 +9,8 @@ export const siteConfig = {
   deployUrl: "https://productivity.remcostoeten.com",
   repository: "hhttps://github.com/remcostoeten/productivity-panel",
 };
+
+export const ADMIN_EMAILS = {
+    MAIN: process.env.ADMIN_EMAIL_MAIN,
+    SECONDARY: process.env.ADMIN_EMAIL_SECONDARY,
+};
