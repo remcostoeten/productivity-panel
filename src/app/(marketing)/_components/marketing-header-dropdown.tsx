@@ -31,7 +31,7 @@ export default function UtilhNavigationMenu({
           variant="ghost"
           className="h-8 w-auto px-3 text-text hover:text-text-accent hover:bg-section-hover transition-all duration-300 ease-in-out"
         >
-          Utils 
+          Utils
           <motion.span
             animate={{ rotate: isOpen ? 180 : 0 }}
             transition={{ duration: 0.3, ease: [0.6, 0.05, -0.01, 0.9] }}

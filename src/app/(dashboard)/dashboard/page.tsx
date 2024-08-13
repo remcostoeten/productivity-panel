@@ -41,15 +41,14 @@ export default async function DashboardPage() {
       <div>
         <h1>Welcome to your dashboard, {userProfile.firstName}!</h1>
         <p>You have signed in {userProfile.signInCount} times.</p>
-        <p>
-          Last sign-in:{" "}
-            {userProfile.lastSignIn.toString()}
-        </p>
+        <p>Last sign-in: {userProfile.lastSignIn.toString()}</p>
         {/* Rest of your dashboard component */}
       </div>
     );
   } catch (error) {
     console.error("Error in DashboardPage:", error);
-    return <div>An error occurred: {error.message}. Please try again later.</div>;
+    return (
+      <div>An error occurred: {error.message}. Please try again later.</div>
+    );
   }
 }

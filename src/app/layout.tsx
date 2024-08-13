@@ -36,7 +36,6 @@ export default function RootLayout({ children }: PageProps) {
             fontSans.variable,
           )}
         >
-        
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"

@@ -7,7 +7,10 @@ import {
   DropdownMenuTrigger,
   Button,
 } from "@/components/ui";
-import { dashboardMenuItems, dropdownMenuItems } from "@/core/data/header-menu-items";
+import {
+  dashboardMenuItems,
+  dropdownMenuItems,
+} from "@/core/data/header-menu-items";
 import { menuAnimationVariants } from "@/core/helpers/animations/menu-animations";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
@@ -31,7 +34,7 @@ export default function DashNavigationMenu({
           variant="ghost"
           className="h-8 w-auto px-3 text-text hover:text-text-accent hover:bg-section-hover transition-all duration-300 ease-in-out"
         >
-          dash 
+          dash
           <motion.span
             animate={{ rotate: isOpen ? 180 : 0 }}
             transition={{ duration: 0.3, ease: [0.6, 0.05, -0.01, 0.9] }}

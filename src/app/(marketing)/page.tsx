@@ -4,15 +4,12 @@ import ClientSection from "./_components/landing/client-section";
 import CallToActionSection from "./_components/landing/cta-section";
 import HeroSection from "./_components/landing/hero-section";
 import Blur from "@/components/ui/Blur";
-import { MillionButton } from "@/components/ui/million-btn";
 
 export default async function Page() {
   return (
     <>
-
-
-    <Blur/>
-       <HeroSection />
+      <Blur />
+      <HeroSection />
       <ClientSection />
       <SphereMask />
       <CallToActionSection />
