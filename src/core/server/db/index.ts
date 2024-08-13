@@ -1,12 +1,12 @@
-import { createClient } from '@libsql/client'
-import { drizzle } from 'drizzle-orm/libsql'
+import { createClient } from "@libsql/client";
+import { drizzle } from "drizzle-orm/libsql";
 
 const client = createClient({
-    url: process.env.DB_URL || 'default_db_url',
-    authToken: process.env.DB_AUTH_TOKEN || 'default_auth_token'
-})
+  url: process.env.DB_URL || "default_db_url",
+  authToken: process.env.DB_AUTH_TOKEN || "default_auth_token",
+});
 
-export const db = drizzle(client)
+export const db = drizzle(client);
 
 // Disable migrate function if using Edge runtime and use `npm run db:migrate` instead.
 // Only run migrate in development. Otherwise, migrate will also be run during the build which can cause errors.

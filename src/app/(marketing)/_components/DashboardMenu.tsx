@@ -21,7 +21,7 @@ const DashNavigationMenu: React.FC<DashNavigationMenuProps> = ({
   animationVariant = "elegant",
 }) => {
   const [isOpen, setIsOpen] = React.useState(false);
-  
+
   const currentVariant = menuAnimationVariants[animationVariant];
 
   return (
@@ -55,14 +55,14 @@ const DashNavigationMenu: React.FC<DashNavigationMenuProps> = ({
             >
               {dropdownMenuItems.map((item, index) => (
                 <DropdownMenuItem key={item.href} asChild>
-                  <motion.a
+                  <motion
                     href={item.href}
                     className="block px-4 py-2 text-text hover:text-text-accent hover:bg-active-state transition-all duration-300 ease-in-out"
                     variants={currentVariant.item}
                     custom={index}
                   >
                     {item.label}
-                  </motion.a>
+                  </motion 
                 </DropdownMenuItem>
               ))}
             </motion.div>

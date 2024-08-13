@@ -7,7 +7,7 @@ import HeroSection from "./_components/landing/hero-section";
 export default async function Page() {
   return (
     <>
-      <HeroSection />
+       <HeroSection />
       <ClientSection />
       <SphereMask />
       <CallToActionSection />

@@ -3,22 +3,30 @@
 import { motion } from "framer-motion";
 import { MoonIcon, SunIcon } from "lucide-react";
 import { useTheme } from "next-themes";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const TOGGLE_CLASSES =
   "text-sm font-medium flex items-center gap-2 px-3 md:pl-3 md:pr-3.5 py-3 md:py-1.5 transition-colors relative z-10";
 
 const ThemeToggle = () => {
-  const [selected, setSelected] = useState("dark");
   const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
 
-  if (selected === "dark") {
-    setTheme("dark");
-  } else {
-    setTheme("light");
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (mounted) {
+      setTheme(theme === "dark" ? "dark" : "light");
+    }
+  }, [theme, setTheme, mounted]);
+
+  if (!mounted) {
+    return null;
   }
 
-  return <SliderToggle selected={selected} setSelected={setSelected} />;
+  return <SliderToggle selected={theme || "dark"} setSelected={setTheme} />;
 };
 
 type SliderProps = {
@@ -28,31 +36,23 @@ type SliderProps = {
 
 const SliderToggle = ({ selected, setSelected }: SliderProps) => {
   return (
-    <div className="fixed bottom-4 left-4  z-50 shadow-md">
+    <div className="fixed bottom-4 left-4 z-50 shadow-md">
       <div className="relative flex w-fit items-center rounded-full">
-        {/* @ts-ignore */}
         <button
           className={`${TOGGLE_CLASSES} ${
-            selected === "light" ? "text-slate-800" : "text-slate00"
+            selected === "light" ? "text-slate-800" : "text-slate-100"
           }`}
-          onClick={() => {
-            setSelected("light");
-          }}
+          onClick={() => setSelected("light")}
         >
           <MoonIcon className="relative z-10 text-lg md:text-sm" />
-          {/* <span className="relative z-10">Light</span> */}
         </button>
-        {/* @ts-ignore */}
         <button
           className={`${TOGGLE_CLASSES} ${
             selected === "dark" ? "text-white/70" : "text-slate-800"
           }`}
-          onClick={() => {
-            setSelected("dark");
-          }}
+          onClick={() => setSelected("dark")}
         >
           <SunIcon className="relative z-10 text-lg md:text-sm" />
-          {/* <span className="relative z-10">Dark</span> */}
         </button>
         <div
           className={`absolute inset-0 z-0 flex ${

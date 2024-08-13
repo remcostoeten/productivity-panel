@@ -21,7 +21,7 @@ const DashNavigationMenu: React.FC<DashNavigationMenuProps> = ({
   animationVariant = "elegant",
 }) => {
   const [isOpen, setIsOpen] = React.useState(false);
-  
+
   const currentVariant = menuAnimationVariants[animationVariant];
 
   return (
