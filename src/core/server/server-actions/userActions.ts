@@ -13,7 +13,6 @@ export async function updateLastSignIn() {
     throw new Error("Not authenticated");
   }
 
-
   await db.update(users).set({ lastSignIn: sql`(strftime('%s', 'now'))` });
 
   return { success: true };
@@ -61,7 +60,8 @@ export async function createOrUpdateUser(userData: {
       lastName,
       profileImageUrl,
       emailVerified: emailVerified ? 1 : 0,
-      isAdmin:ADMIN_EMAILS.MAIN === email || ADMIN_EMAILS.SECONDARY === email ? 1 : 0,
+      isAdmin:
+        ADMIN_EMAILS.MAIN === email || ADMIN_EMAILS.SECONDARY === email ? 1 : 0,
       lastSignIn: sql`(strftime('%s', 'now'))`,
       createdAt: sql`(strftime('%s', 'now'))`,
       updatedAt: sql`(strftime('%s', 'now'))`,

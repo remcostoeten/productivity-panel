@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, use, useCallback, useTransition } from "react";
+import { useState, useCallback, useEffect, useTransition } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { UserButton } from "@clerk/nextjs";
@@ -11,19 +11,18 @@ import BrandLogo from "@/components/theme/BrandLogo";
 import menuItems from "@/core/data/header-menu-items";
 import { cn } from "@/core/helpers/cn";
 import NavigationMenu from "./marketing-header-dropdown";
-import DashNavigationMenu from "./marketing-header-dropdown";
 import { BorderMagicButton, BorderMagicButtonAlt } from "@/components/ui";
 import {
+  mobilenavbarVariant,
   containerVariants,
   mobileLinkVar,
-  mobilenavbarVariant,
 } from "@/core/helpers/animations/menu-animations";
 
 export default function SiteHeader() {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
-  const [hamburgerMenuIsOpen, setHamburgerMenuIsOpen] = use(useState(false));
+  const [hamburgerMenuIsOpen, setHamburgerMenuIsOpen] = useState(false);
 
   const toggleHamburgerMenu = useCallback(() => {
     startTransition(() => {
@@ -31,11 +30,11 @@ export default function SiteHeader() {
     });
   }, []);
 
-  const closeHamburgerNavigation = useEffectEvent(() => {
+  const closeHamburgerNavigation = useCallback(() => {
     setHamburgerMenuIsOpen(false);
-  });
+  }, []);
 
-  use(() => {
+  useEffect(() => {
     const html = document.querySelector("html");
     if (html) {
       html.classList.toggle("overflow-hidden", hamburgerMenuIsOpen);
@@ -48,9 +47,9 @@ export default function SiteHeader() {
       window.removeEventListener("orientationchange", closeHamburgerNavigation);
       window.removeEventListener("resize", closeHamburgerNavigation);
     };
-  });
+  }, [hamburgerMenuIsOpen, closeHamburgerNavigation]);
 
-  const pathname = use(usePathname());
+  const pathname = usePathname();
 
   return (
     <>
@@ -78,12 +77,14 @@ export default function SiteHeader() {
               </Link>
             ))}
             <NavigationMenu animationVariant="dropdownMenu" />
-            <DashNavigationMenu animationVariant="dropdownMenu" />
           </nav>
 
           <div className="hidden md:flex ml-auto h-full items-center mr-4">
             <UserButton />
-            <BorderMagicButtonAlt href="/dashboard"> Dashboard</BorderMagicButtonAlt>
+            <BorderMagicButtonAlt href="/dashboard">
+              {" "}
+              Dashboard
+            </BorderMagicButtonAlt>
           </div>
           <button className="ml-6 md:hidden" onClick={toggleHamburgerMenu}>
             <span className="sr-only">Toggle menu</span>

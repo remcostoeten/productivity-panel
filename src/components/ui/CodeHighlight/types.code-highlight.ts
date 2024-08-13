@@ -3,6 +3,7 @@ import { ReactNode } from "react";
 export type CodeContentProps = {
   children: ReactNode;
   language?:
+    | "language"
     | "jsx"
     | "tsx"
     | "javascript"

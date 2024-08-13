@@ -1,14 +1,14 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  Button,
+} from "@/components/ui";
 import { dropdownMenuItems } from "@/core/data/header-menu-items";
-import { menuAnimationVariants } from "@/core/helpers/animations/ menu-animations";
+import { menuAnimationVariants } from "@/core/helpers/animations/menu-animations";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import React from "react";
@@ -17,18 +17,10 @@ type DashNavigationMenuProps = {
   animationVariant?: keyof typeof menuAnimationVariants;
 };
 
-const DashNavigationMenu: React.FC<DashNavigationMenuProps> = ({
+export default function DashNavigationMenu({
   animationVariant = "elegant",
-}) => {
+}: DashNavigationMenuProps) {
   const [isOpen, setIsOpen] = React.useState(false);
-
-  const menuItems = [
-    { href: "/design-system", label: "Design System" },
-    { href: "/color-tool", label: "Color UI picker" },
-    { href: "/color-array", label: "Color Array" },
-    { href: "/color-tweaker", label: "Color Tweaker" },
-    { href: "/", label: "Landing Page" },
-  ];
 
   const currentVariant = menuAnimationVariants[animationVariant];
 
@@ -79,6 +71,4 @@ const DashNavigationMenu: React.FC<DashNavigationMenuProps> = ({
       </AnimatePresence>
     </DropdownMenu>
   );
-};
-
-export default DashNavigationMenu;
+}
