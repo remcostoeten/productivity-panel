@@ -1,25 +1,25 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { dropdownMenuItems } from "@/core/data/header-menu-items";
+  Button,
+} from "@/components/ui";
+import { dashboardMenuItems, dropdownMenuItems } from "@/core/data/header-menu-items";
+import { menuAnimationVariants } from "@/core/helpers/animations/menu-animations";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import React from "react";
-import { menuAnimationVariants } from "./animationVariants";
 
 type DashNavigationMenuProps = {
   animationVariant?: keyof typeof menuAnimationVariants;
 };
 
-const DashNavigationMenu: React.FC<DashNavigationMenuProps> = ({
+export default function DashNavigationMenu({
   animationVariant = "elegant",
-}) => {
+}: DashNavigationMenuProps) {
   const [isOpen, setIsOpen] = React.useState(false);
 
   const currentVariant = menuAnimationVariants[animationVariant];
@@ -31,7 +31,7 @@ const DashNavigationMenu: React.FC<DashNavigationMenuProps> = ({
           variant="ghost"
           className="h-8 w-auto px-3 text-text hover:text-text-accent hover:bg-section-hover transition-all duration-300 ease-in-out"
         >
-          Menu
+          dash 
           <motion.span
             animate={{ rotate: isOpen ? 180 : 0 }}
             transition={{ duration: 0.3, ease: [0.6, 0.05, -0.01, 0.9] }}
@@ -53,7 +53,7 @@ const DashNavigationMenu: React.FC<DashNavigationMenuProps> = ({
               animate="visible"
               exit="exit"
             >
-              {dropdownMenuItems.map((item, index) => (
+              {dashboardMenuItems.map((item, index) => (
                 <DropdownMenuItem key={item.href} asChild>
                   <motion.a
                     href={item.href}
@@ -71,6 +71,4 @@ const DashNavigationMenu: React.FC<DashNavigationMenuProps> = ({
       </AnimatePresence>
     </DropdownMenu>
   );
-};
-
-export default DashNavigationMenu;
+}

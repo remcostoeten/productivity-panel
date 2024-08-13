@@ -8,7 +8,7 @@ import { cn } from "@core/helpers/cn";
 import { ArrowRightIcon, ArrowLeftIcon } from "@radix-ui/react-icons";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-col disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
@@ -22,11 +22,11 @@ const buttonVariants = cva(
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
         shimmer:
-          "h-12 animate-shimmer-btn items-center justify-center rounded-md border border-slate-800  shimmer-btn   bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-slate-400 transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50",
+          "h-12 animate-shimmer-btn items-center justify-center rounded-md border border-slate-800  shimmer-btn   bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-slate-400 transition-colors  ",
         borderMagic:
-          "relative inline-flex h-9 overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50",
+          "relative inline-flex h-9 overflow-hidden rounded-full p-[1px]  ",
         borderMagicAlt:
-          "relative inline-flex h-12 overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50",
+          "relative inline-flex h-12 overflow-hidden rounded-full p-[1px] ",
       },
       size: {
         default: "h-10 px-4 py-2",
@@ -52,7 +52,7 @@ export interface ButtonProps
   target?: string;
 }
 
-const Button = forwardRef<HTMLAnchorElement | HTMLButtonElement, ButtonProps>(
+const Button = forwardRef<HTMLAnchorElement | HTMLButtonElement, ButtonProps & { ref?: React.Ref<HTMLAnchorElement | HTMLButtonElement> }>(
   (
     {
       className,
@@ -80,7 +80,7 @@ const Button = forwardRef<HTMLAnchorElement | HTMLButtonElement, ButtonProps>(
       >
         {variant === "borderMagic" && (
           <>
-            <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#ff6c00_0%,#ff6a0016_50%,#ff6c00_100%)] opacity-50" />
+            <span className="  absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#fff_0%,#ffff_50%,#ffff00_100%)] opacity-50" />
             <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 px-3 py-1 text-xs font-medium text-white backdrop-blur-3xl">
               {props.children}
             </span>
@@ -88,7 +88,7 @@ const Button = forwardRef<HTMLAnchorElement | HTMLButtonElement, ButtonProps>(
         )}
         {variant === "borderMagicAlt" && (
           <>
-            <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
+            <span className="absolute inset-[-1000%] animate-[spin_22s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
             <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 px-3 py-1 text-sm font-medium text-white backdrop-blur-3xl">
               {props.children}
             </span>
@@ -137,7 +137,7 @@ const BorderMagicButton = forwardRef<
     return (
       <Comp
         className={cn(
-          "relative inline-flex h-9 overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50",
+          "relative inline-flex h-9 overflow-hidden rounded-full p-[1px] ",
           className,
         )}
         href={href}
@@ -160,6 +160,12 @@ const BorderMagicButton = forwardRef<
   },
 );
 
+
+
+  const GRADIENT_COLOR_ONE = 'ff6c00';
+const GRADIENT_COLOR_TWO = 'ff6a0016';
+const GRADIENT_COLOR_THREE = 'ff6c00';
+
 const BorderMagicButtonAlt = React.forwardRef<
   HTMLAnchorElement | HTMLButtonElement,
   ButtonProps
@@ -173,15 +179,17 @@ const BorderMagicButtonAlt = React.forwardRef<
     return (
       <Comp
         className={cn(
-          "relative inline-flex h-12 overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50",
+          "relative inline-flex h-9 overflow-hidden rounded-full w-max p-[1px]",
           className,
         )}
         href={href}
         target={target}
-        ref={ref as React.Ref<HTMLAnchorElement | HTMLButtonElement>}
+        // ref={ref as React.Ref<HTMLAnchorElement | HTMLButtonElement>}
         {...props}
       >
-        <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
+        <span 
+          className={`absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#${GRADIENT_COLOR_ONE}_0%,#${GRADIENT_COLOR_TWO}_50%,#${GRADIENT_COLOR_THREE}_100%)]`}
+        />
         <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 px-3 py-1 text-sm font-medium text-white backdrop-blur-3xl">
           {withArrow && arrowPosition === "left" && (
             <ArrowLeftIcon className="mr-1 size-4 transition-transform duration-300 ease-in-out" />

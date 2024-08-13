@@ -3,7 +3,7 @@
 import { useState, useCallback, useEffect, useTransition } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import { UserButton } from "@clerk/nextjs";
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { XIcon, AlignJustify } from "lucide-react";
 import { HamburgerMenuIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
@@ -17,6 +17,8 @@ import {
   containerVariants,
   mobileLinkVar,
 } from "@/core/helpers/animations/menu-animations";
+import DashNavigationMenu from "./dash-header-dropdown";
+import UtilhNavigationMenu from "./marketing-header-dropdown";
 
 export default function SiteHeader() {
   const [isPending, startTransition] = useTransition();
@@ -76,15 +78,22 @@ export default function SiteHeader() {
                 {item.label}
               </Link>
             ))}
-            <NavigationMenu animationVariant="dropdownMenu" />
+            <UtilhNavigationMenu animationVariant="dropdownMenu" />
+            <DashNavigationMenu animationVariant="dropdownMenu" />
           </nav>
 
-          <div className="hidden md:flex ml-auto h-full items-center mr-4">
+          <div className="hidden md:flex ml-auto space-x-4 h-full items-center mr-4">
             <UserButton />
-            <BorderMagicButtonAlt href="/dashboard">
-              {" "}
-              Dashboard
-            </BorderMagicButtonAlt>
+            <SignedOut>
+              <BorderMagicButtonAlt href="/sign-in">
+                Sign in
+              </BorderMagicButtonAlt>
+            </SignedOut>
+            <SignedIn>
+              <BorderMagicButtonAlt href="/dashboard">
+                Dashboard
+              </BorderMagicButtonAlt>
+            </SignedIn>
           </div>
           <button className="ml-6 md:hidden" onClick={toggleHamburgerMenu}>
             <span className="sr-only">Toggle menu</span>

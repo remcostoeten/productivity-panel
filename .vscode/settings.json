@@ -73,7 +73,6 @@
   "editor.bracketPairColorization.enabled": false,
   "editor.colorDecorators": false,
   "editor.cursorStyle": "line",
-
   // "editor.fontFamily": "cascadia code",
   // "editor.fontFamily": "caskaydia cove",
   // "editor.fontFamily": "Hack",
@@ -93,7 +92,6 @@
   //  "editor.fontFamily": "recursive mono linear static",
   //  "editor.fontFamily": "monaspicear nerd font",
   // "editor.fontFamily": "rec mono linear",
-
   "editor.fontLigatures": "'ss01', 'cv03', 'zero'",
   "editor.fontSize": 17,
   "editor.glyphMargin": false,
@@ -140,7 +138,7 @@
   "workbench.tree.renderIndentGuides": "none",
   "window.customTitleBarVisibility": "auto",
   "symbols.hidesExplorerArrows": false,
-  "workbench.activityBar.location": "hidden",
+  "workbench.activityBar.location": "bottom",
   "window.commandCenter": false,
   "workbench.layoutControl.enabled": false,
   "editor.stickyScroll.enabled": false,
@@ -183,7 +181,7 @@
   },
   "workbench.editor.editorActionsLocation": "hidden",
   "workbench.statusBar.visible": true,
-  "workbench.editor.showTabs": "single",
+  "workbench.editor.showTabs": "multiple",
   "workbench.preferredLightColorTheme": "luna-pro-starlight",
   "workbench.sideBar.location": "right",
   "phpTools.language": "en",

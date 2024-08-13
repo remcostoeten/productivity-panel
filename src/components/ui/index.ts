@@ -25,3 +25,4 @@ export * from "./text-shimmer";
 export * from "./textarea";
 export * from "./tooltip";
 export * from "./fancy-box";
+export * from "./particles";
