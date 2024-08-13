@@ -1,10 +1,5 @@
-import { sql } from "drizzle-orm";
-import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
-
+import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
 import users from "./users";
-
-export { default as siteVisits } from "./site-visits";
-export { default as users } from "./users";
 
 export const wishlists = sqliteTable("wishlists", {
   id: text("id").primaryKey(),

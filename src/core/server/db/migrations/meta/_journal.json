@@ -5,22 +5,22 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1723169020708,
-      "tag": "0000_premium_silver_samurai",
+      "when": 1723586055677,
+      "tag": "0000_organic_joseph",
       "breakpoints": true
     },
     {
       "idx": 1,
       "version": "6",
-      "when": 1723170024092,
-      "tag": "0001_tan_vermin",
+      "when": 1723588430704,
+      "tag": "0001_brown_blue_marvel",
       "breakpoints": true
     },
     {
       "idx": 2,
       "version": "6",
-      "when": 1723404749373,
-      "tag": "0002_abandoned_taskmaster",
+      "when": 1723589050407,
+      "tag": "0002_simple_gauntlet",
       "breakpoints": true
     }
   ]
