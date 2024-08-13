@@ -1,11 +1,16 @@
 "use client";
 
 import { useAuth } from "@clerk/nextjs";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  createWishlist,
+  getWishlistItemsByWishlist,
+  getWishlistsByUser,
+} from "@/core/server/server-actions/wishlist";
 import toast from "react-hot-toast";
-import { createWishlist } from "@/core/server/server-actions/wishlist";
+import WishlistItem from "./_components/WishlistDisplay";
 
 export default function WishlistsPage() {
   const { userId } = useAuth();
@@ -13,13 +18,18 @@ export default function WishlistsPage() {
   const [newWishlistName, setNewWishlistName] = useState("");
   const [newWishlistBudget, setNewWishlistBudget] = useState(0);
 
+  useEffect(() => {
+    if (userId) {
+      loadWishlists();
+    }
+  }, [userId]);
+
   async function loadWishlists() {
-    const res = await fetch(`/api/wishlists?userId=${userId}`);
-    const data = await res.json();
-    setWishlists(data.wishlists);
+    const wishlists = await getWishlistsByUser(userId);
+    setWishlists(wishlists);
   }
 
-  async function handleCreateWishlist(e) {
+  async function handleCreateWishlist(e: { preventDefault: () => void }) {
     e.preventDefault();
 
     await createWishlist(userId, newWishlistName, newWishlistBudget);
@@ -41,12 +51,16 @@ export default function WishlistsPage() {
       <form onSubmit={handleCreateWishlist} className="flex gap-2 mb-4">
         <Input
           value={newWishlistName}
-          onChange={(e) => setNewWishlistName(e.target.value)}
+          onChange={(e: { target: { value: any } }) =>
+            setNewWishlistName(e.target.value)
+          }
           placeholder="Wishlist name"
         />
         <Input
           value={newWishlistBudget}
-          onChange={(e) => setNewWishlistBudget(Number(e.target.value))}
+          onChange={(e: { target: { value: any } }) =>
+            setNewWishlistBudget(Number(e.target.value))
+          }
           placeholder="Budget"
           type="number"
         />
@@ -56,7 +70,7 @@ export default function WishlistsPage() {
       <Button onClick={loadWishlists}>Refresh</Button>
 
       <div className="grid gap-4">
-        {wishlists.map((wishlist) => (
+        {wishlists.map((wishlist: { id: any }) => (
           <WishlistItem key={wishlist.id} wishlist={wishlist} />
         ))}
       </div>
