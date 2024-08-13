@@ -1,74 +1,28 @@
 "use client";
 
 import {
-  Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  Button,
 } from "@/components/ui";
-import { dropdownMenuItems } from "@/core/data/header-menu-items";
 import { menuAnimationVariants } from "@/core/helpers/animations/menu-animations";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import React from "react";
 
-type DashNavigationMenuProps = {
+type NavigationMenuProps = {
   animationVariant?: keyof typeof menuAnimationVariants;
+  title: string;
+  items: { href: string; label: string }[];
 };
 
-function MenuButton({
-  isOpen,
-  onClick,
-}: {
-  isOpen: boolean;
-  onClick: () => void;
-}) {
-  return (
-    <Button
-      variant="ghost"
-      className="h-8 w-auto px-3 text-text hover:text-text-accent hover:bg-section-hover transition-all duration-300 ease-in-out"
-      onClick={onClick}
-    >
-      Menu
-      <motion.span
-        animate={{ rotate: isOpen ? 180 : 0 }}
-        transition={{ duration: 0.3, ease: [0.6, 0.05, -0.01, 0.9] }}
-      >
-        <ChevronDown className="ml-1 h-4 w-4" />
-      </motion.span>
-    </Button>
-  );
-}
-
-function MenuItem({
-  href,
-  label,
-  variant,
-  index,
-}: {
-  href: string;
-  label: string;
-  variant: any;
-  index: number;
-}) {
-  return (
-    <DropdownMenuItem asChild>
-      <motion.a
-        href={href}
-        className="block px-4 py-2 text-text hover:text-text-accent hover:bg-active-state transition-all duration-300 ease-in-out"
-        variants={variant}
-        custom={index}
-      >
-        {label}
-      </motion.a>
-    </DropdownMenuItem>
-  );
-}
-
-export default function DashNavigationMenu({
+export default function NavigationMenu({
   animationVariant = "elegant",
-}: DashNavigationMenuProps) {
+  title,
+  items,
+}: NavigationMenuProps) {
   const [isOpen, setIsOpen] = React.useState(false);
 
   const currentVariant = menuAnimationVariants[animationVariant];
@@ -76,7 +30,18 @@ export default function DashNavigationMenu({
   return (
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger asChild>
-        <MenuButton isOpen={isOpen} onClick={() => setIsOpen(!isOpen)} />
+        <Button
+          variant="ghost"
+          className="h-8 w-auto px-3 text-text hover:text-text-accent hover:bg-section-hover transition-all duration-300 ease-in-out"
+        >
+          {title}
+          <motion.span
+            animate={{ rotate: isOpen ? 180 : 0 }}
+            transition={{ duration: 0.3, ease: [0.6, 0.05, -0.01, 0.9] }}
+          >
+            <ChevronDown className="ml-1 h-4 w-4" />
+          </motion.span>
+        </Button>
       </DropdownMenuTrigger>
       <AnimatePresence>
         {isOpen && (
@@ -91,14 +56,17 @@ export default function DashNavigationMenu({
               animate="visible"
               exit="exit"
             >
-              {dropdownMenuItems.map((item, index) => (
-                <MenuItem
-                  key={item.href}
-                  href={item.href}
-                  label={item.label}
-                  variant={currentVariant.item}
-                  index={index}
-                />
+              {items.map((item, index) => (
+                <DropdownMenuItem key={item.href} asChild>
+                  <motion.a
+                    href={item.href}
+                    className="block px-4 py-2 text-text hover:text-text-accent hover:bg-active-state transition-all duration-300 ease-in-out"
+                    variants={currentVariant.item}
+                    custom={index}
+                  >
+                    {item.label}
+                  </motion.a>
+                </DropdownMenuItem>
               ))}
             </motion.div>
           </DropdownMenuContent>
@@ -107,3 +75,4 @@ export default function DashNavigationMenu({
     </DropdownMenu>
   );
 }
+                                                                  

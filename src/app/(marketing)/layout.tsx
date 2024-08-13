@@ -10,9 +10,9 @@ export default async function MarketingLayout({
   return (
     <>
       <SiteHeader />
-      <main className="mt-marketing-header mx-auto flex-1 overflow-hidden">
-        {children}
-      </main>
+      <div className="w-full max-w-4xl mx-auto p-6 bg-background text-foreground">
+        <div className="flex flex-col justify-between my-10">{children}</div>
+      </div>
     </>
   );
 }
