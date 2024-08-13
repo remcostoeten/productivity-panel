@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
 import CodeContent from "./CodeContent";
 import FileHeader from "./FileHeader";
 import { CodeHighlightProps } from "./types.code-highlight";
@@ -8,7 +10,11 @@ export default function CodeHighlight({
   children,
   language = "jsx",
 }: CodeHighlightProps) {
-  const codeString = React.Children.toArray(children).join("\n");
+  const [codeString, setCodeString] = useState("");
+
+  useEffect(() => {
+    setCodeString(React.Children.toArray(children).join("\n"));
+  }, [children]);
 
   const copyToClipboard = () => {
     navigator.clipboard
@@ -24,7 +30,7 @@ export default function CodeHighlight({
   return (
     <section className="flex flex-col text-xs rounded-md border border-solid bg-blend-normal border-zinc-800 max-w-[813px]">
       <FileHeader title={title} onCopy={copyToClipboard} />
-      <CodeContent language={language}>{children}</CodeContent>
+      <CodeContent language={language}>{codeString}</CodeContent>
     </section>
   );
 }

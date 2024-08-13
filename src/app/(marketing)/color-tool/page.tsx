@@ -14,6 +14,7 @@ import ColorToolIntro from "./_components/ColorToolPageIntro";
 import FileUploadUi from "./_components/FileUploadUi";
 import MoveColorDialog from "./_components/MoveColorDialog";
 import { ColorItem, Folder } from "./types.color-tool";
+import ToolIntro from "./_components/ColorToolPageIntro";
 
 export default function ColorToolPage() {
   const [folders, setFolders] = useState<Folder[]>([]);
@@ -225,9 +226,16 @@ export default function ColorToolPage() {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-6 bg-background text-foreground">
+    <div className="w-full max-w-4xl mx-auto  bg-background text-foreground">
       <div className="flex flex-col -center justify-between mb-6">
-        <ColorToolIntro />
+        <ToolIntro
+          title="Color Picker"
+          description="The Color Picker feature streamlines color management with an intuitive
+      interface for uploading images, picking colors, and generating CSS
+      variables. Users can organize colors into folders, manipulate them, and
+      get code snippets for easy integration. All data is saved locally for
+      easy access."
+        />{" "}
         <ButtonBar
           pickingColor={pickingColor}
           setPickingColor={setPickingColor}

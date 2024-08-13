@@ -96,7 +96,7 @@ const containerVariants = {
   open: {
     transition: {
       staggerChildren: 0.06,
-    },   
+    },
   },
 };
 
