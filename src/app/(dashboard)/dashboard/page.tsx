@@ -12,9 +12,15 @@ export default async function DashboardPage() {
 
   if (!userId || !user) {
     redirect("/sign-in");
+    return null; // Ensure the function exits after redirect
   }
 
   try {
+    // Check if user email addresses exist
+    if (!user.emailAddresses || !user.emailAddresses[0]) {
+      throw new Error("User email addresses are missing.");
+    }
+
     // Create or update user in the database
     await createOrUpdateUser({
       id: userId,
@@ -37,13 +43,13 @@ export default async function DashboardPage() {
         <p>You have signed in {userProfile.signInCount} times.</p>
         <p>
           Last sign-in:{" "}
-          {new Date(userProfile.lastSignIn * 1000).toLocaleString()}
+            {userProfile.lastSignIn.toString()}
         </p>
         {/* Rest of your dashboard component */}
       </div>
     );
   } catch (error) {
     console.error("Error in DashboardPage:", error);
-    return <div>An error occurred. Please try again later.</div>;
+    return <div>An error occurred: {error.message}. Please try again later.</div>;
   }
 }

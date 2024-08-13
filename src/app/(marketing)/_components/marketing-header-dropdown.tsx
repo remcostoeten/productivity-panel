@@ -1,11 +1,11 @@
 "use client";
 
 import {
+  Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-  Button,
 } from "@/components/ui";
 import { dropdownMenuItems } from "@/core/data/header-menu-items";
 import { menuAnimationVariants } from "@/core/helpers/animations/menu-animations";
@@ -17,7 +17,7 @@ type DashNavigationMenuProps = {
   animationVariant?: keyof typeof menuAnimationVariants;
 };
 
-export default function DashNavigationMenu({
+export default function UtilhNavigationMenu({
   animationVariant = "elegant",
 }: DashNavigationMenuProps) {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -31,7 +31,7 @@ export default function DashNavigationMenu({
           variant="ghost"
           className="h-8 w-auto px-3 text-text hover:text-text-accent hover:bg-section-hover transition-all duration-300 ease-in-out"
         >
-          Menu
+          Utils 
           <motion.span
             animate={{ rotate: isOpen ? 180 : 0 }}
             transition={{ duration: 0.3, ease: [0.6, 0.05, -0.01, 0.9] }}
