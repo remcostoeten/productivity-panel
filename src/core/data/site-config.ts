@@ -11,6 +11,6 @@ export const siteConfig = {
 };
 
 export const ADMIN_EMAILS = {
-    MAIN: process.env.ADMIN_EMAIL_MAIN,
-    SECONDARY: process.env.ADMIN_EMAIL_SECONDARY,
+  MAIN: process.env.ADMIN_EMAIL_MAIN,
+  SECONDARY: process.env.ADMIN_EMAIL_SECONDARY,
 };
