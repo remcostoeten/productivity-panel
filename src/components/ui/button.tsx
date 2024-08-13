@@ -12,7 +12,8 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        default:
+          "bg-zinc-200 hover:bg-zinc-100 hover:scale-105 transition-all duration-300 text-primary-foreground",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         outline:
@@ -52,7 +53,10 @@ export interface ButtonProps
   target?: string;
 }
 
-const Button = forwardRef<HTMLAnchorElement | HTMLButtonElement, ButtonProps & { ref?: React.Ref<HTMLAnchorElement | HTMLButtonElement> }>(
+const Button = forwardRef<
+  HTMLAnchorElement | HTMLButtonElement,
+  ButtonProps & { ref?: React.Ref<HTMLAnchorElement | HTMLButtonElement> }
+>(
   (
     {
       className,
@@ -160,11 +164,9 @@ const BorderMagicButton = forwardRef<
   },
 );
 
-
-
-  const GRADIENT_COLOR_ONE = 'ff6c00';
-const GRADIENT_COLOR_TWO = 'ff6a0016';
-const GRADIENT_COLOR_THREE = 'ff6c00';
+const GRADIENT_COLOR_ONE = "ff6c00";
+const GRADIENT_COLOR_TWO = "ff6a0016";
+const GRADIENT_COLOR_THREE = "ff6c00";
 
 const BorderMagicButtonAlt = React.forwardRef<
   HTMLAnchorElement | HTMLButtonElement,
@@ -187,7 +189,7 @@ const BorderMagicButtonAlt = React.forwardRef<
         // ref={ref as React.Ref<HTMLAnchorElement | HTMLButtonElement>}
         {...props}
       >
-        <span 
+        <span
           className={`absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#${GRADIENT_COLOR_ONE}_0%,#${GRADIENT_COLOR_TWO}_50%,#${GRADIENT_COLOR_THREE}_100%)]`}
         />
         <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 px-3 py-1 text-sm font-medium text-white backdrop-blur-3xl">

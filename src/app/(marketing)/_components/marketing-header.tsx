@@ -79,7 +79,9 @@ export default function SiteHeader() {
               </Link>
             ))}
             <UtilhNavigationMenu animationVariant="dropdownMenu" />
-            <DashNavigationMenu animationVariant="dropdownMenu" />
+            <SignedIn>
+              <DashNavigationMenu animationVariant="dropdownMenu" />
+            </SignedIn>
           </nav>
 
           <div className="hidden md:flex ml-auto space-x-4 h-full items-center mr-4">

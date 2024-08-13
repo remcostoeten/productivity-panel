@@ -1,5 +1,5 @@
 export * from "./avatar";
-import { Slider } from '@/components/ui/slider';
+import { Slider } from "@/components/ui/slider";
 export * from "./scroll-area";
 export * from "./border-beam";
 export * from "./button";
