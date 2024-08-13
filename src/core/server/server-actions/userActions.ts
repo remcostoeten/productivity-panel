@@ -36,12 +36,11 @@ export async function createOrUpdateUser(userData: {
     .limit(1);
 
   if (existingUser.length > 0) {
-    // Update existing user
     await db
       .update(users)
       .set({
         email,
-        firstName,
+        firstName: userData.firstName,
         lastName,
         profileImageUrl,
         emailVerified: emailVerified ? 1 : 0,
