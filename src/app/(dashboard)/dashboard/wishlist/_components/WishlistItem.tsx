@@ -1,13 +1,13 @@
-"use client";
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import {
   createWishlistItem,
   getWishlistItemsByWishlist,
+  deleteWishlistItem,
 } from "@/core/server/server-actions/wishlist";
+import { PlusIcon, Trash2Icon } from "lucide-react";
 
 export default function WishlistItem({ wishlist }) {
   const [items, setItems] = useState([]);
@@ -23,7 +23,7 @@ export default function WishlistItem({ wishlist }) {
     setItems(items);
   }
 
-  async function handleCreateItem(e) {
+  async function handleCreateItem(e: { preventDefault: () => void }) {
     e.preventDefault();
 
     await createWishlistItem(wishlist.id, newItemName, newItemPrice);
@@ -31,17 +31,29 @@ export default function WishlistItem({ wishlist }) {
     setNewItemName("");
     setNewItemPrice(0);
 
-    toast({
-      title: "Item added",
-    });
+    toast.success("Item added");
 
     loadItems();
   }
 
+  async function handleDeleteItem(itemId: string) {
+    await deleteWishlistItem(itemId);
+    toast.success("Item deleted");
+    loadItems();
+  }
+
+  const totalCost = items.reduce(
+    (acc: any, item: { price: any }) => acc + item.price,
+    0,
+  );
+  const remainingBudget = wishlist.budget - totalCost;
+
   return (
     <div className="border p-4">
+      <Toaster />
       <h2 className="text-xl font-bold">{wishlist.name}</h2>
       <p>Budget: ${wishlist.budget}</p>
+      <p>Remaining Budget: ${remainingBudget}</p>
 
       <form onSubmit={handleCreateItem} className="flex gap-2 my-4">
         <Input
@@ -51,23 +63,36 @@ export default function WishlistItem({ wishlist }) {
           }
           placeholder="Item name"
         />
-        <Input
-          value={newItemPrice}
-          onChange={(e: { target: { value: any } }) =>
-            setNewItemPrice(Number(e.target.value))
-          }
-          placeholder="Price"
-          type="number"
-        />
-        <Button type="submit">Add Item</Button>
+        <div className="flex items-center">
+          <span className="mr-1">€</span>
+          <Input
+            value={newItemPrice}
+            onChange={(e: { target: { value: any } }) =>
+              setNewItemPrice(Number(e.target.value))
+            }
+            placeholder="Price"
+            type="number"
+            className="w-20"
+          />
+        </div>
+        <Button size="sm" variant="outline" type="submit">
+          <PlusIcon />
+        </Button>
       </form>
 
-      <Button onClick={loadItems}>Refresh Items</Button>
-
       <ul>
-        {items.map((item) => (
-          <li key={item.id}>
-            {item.name} - ${item.price}
+        {items.map((item: { id: any; name: any; price: any }) => (
+          <li key={item.id} className="flex justify-between items-center">
+            <span>
+              {item.name} - ${item.price}
+            </span>
+            <Button
+              size="icon"
+              variant="outline"
+              onClick={() => handleDeleteItem(item.id)}
+            >
+              <Trash2Icon />
+            </Button>
           </li>
         ))}
       </ul>

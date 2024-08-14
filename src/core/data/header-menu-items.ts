@@ -22,5 +22,6 @@ export const dropdownMenuItems = [
 
 export const dashboardMenuItems = [
   { href: "/dashboard/wishlist", label: "Wishlist" },
+  { href: "/dashboard/wishlist/v0", label: "Wishlist v0"  },
   { href: "/dashboard/clerk-flow", label: "Clerk flow" },
 ];
