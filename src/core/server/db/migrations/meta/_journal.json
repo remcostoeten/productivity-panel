@@ -5,29 +5,8 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1723586055677,
-      "tag": "0000_organic_joseph",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1723588430704,
-      "tag": "0001_brown_blue_marvel",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1723589050407,
-      "tag": "0002_simple_gauntlet",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "6",
-      "when": 1723626337683,
-      "tag": "0003_classy_siren",
+      "when": 1723672750048,
+      "tag": "0000_blushing_vision",
       "breakpoints": true
     }
   ]

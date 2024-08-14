@@ -1,4 +1,3 @@
-import { sql } from "drizzle-orm";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 import users from "./users";
@@ -9,8 +8,10 @@ export { default as users } from "./users";
 export const wishlists = sqliteTable("wishlists", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
-  budget: integer("budget"),
-  userId: text("user_id").references(() => users.id),
+  budget: integer("budget").notNull(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => users.id),
 });
 
 export const wishlistItems = sqliteTable("wishlist_items", {
@@ -18,5 +19,9 @@ export const wishlistItems = sqliteTable("wishlist_items", {
   name: text("name").notNull(),
   price: integer("price").notNull(),
   description: text("description"),
-  wishlistId: text("wishlist_id").references(() => wishlists.id),
+  url: text("url"),
+  category: text("category"),
+  wishlistId: text("wishlist_id")
+    .notNull()
+    .references(() => wishlists.id),
 });
