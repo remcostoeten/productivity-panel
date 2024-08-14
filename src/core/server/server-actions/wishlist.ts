@@ -1,19 +1,16 @@
 "use server";
 
-import { eq } from "drizzle-orm";
 import { db } from "@/core/server/db";
+import { eq } from "drizzle-orm";
+import { nanoid } from "nanoid";
 import { v4 as uuidv4 } from "uuid";
-import { wishlists, wishlistItems, users } from "../db/schema";
+import { users, wishlistItems, wishlists } from "../db/schema";
 
 export async function deleteWishlistItem(itemId: string) {
   await db.delete(wishlistItems).where(eq(wishlistItems.id, itemId));
 }
 
-export async function deleteWishlist(wishlistId: string) {
-  await db
-    .delete(wishlistItems)
-    .where(eq(wishlistItems.wishlistId, wishlistId));
-
+export async function deleteEntireWishlist(wishlistId: string) {
   await db.delete(wishlists).where(eq(wishlists.id, wishlistId));
 }
 
@@ -98,12 +95,30 @@ export async function createWishlistItem(
   wishlistId: string,
   name: string,
   price: number,
-  description: string,
+  description?: string,
+  url?: string,
+  category?: string,
 ) {
-  const id = uuidv4();
-  await db
-    .insert(wishlistItems)
-    .values({ id, name, price, description, wishlistId });
+  try {
+    const newItem = {
+      id: nanoid(),
+      name,
+      price,
+      description,
+      url,
+      category,
+      wishlistId,
+    };
+
+    console.log("Attempting to insert new item:", newItem);
+    console.log("Current schema:", db._.schema); // This will log your current schema
+    await db.insert(wishlistItems).values(newItem);
+    console.log("Item inserted successfully");
+    return newItem;
+  } catch (error) {
+    console.error("Error in createWishlistItem:", error);
+    throw error;
+  }
 }
 
 export async function getWishlistItemsByWishlist(wishlistId: string) {
@@ -111,4 +126,15 @@ export async function getWishlistItemsByWishlist(wishlistId: string) {
     .select()
     .from(wishlistItems)
     .where(eq(wishlistItems.wishlistId, wishlistId));
+}
+
+export async function updateWishlist(
+  wishlistId: string,
+  updates: Partial<typeof wishlists.$inferInsert>,
+) {
+  await db.update(wishlists).set(updates).where(eq(wishlists.id, wishlistId));
+}
+
+export async function updateWishlistName(wishlistId: string, newName: string) {
+  await updateWishlist(wishlistId, { name: newName });
 }

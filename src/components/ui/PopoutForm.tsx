@@ -2,15 +2,16 @@
 
 import { cn } from "@/core/helpers/cn";
 import { motion } from "framer-motion";
-import { PlusIcon } from "lucide-react";
+import { ChevronDownIcon, PlusIcon } from "lucide-react";
 import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 
 type FieldConfig = {
-  type: "text" | "textarea" | "number";
+  type: "text" | "textarea" | "number" | "select";
   name: string;
   placeholder: string;
   prefix?: string;
+  options?: string[];
 };
 
 type PopoutFormProps = {
@@ -25,9 +26,11 @@ type PopoutFormProps = {
 
 const InputField: React.FC<
   FieldConfig & { value: string; onChange: (value: string) => void }
-> = ({ type, name, placeholder, prefix, value, onChange }) => {
+> = ({ type, name, placeholder, prefix, value, onChange, options }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
   const inputClass =
-    "w-full rounded-[6px] border-border !border-1 !border-red-400  px-2 py-[6px] text-sm text-white placeholder:text-white/30 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-primary";
+    "w-full rounded-[6px] border-border !border-1 !border-red-400 px-2 py-[6px] text-sm text-white placeholder:text-white/30 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-primary";
 
   if (type === "textarea") {
     return (
@@ -38,6 +41,41 @@ const InputField: React.FC<
         onChange={(e) => onChange(e.target.value)}
         className={`${inputClass} h-[60px] resize-none`}
       />
+    );
+  }
+
+  if (type === "select") {
+    return (
+      <div className="relative">
+        <button
+          type="button"
+          onClick={() => setIsOpen(!isOpen)}
+          className={`${inputClass} flex items-center justify-between`}
+        >
+          {value || placeholder}
+          <ChevronDownIcon
+            size={16}
+            className={cn("transition-transform", isOpen && "rotate-180")}
+          />
+        </button>
+        {isOpen && (
+          <div className="absolute z-10 w-full mt-1 bg-neutral-800 rounded-md shadow-lg">
+            {options?.map((option) => (
+              <button
+                key={option}
+                type="button"
+                className="w-full px-2 py-1 text-left text-sm text-white hover:bg-neutral-700"
+                onClick={() => {
+                  onChange(option);
+                  setIsOpen(false);
+                }}
+              >
+                {option}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
     );
   }
 
@@ -167,7 +205,7 @@ export default function PopoutForm({
               <div className="flex justify-between">
                 <button
                   type="submit"
-                  className="text-neutral-2 00 bg-theme-primary py-1 font-medium px-2 rounded-lg"
+                  className="text-neutral-200 bg-theme-primary py-1 font-medium px-2 rounded-lg"
                   onClick={handleSubmit}
                 >
                   Submit
