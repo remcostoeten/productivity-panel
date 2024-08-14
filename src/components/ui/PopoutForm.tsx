@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import { cn } from "@/core/helpers/cn";
 import { motion } from "framer-motion";
 import { PlusIcon } from "lucide-react";
+import React, { useState } from "react";
 import { toast } from "react-hot-toast";
-import { cn } from "@/core/helpers/cn";
 
 type FieldConfig = {
   type: "text" | "textarea" | "number";
@@ -27,7 +27,7 @@ const InputField: React.FC<
   FieldConfig & { value: string; onChange: (value: string) => void }
 > = ({ type, name, placeholder, prefix, value, onChange }) => {
   const inputClass =
-    "w-full rounded-[6px] bg-transparent px-2 py-[6px] text-sm text-white placeholder:text-white/30 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-primary";
+    "w-full rounded-[6px] border-border !border-1 !border-red-400  px-2 py-[6px] text-sm text-white placeholder:text-white/30 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-primary";
 
   if (type === "textarea") {
     return (
@@ -36,7 +36,7 @@ const InputField: React.FC<
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className={`${inputClass} h-[80px] resize-none`}
+        className={`${inputClass} h-[60px] resize-none`}
       />
     );
   }
@@ -150,7 +150,7 @@ export default function PopoutForm({
               initial={{ opacity: 0, filter: "blur(4px)" }}
               animate={{ opacity: 1, filter: "blur(0px)" }}
               transition={{ duration: 1.2, type: "spring" }}
-              className="flex flex-col gap-4 justify-between h-full"
+              className="flex flex-col gap-.5 justify-between h-full p-2"
             >
               {fields.map((field, index) => (
                 <React.Fragment key={field.name}>
@@ -160,15 +160,11 @@ export default function PopoutForm({
                     onChange={(value) => handleChange(field.name, value)}
                   />
                   {index < fields.length - 1 && (
-                    <hr className="border-neutral-700" />
+                    <hr className="border-neutral-700/40" />
                   )}
                 </React.Fragment>
               ))}
               <div className="flex justify-between">
-                <div className="flex items-center gap-2 ml-2">
-                  <div className="rounded-full size-2 bg-theme-primary" />
-                  <p className="text-sm text-neutral-500">Changes</p>
-                </div>
                 <button
                   type="submit"
                   className="text-neutral-2 00 bg-theme-primary py-1 font-medium px-2 rounded-lg"
