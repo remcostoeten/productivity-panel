@@ -1,3 +1,4 @@
+import { ModernKbd } from "@/components/ui/kbd";
 import SiteHeader from "./_components/marketing-header";
 
 interface MarketingLayoutProps {

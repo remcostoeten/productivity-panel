@@ -71,7 +71,11 @@ export default function WishlistsPage() {
       </form>
       <div className="grid gap-4">
         {wishlists.map((wishlist: { id: any }) => (
-          <WishlistItem wishlist={wishlist} />
+          <WishlistItem
+            userId={userId}
+            onWishlistCreated={handleWishlistUpdate}
+            wishlist={wishlist}
+          />
         ))}
       </div>
     </>

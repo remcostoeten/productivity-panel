@@ -22,6 +22,13 @@
       "when": 1723589050407,
       "tag": "0002_simple_gauntlet",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1723626337683,
+      "tag": "0003_classy_siren",
+      "breakpoints": true
     }
   ]
 }
