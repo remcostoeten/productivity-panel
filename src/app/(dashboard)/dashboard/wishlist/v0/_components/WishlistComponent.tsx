@@ -1,15 +1,15 @@
 "use client";
 
-import { Card, CardHeader, CardContent } from "@/components/ui";
-import { toast } from "react-hot-toast";
+import { useState, useEffect } from "react";
 import { WishlistComponentProps } from "../v0.types";
 import { useWishlistStore } from "@/core/stores/useWishlistStore";
-import { TrashIcon, Trash2Icon } from "lucide-react";
-import { WishlistItem } from "@/core/types/types.wishlist";
 import { deleteWishlist } from "@/core/server/server-actions/wishlist";
 import { motion, AnimatePresence } from "framer-motion";
 import PopoutForm from "@c/ui/PopoutForm";
-import { useState, useEffect } from "react";
+import { toast } from "react-hot-toast";
+import { Card, CardHeader, CardContent } from "@/components/ui";
+import { TrashIcon, Trash2Icon } from "lucide-react";
+import { WishlistItem } from "@/core/types/types.wishlist";
 
 export default function WishlistComponent({ userId }: WishlistComponentProps) {
   const {
@@ -22,8 +22,6 @@ export default function WishlistComponent({ userId }: WishlistComponentProps) {
     removeWishlistItem,
   } = useWishlistStore();
 
-  const [localWishlists, setLocalWishlists] = useState(wishlists);
-
   useEffect(() => {
     fetchWishlists(userId);
   }, [userId, fetchWishlists]);
@@ -33,13 +31,6 @@ export default function WishlistComponent({ userId }: WishlistComponentProps) {
       toast.error(error);
     }
   }, [error]);
-
-  useEffect(() => {
-    setLocalWishlists(wishlists);
-    if (wishlists.length === 0) {
-      toast("No wishlists available. Add a new wishlist to get started.");
-    }
-  }, [wishlists]);
 
   const handleAddWishlist = async (data: Record<string, string>) => {
     try {
@@ -55,43 +46,11 @@ export default function WishlistComponent({ userId }: WishlistComponentProps) {
     data: Record<string, string>,
   ) => {
     const { name, price, description } = data;
-    setLocalWishlists((prevWishlists: any[]) => {
-      return prevWishlists.map((wishlist: { id: string; items: any }) => {
-        if (wishlist.id === wishlistId) {
-          return {
-            ...wishlist,
-            items: [
-              ...wishlist.items,
-              {
-                id: Date.now().toString(),
-                name,
-                price: Number(price),
-                description,
-              },
-            ],
-          };
-        }
-        return wishlist;
-      });
-    });
 
     try {
       await addWishlistItem(wishlistId, name, Number(price), description);
       toast.success("Item added successfully");
     } catch (error) {
-      setLocalWishlists((prevWishlists: any[]) => {
-        return prevWishlists.map((wishlist: { id: string; items: any[] }) => {
-          if (wishlist.id === wishlistId) {
-            return {
-              ...wishlist,
-              items: wishlist.items.filter(
-                (item: { name: string }) => item.name !== name,
-              ),
-            };
-          }
-          return wishlist;
-        });
-      });
       toast.error("Failed to add item");
     }
   };
@@ -99,12 +58,21 @@ export default function WishlistComponent({ userId }: WishlistComponentProps) {
   const removeEntireWishlist = async (wishlistId: string) => {
     try {
       await deleteWishlist(wishlistId);
-      setLocalWishlists((prev: any[]) =>
-        prev.filter((wishlist: { id: string }) => wishlist.id !== wishlistId),
-      );
       toast.success("Wishlist removed successfully");
     } catch (error) {
       toast.error("Failed to remove wishlist");
+    }
+  };
+
+  const handleRemoveSingleWishlistItem = async (
+    wishlistId: string,
+    itemId: string,
+  ) => {
+    try {
+      await removeWishlistItem(itemId);
+      toast.success("Item removed successfully");
+    } catch (error) {
+      toast.error("Failed to remove item");
     }
   };
 
@@ -115,9 +83,9 @@ export default function WishlistComponent({ userId }: WishlistComponentProps) {
       <div className="grid gap-4">
         <div className="grid gap-6">
           <AnimatePresence>
-            {localWishlists.map(
+            {wishlists.map(
               (wishlist: {
-                id: React.Key;
+                id: string;
                 name: string;
                 budget: number;
                 items: WishlistItem[];
@@ -140,9 +108,7 @@ export default function WishlistComponent({ userId }: WishlistComponentProps) {
                         </h2>
                         <button
                           className="text-neutral-400 hover:text-neutral-300"
-                          onClick={() =>
-                            removeEntireWishlist(wishlist.id as string)
-                          }
+                          onClick={() => removeEntireWishlist(wishlist.id)}
                         >
                           <Trash2Icon size={20} />
                         </button>
@@ -153,7 +119,7 @@ export default function WishlistComponent({ userId }: WishlistComponentProps) {
                     </CardHeader>
                     <CardContent className="px-6 py-4">
                       <ul className="grid gap-4">
-                        {wishlist.items.map((item: WishlistItem) => (
+                        {wishlist.items.map((item) => (
                           <li
                             key={item.id}
                             className="grid grid-cols-[1fr_auto] items-center gap-4"
@@ -171,8 +137,8 @@ export default function WishlistComponent({ userId }: WishlistComponentProps) {
                               <button
                                 className="text-neutral-400 hover:text-neutral-300"
                                 onClick={() =>
-                                  removeWishlistItem(
-                                    wishlist.id as string,
+                                  handleRemoveSingleWishlistItem(
+                                    wishlist.id,
                                     item.id,
                                   )
                                 }
@@ -204,7 +170,7 @@ export default function WishlistComponent({ userId }: WishlistComponentProps) {
                           },
                         ]}
                         onSubmit={(data) =>
-                          handleAddWishlistItem(wishlist.id as string, data)
+                          handleAddWishlistItem(wishlist.id, data)
                         }
                         defaultWidth={148}
                         defaultHeight={52}
