@@ -138,7 +138,7 @@
   "workbench.tree.renderIndentGuides": "none",
   "window.customTitleBarVisibility": "auto",
   "symbols.hidesExplorerArrows": false,
-  "workbench.activityBar.location": "bottom",
+  "workbench.activityBar.location": "default",
   "window.commandCenter": false,
   "workbench.layoutControl.enabled": false,
   "editor.stickyScroll.enabled": false,

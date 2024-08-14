@@ -85,7 +85,6 @@ export default function SiteHeader() {
           </nav>
 
           <div className="hidden md:flex ml-auto space-x-4 h-full items-center mr-4">
-            <UserButton />
             <SignedOut>
               <BorderMagicButtonAlt href="/sign-in">
                 Sign in
@@ -96,6 +95,7 @@ export default function SiteHeader() {
                 Dashboard
               </BorderMagicButtonAlt>
             </SignedIn>
+            <UserButton />
           </div>
           <button className="ml-6 md:hidden" onClick={toggleHamburgerMenu}>
             <span className="sr-only">Toggle menu</span>

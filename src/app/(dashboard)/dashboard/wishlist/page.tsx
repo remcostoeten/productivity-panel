@@ -5,12 +5,13 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
-  createWishlist,
-  getWishlistItemsByWishlist,
   getWishlistsByUser,
+  createWishlist,
 } from "@/core/server/server-actions/wishlist";
 import toast from "react-hot-toast";
-import WishlistItem from "./_components/WishlistDisplay";
+import WishlistItem from "./_components/WishlistItem";
+import MarketingLayout from "@/app/(marketing)/layout";
+import ToolIntro from "@/app/(marketing)/color-tool/_components/ColorToolPageIntro";
 
 export default function WishlistsPage() {
   const { userId } = useAuth();
@@ -22,7 +23,7 @@ export default function WishlistsPage() {
     if (userId) {
       loadWishlists();
     }
-  }, [userId]);
+  }, []);
 
   async function loadWishlists() {
     const wishlists = await getWishlistsByUser(userId);
@@ -44,10 +45,12 @@ export default function WishlistsPage() {
     loadWishlists();
   }
 
-  return (
-    <div>
-      <h1 className="text-2xl font-bold mb-4">My Wishlists</h1>
+  function handleWishlistUpdate(updatedWishlists: any) {
+    setWishlists(updatedWishlists);
+  }
 
+  return (
+    <>
       <form onSubmit={handleCreateWishlist} className="flex gap-2 mb-4">
         <Input
           value={newWishlistName}
@@ -66,14 +69,11 @@ export default function WishlistsPage() {
         />
         <Button type="submit">Create Wishlist</Button>
       </form>
-
-      <Button onClick={loadWishlists}>Refresh</Button>
-
       <div className="grid gap-4">
         {wishlists.map((wishlist: { id: any }) => (
-          <WishlistItem key={wishlist.id} wishlist={wishlist} />
+          <WishlistItem wishlist={wishlist} />
         ))}
       </div>
-    </div>
+    </>
   );
 }
