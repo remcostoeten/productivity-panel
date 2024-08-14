@@ -3,7 +3,7 @@ export type BudgetItem = {
   title: string;
   cost: number;
   description: string;
-  priority: 'high' | 'medium' | 'low';
+  priority: "high" | "medium" | "low";
   url?: string;
 };
 

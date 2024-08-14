@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "c703ad46-18b5-431f-9859-48ac25036de2",
-  "prevId": "d229665f-86ab-4942-a29c-d1cd35d04e8b",
+  "id": "0cdc0479-d364-4737-8d5d-9ae27a96f1c1",
+  "prevId": "c703ad46-18b5-431f-9859-48ac25036de2",
   "tables": {
     "site_visits": {
       "name": "site_visits",
@@ -155,6 +155,13 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": true,
+          "autoincrement": false
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
           "autoincrement": false
         },
         "wishlist_id": {

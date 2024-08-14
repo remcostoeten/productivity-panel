@@ -5,6 +5,7 @@ export * from "./border-beam";
 export * from "./button";
 export * from "./card";
 export * from "./checkbox";
+export * from "./PopoutForm";
 export * from "./command";
 export * from "./dialog";
 export * from "./drawer";
