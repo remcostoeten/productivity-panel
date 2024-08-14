@@ -1,4 +1,7 @@
+import { ReactKey } from 'react';
+
 export type WishlistItem = {
+  id: string;
   name: string;
   description: string;
   category: string;
@@ -6,10 +9,11 @@ export type WishlistItem = {
   url: string;
 };
 
-export type Wishlist = {
-  name: string;
-  userId: string;
 
-  budget: number;
-  items: WishlistItem[];
+export type Wishlist = {
+    id: ReactKey;
+    name: string;
+    budget: number;
+    remainingBudget: number;
+    items: WishlistItem[];
 };
