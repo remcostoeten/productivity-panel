@@ -1,10 +1,5 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
-import { LinkIcon, PlusCircleIcon, Trash2Icon, TrashIcon } from "lucide-react";
-import { useEffect, useState } from "react";
-import { toast } from "react-hot-toast";
-
 import { AnimatePulse } from "@/components/atoms/AnimatePulse";
 import { Flex } from "@/components/atoms/Flex";
 import { WishlistSkeleton } from "@/components/effect/skeleton-loaders";
@@ -14,22 +9,19 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import PopoutForm from "@/components/ui/PopoutForm";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { deleteEntireWishlist } from "@/core/server/server-actions/wishlist";
 import { useWishlistStore } from "@/core/stores/useWishlistStore";
+import { WishlistItem } from "@/core/types/types.wishlist";
+import { AnimatePresence, motion } from "framer-motion";
+import { EditIcon, LinkIcon, Trash2Icon, TrashIcon } from "lucide-react";
+import { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
 
-export default function WishlistComponent({ userId }) {
+export default function WishlistComponent({ userId }: { userId: string }) {
   const {
     wishlists,
     isLoading,
@@ -38,22 +30,11 @@ export default function WishlistComponent({ userId }) {
     addWishlist,
     addWishlistItem,
     removeWishlistItem,
+    updateWishlistName,
+    updateWishlistBudget,
   } = useWishlistStore();
 
   const [localWishlists, setLocalWishlists] = useState([]);
-  const [categories, setCategories] = useState([
-    "Electronics",
-    "Clothing",
-    "Books",
-    "Home & Garden",
-    "Sports & Outdoors",
-    "Toys & Games",
-    "Beauty & Personal Care",
-    "Other",
-  ]);
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [newCategory, setNewCategory] = useState("");
-  const [isAddCategoryModalOpen, setIsAddCategoryModalOpen] = useState(false);
   const [isUpdateWishlistModalOpen, setIsUpdateWishlistModalOpen] =
     useState(false);
   const [selectedWishlistId, setSelectedWishlistId] = useState(null);
@@ -61,7 +42,9 @@ export default function WishlistComponent({ userId }) {
   const [newBudget, setNewBudget] = useState("");
 
   useEffect(() => {
-    fetchWishlists(userId);
+    if (userId) {
+      fetchWishlists(userId);
+    }
   }, [userId, fetchWishlists]);
 
   useEffect(() => {
@@ -71,7 +54,8 @@ export default function WishlistComponent({ userId }) {
   }, [error]);
 
   useEffect(() => {
-    setLocalWishlists(wishlists.filter((wishlist) => wishlist != null));
+    const filteredWishlists = wishlists.filter((wishlist) => wishlist != null);
+    setLocalWishlists(filteredWishlists);
   }, [wishlists]);
 
   const handleAddWishlist = async (data: { name: string; budget: any }) => {
@@ -82,6 +66,7 @@ export default function WishlistComponent({ userId }) {
       toast.error("Failed to add wishlist");
     }
   };
+
   const handleAddWishlistItem = async (
     wishlistId: string,
     data: Record<string, string | string[]>,
@@ -89,39 +74,20 @@ export default function WishlistComponent({ userId }) {
     const { name, price, description, url } = data;
 
     try {
-      console.log("Adding new item:", {
-        wishlistId,
-        name,
-        price,
-        description,
-        url,
-        selectedCategory,
-      });
-
-      const updatedWishlist = await addWishlistItem(
+      await addWishlistItem(
         wishlistId,
         name as string,
         Number(price),
         description as string,
-        url as string,
-        selectedCategory,
       );
 
-      console.log("Wishlist updated with new item:", updatedWishlist);
-
-      setLocalWishlists((prevWishlists) =>
-        prevWishlists.map((wishlist) =>
-          wishlist.id === updatedWishlist.id ? updatedWishlist : wishlist,
-        ),
-      );
-
+      await fetchWishlists(userId);
       toast.success("Item added successfully");
-      setSelectedCategory("");
     } catch (error) {
-      console.error("Error adding wishlist item:", error);
       toast.error("Failed to add item");
     }
   };
+
   const removeEntireWishlist = async (wishlistId: string) => {
     try {
       await deleteEntireWishlist(wishlistId);
@@ -159,46 +125,32 @@ export default function WishlistComponent({ userId }) {
     }
   };
 
-  const handleAddCategory = () => {
-    if (newCategory && !categories.includes(newCategory)) {
-      setCategories((prevCategories) => [...prevCategories, newCategory]);
-      setNewCategory("");
-      setIsAddCategoryModalOpen(false);
-      toast.success("Category added successfully");
+  const handleUpdateWishlist = async () => {
+    if (selectedWishlistId && (newName || newBudget !== "")) {
+      try {
+        if (newName) {
+          await updateWishlistName(selectedWishlistId, newName);
+        }
+        if (newBudget !== "") {
+          await updateWishlistBudget(selectedWishlistId, Number(newBudget));
+        }
+
+        setIsUpdateWishlistModalOpen(false);
+        setNewName("");
+        setNewBudget("");
+        setSelectedWishlistId(null);
+        toast.success("Wishlist updated successfully");
+
+        await fetchWishlists(userId);
+      } catch (error) {
+        toast.error("Failed to update wishlist");
+      }
     } else {
-      toast.error("Category already exists or is invalid");
+      toast.error("No changes to update or invalid wishlist selected");
     }
   };
 
-  //   const handleUpdateWishlist = async () => {
-  //     if (selectedWishlistId && (newName || newBudget !== "")) {
-  //       try {
-  //         const updatedFields = {}; // Declare the 'updatedFields' variable
-  //         const updatedWishlists = wishlists.map((wishlist) => {
-  //           if (wishlist) {
-  //             return {
-  //               ...wishlist,
-  //               ...updatedFields,
-  //             };
-  //           }
-  //           return wishlist || {};
-  //         });
-
-  //         setIsUpdateWishlistModalOpen(false);
-  //         setNewName("");
-  //         setNewBudget("");
-  //         setSelectedWishlistId(null);
-  //         toast.success("Wishlist updated successfully");
-  //       } catch (error) {
-  //         console.error("Error updating wishlist:", error);
-  //         toast.error("Failed to update wishlist");
-  //       }
-  //     } else {
-  //       toast.error("No changes to update or invalid wishlist selected");
-  //     }
-  //   };
-
-  if (isLoading && localWishlists.length > 0) return <WishlistSkeleton />;
+  if (isLoading) return <WishlistSkeleton />;
 
   return (
     <div className="w-full max-w-4xl mx-auto">
@@ -234,6 +186,17 @@ export default function WishlistComponent({ userId }) {
                               variant="outline"
                               size="icon"
                               className="text-neutral-400 hover:text-neutral-300"
+                              onClick={() => {
+                                setSelectedWishlistId(wishlist.id);
+                                setIsUpdateWishlistModalOpen(true);
+                              }}
+                            >
+                              <EditIcon />
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="icon"
+                              className="text-neutral-400 hover:text-neutral-300"
                               onClick={() => removeEntireWishlist(wishlist.id)}
                             >
                               <Trash2Icon size={16} />
@@ -246,7 +209,7 @@ export default function WishlistComponent({ userId }) {
                       </CardHeader>
                       <CardContent className="bg-[#0c0c0c] px-6 py-4">
                         <ul className="grid gap-4">
-                          {(wishlist.items || []).map((item) => (
+                          {(wishlist.items || []).map((item: WishlistItem) => (
                             <li
                               key={item.id}
                               className="grid grid-cols-[1fr_auto] items-center gap-4"
@@ -311,11 +274,6 @@ export default function WishlistComponent({ userId }) {
                                 name: "description",
                                 placeholder: "Description",
                               },
-                              {
-                                type: "text",
-                                name: "url",
-                                placeholder: "Product URL (optional)",
-                              },
                             ]}
                             onSubmit={(data) =>
                               handleAddWishlistItem(wishlist.id, data)
@@ -323,59 +281,8 @@ export default function WishlistComponent({ userId }) {
                             defaultWidth={148}
                             defaultHeight={52}
                             expandedWidth={320}
-                            expandedHeight={420}
-                          >
-                            <div className="flex items-center space-x-2">
-                              <Select onValueChange={setSelectedCategory}>
-                                <SelectTrigger className="w-[180px]">
-                                  <SelectValue placeholder="Select a category" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  {categories.map((category) => (
-                                    <SelectItem key={category} value={category}>
-                                      {category}
-                                    </SelectItem>
-                                  ))}
-                                </SelectContent>
-                              </Select>
-                              <Dialog
-                                open={isAddCategoryModalOpen}
-                                onOpenChange={setIsAddCategoryModalOpen}
-                              >
-                                <DialogTrigger asChild>
-                                  <Button variant="outline" size="icon">
-                                    <PlusCircleIcon className="h-4 w-4" />
-                                  </Button>
-                                </DialogTrigger>
-                                <DialogContent className="sm:max-w-[425px]">
-                                  <DialogHeader>
-                                    <DialogTitle>Add New Category</DialogTitle>
-                                  </DialogHeader>
-                                  <div className="grid gap-4 py-4">
-                                    <div className="grid grid-cols-4 items-center gap-4">
-                                      <Label
-                                        htmlFor="name"
-                                        className="text-right"
-                                      >
-                                        Name
-                                      </Label>
-                                      <Input
-                                        id="name"
-                                        value={newCategory}
-                                        onChange={(e) =>
-                                          setNewCategory(e.target.value)
-                                        }
-                                        className="col-span-3"
-                                      />
-                                    </div>
-                                  </div>
-                                  <Button onClick={handleAddCategory}>
-                                    Add Category
-                                  </Button>
-                                </DialogContent>
-                              </Dialog>
-                            </div>
-                          </PopoutForm>
+                            expandedHeight={320}
+                          />
                           <p className="text-muted-foreground">
                             Remaining: €
                             {wishlist.budget -
@@ -439,14 +346,12 @@ export default function WishlistComponent({ userId }) {
                 id="newBudget"
                 type="number"
                 value={newBudget}
-                onChange={(e: { target: { value: any } }) =>
-                  setNewBudget(e.target.value)
-                }
+                onChange={(e) => setNewBudget(e.target.value)}
                 className="col-span-3"
               />
             </div>
           </div>
-          {/* <Button onClick={handleUpdateWishlist}>Update Wishlist</Button> */}
+          <Button onClick={handleUpdateWishlist}>Update Wishlist</Button>
         </DialogContent>
       </Dialog>
     </div>

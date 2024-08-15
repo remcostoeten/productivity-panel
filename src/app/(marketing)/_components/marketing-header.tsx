@@ -1,31 +1,24 @@
 "use client";
 
-import { useState, useCallback, useEffect, useTransition } from "react";
-import { usePathname, useRouter } from "next/navigation";
-import { AnimatePresence, motion } from "framer-motion";
-import { SignedIn, SignedOut, UserButton, useClerk } from "@clerk/nextjs";
-import { XIcon, AlignJustify } from "lucide-react";
-import { HamburgerMenuIcon } from "@radix-ui/react-icons";
-import Link from "next/link";
 import BrandLogo from "@/components/theme/BrandLogo";
+import { BorderMagicButtonAlt, Tooltip, TooltipTrigger } from "@/components/ui";
+import { ModernKbd } from "@/components/ui/kbd";
 import menuItems from "@/core/data/header-menu-items";
-import { cn } from "@/core/helpers/cn";
-import NavigationMenu from "./marketing-header-dropdown";
 import {
-  BorderMagicButton,
-  BorderMagicButtonAlt,
-  Tooltip,
-  TooltipTrigger,
-} from "@/components/ui";
-import {
-  mobilenavbarVariant,
   containerVariants,
   mobileLinkVar,
+  mobilenavbarVariant,
 } from "@/core/helpers/animations/menu-animations";
-import DashNavigationMenu from "./dash-header-dropdown";
-import UtilhNavigationMenu from "./marketing-header-dropdown";
+import { cn } from "@/core/helpers/cn";
+import { SignedIn, SignedOut, UserButton, useClerk } from "@clerk/nextjs";
+import { HamburgerMenuIcon } from "@radix-ui/react-icons";
 import { TooltipContent } from "@radix-ui/react-tooltip";
-import { ModernKbd } from "@/components/ui/kbd";
+import { AnimatePresence, motion } from "framer-motion";
+import { AlignJustify, XIcon } from "lucide-react";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { useCallback, useEffect, useState, useTransition } from "react";
+import DashNavigationMenu from "./dash-header-dropdown";
 
 // Custom hook for keyboard shortcuts
 const useKeyboardShortcut = () => {
@@ -146,7 +139,6 @@ export default function SiteHeader() {
                 {item.label}
               </Link>
             ))}
-            <UtilhNavigationMenu animationVariant="dropdownMenu" />
             <SignedIn>
               <DashNavigationMenu animationVariant="dropdownMenu" />
             </SignedIn>
