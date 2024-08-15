@@ -2,6 +2,7 @@
 
 import { AnimatePulse } from "@/components/atoms/AnimatePulse";
 import { Flex } from "@/components/atoms/Flex";
+import Truncate from "@/components/atoms/Truncate";
 import { WishlistSkeleton } from "@/components/effect/skeleton-loaders";
 import { Button, Card, CardContent, CardHeader } from "@/components/ui";
 import {
@@ -151,12 +152,21 @@ export default function WishlistComponent({ userId }: { userId: string }) {
     }
   };
 
+  function remainingColor(budget: number, total: number) {
+    const remaining = budget - total;
+    if (remaining < 0) {
+      return "text-error";
+    } else if (remaining > 0 && remaining < budget / 4) {
+      return "text-yellow-500";
+    }
+  }
+
   if (isLoading) return <WishlistSkeleton />;
 
   return (
-    <div className="w-full max-w-4xl mx-auto">
-      <div className="grid gap-4">
-        <div className="grid gap-6">
+    <div className="w-full max-w-4xl max-w-screen mx-auto">
+      <div className="grid max-w-screen gap-4">
+        <div className="grid gap-6 max-w-screen">
           <AnimatePresence>
             {localWishlists.length === 0 ? (
               <p className="text-2xl">
@@ -178,7 +188,7 @@ export default function WishlistComponent({ userId }: { userId: string }) {
                   >
                     <Card className="hover:shadow-lg hover:shadow-[#ff6c00]/10 transition-shadow duration-700">
                       <CardHeader className="bg-[#161616] px-6 py-4">
-                        <div className="flex items-center justify-between">
+                        <div className="flex items-center justify-between gap-2">
                           <h2 className="text-lg font-semibold">
                             {wishlist.name}
                           </h2>
@@ -213,13 +223,19 @@ export default function WishlistComponent({ userId }: { userId: string }) {
                           {(wishlist.items || []).map((item: WishlistItem) => (
                             <li
                               key={item.id}
-                              className="grid grid-cols-[1fr_auto] items-center gap-4"
+                              className="grid grid-cols-[1fr_auto] pb-4 border-b  items-center gap-4"
                             >
                               <div className="grid gap-1">
-                                <h3 className="font-medium">{item.name}</h3>
+                                <h3 className="font-medium">
+                                  <Truncate text={item.name} chars="50" />
+                                </h3>
                                 <p className="text-sm text-muted-foreground">
-                                  {item.description}
+                                  <Truncate
+                                    chars="100"
+                                    text={item.description}
+                                  />
                                 </p>
+
                                 {item.url && (
                                   <a
                                     href={item.url}
@@ -235,7 +251,7 @@ export default function WishlistComponent({ userId }: { userId: string }) {
                                 )}
                               </div>
                               <div className="flex items-center gap-2">
-                                <div className="text-lg font-semibold">
+                                <div className="flex items-center justify-between flex-wrap text-wrap break-words">
                                   €{item.price}.-
                                 </div>
                                 <Button
@@ -284,16 +300,27 @@ export default function WishlistComponent({ userId }: { userId: string }) {
                             expandedWidth={320}
                             expandedHeight={320}
                           />
-                          <p className="text-muted-foreground">
-                            Remaining: €
-                            {(
-                              wishlist.budget -
-                              (wishlist.items || []).reduce(
-                                (total, item) => total + (item.price || 0),
-                                0,
-                              )
-                            ).toFixed(2)}
-                            .-
+                          <p className="flex flex-col sm:block">
+                            Remaining:
+                            <span
+                              className={remainingColor(
+                                wishlist.budget,
+                                (wishlist.items || []).reduce(
+                                  (total, item) => total + (item.price || 0),
+                                  0,
+                                ),
+                              )}
+                            >
+                              €
+                              {(
+                                wishlist.budget -
+                                (wishlist.items || []).reduce(
+                                  (total, item) => total + (item.price || 0),
+                                  0,
+                                )
+                              ).toFixed(2)}
+                              .-
+                            </span>
                           </p>
                         </Flex>
                       </CardContent>

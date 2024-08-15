@@ -1,10 +1,10 @@
 import { create } from "zustand";
 import {
-    createWishlist,
-    createWishlistItem,
-    deleteWishlistItem,
-    getWishlistsByUser,
-    updateWishlist,
+  createWishlist,
+  createWishlistItem,
+  deleteWishlistItem,
+  getWishlistsByUser,
+  updateWishlist,
 } from "../server/server-actions/wishlist";
 import { Wishlist } from "../types/types.wishlist";
 
@@ -36,15 +36,15 @@ export const useWishlistStore = create<WishlistStore>((set, get) => ({
   error: null,
 
   fetchWishlists: async (userId: string): Promise<void> => {
-    console.log('Fetching wishlists for user:', userId);
+    console.log("Fetching wishlists for user:", userId);
     set({ isLoading: true, error: null });
     try {
       const wishlists = await getWishlistsByUser(userId);
-      console.log('Fetched wishlists:', wishlists);
+      console.log("Fetched wishlists:", wishlists);
       set({ wishlists, isLoading: false, error: null });
     } catch (error) {
-      console.error('Error fetching wishlists:', error);
-      set({ error: 'Failed to fetch wishlists', isLoading: false });
+      console.error("Error fetching wishlists:", error);
+      set({ error: "Failed to fetch wishlists", isLoading: false });
     }
   },
 
@@ -57,10 +57,10 @@ export const useWishlistStore = create<WishlistStore>((set, get) => ({
       console.log("Adding new wishlist:", { userId, name, budget });
       const newWishlist = await createWishlist(userId, name, budget);
       console.log("New wishlist created:", newWishlist);
-      
+
       // Fetch updated wishlists after adding
       const updatedWishlists = await getWishlistsByUser(userId);
-      
+
       set((state) => ({
         wishlists: updatedWishlists,
         error: null,
@@ -94,7 +94,6 @@ export const useWishlistStore = create<WishlistStore>((set, get) => ({
         price,
         description,
         url,
-        category,
       );
       console.log("New item created:", newItem);
 

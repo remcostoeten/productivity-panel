@@ -11,6 +11,9 @@ export async function deleteWishlistItem(itemId: string) {
 }
 
 export async function deleteEntireWishlist(wishlistId: string) {
+  await db
+    .delete(wishlistItems)
+    .where(eq(wishlistItems.wishlistId, wishlistId));
   await db.delete(wishlists).where(eq(wishlists.id, wishlistId));
 }
 
@@ -93,7 +96,7 @@ export async function createWishlistItem(
   name: string,
   price: number,
   description: string,
-  category: string
+  category: string,
 ) {
   const newItem = {
     id: nanoid(),
