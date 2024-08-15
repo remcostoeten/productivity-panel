@@ -1,5 +1,5 @@
 import { Center } from "@/components/atoms/Center";
-import SimpleSpinner from "@/components/effect/SimpleSpinner";
+import SimpleSpinner from "@/components/effect/loaders/simple-spinner";
 
 export default function Loading() {
   return (

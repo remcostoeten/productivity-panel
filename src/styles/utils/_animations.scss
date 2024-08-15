@@ -11,47 +11,49 @@
 }
 /*______________________________________________*/
 $timing: 0.3s;
-$bezier: cubic-bezier(0.215 ,
- 0.61, 0.335 ,1);
+$bezier: cubic-bezier(0.215, 0.61, 0.335, 1);
 
 .shimmer-btn {
-    transition: $timing $bezier border, $timing $bezier box-shadow, scale $timing $bezier;
+  transition:
+    $timing $bezier border,
+    $timing $bezier box-shadow,
+    scale $timing $bezier;
 
-    &:hover {
-        border-color: rgba(255, 108, 0, 0.2);
-scale: 1.03;
-        box-shadow: rgba(255, 108, 0, 0.4) 0px 0px 40px 0.2em; // Adjusted to include a spread radius and 20% opacity        
-    }
+  &:hover {
+    border-color: rgba(255, 108, 0, 0.2);
+    scale: 1.03;
+    box-shadow: rgba(255, 108, 0, 0.4) 0px 0px 40px 0.2em; // Adjusted to include a spread radius and 20% opacity
+  }
 }
-    /*_____________SimpleSpinner.tsx________________________________*/
-      
-      .simple-spinner {
-        width: 30px;
-        height: 30px;
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-      }
-      
-      .simple-spinner span {
-        display: block;
-        width: 30px;
-        height: 30px;
-        border: 3px solid transparent;
-        border-radius: 50%;
-        border-right-color: rgba(255, 255, 255, 0.7);
-        animation: spinner-anim 0.8s linear infinite;
-      }
-      
-      @keyframes spinner-anim {
-        from {
-          transform: rotate(0);
-        }
-        to {
-          transform: rotate(360deg);
-        }
-      }
+/*_____________SimpleSpinner.tsx________________________________*/
+
+.simple-spinner {
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.simple-spinner span {
+  display: block;
+  width: 30px;
+  height: 30px;
+  border: 3px solid transparent;
+  border-radius: 50%;
+  border-right-color: rgba(255, 255, 255, 0.7);
+  animation: spinner-anim 0.8s linear infinite;
+}
+
+@keyframes spinner-anim {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
 /*______________________________________________*/
 
 /*______________________________________________*/
