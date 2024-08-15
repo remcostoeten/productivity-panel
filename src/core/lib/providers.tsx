@@ -2,15 +2,17 @@
 
 import { ClerkProvider } from "@clerk/nextjs";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
+import { useRouter } from "next/navigation";
 import posthog from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
-import { Toaster } from "react-hot-toast";
 
 interface ProvidersProps {
   children: React.ReactNode;
 }
 
 export default function Providers({ children }: ProvidersProps) {
+  const router = useRouter();
+
   if (typeof window !== "undefined") {
     if (
       !process.env.NEXT_PUBLIC_POSTHOG_KEY ||
@@ -44,6 +46,7 @@ export default function Providers({ children }: ProvidersProps) {
             card: "bg-[#fafafa]",
           },
         }}
+        navigate={(to) => router.push(to)}
       >
         <TooltipProvider>{children}</TooltipProvider>
       </ClerkProvider>
