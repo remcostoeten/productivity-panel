@@ -207,41 +207,47 @@ export default function SiteHeader() {
             animate={hamburgerMenuIsOpen ? "open" : "exit"}
           >
             {menuItems.map((item) => (
-              <>
-                <motion.li
-                  variants={mobileLinkVar}
-                  key={item.id}
-                  className="border-grey-dark border-b py-0.5 pl-6 md:border-none"
+              <motion.li
+                variants={mobileLinkVar}
+                key={item.id}
+                className="border-grey-dark border-b py-0.5 pl-6 md:border-none"
+              >
+                <Link
+                  className={cn(
+                    "flex h-[var(--navigation-height)] w-full items-center text-xl transition-[color,transform] duration-300 md:translate-y-0 md:text-sm md:transition-colors",
+                    pathname === item.href
+                      ? "text-primary font-semibold"
+                      : "text-muted-foreground hover:text-foreground",
+                    hamburgerMenuIsOpen ? "[&_a]:translate-y-0" : "",
+                  )}
+                  href={item.href}
                 >
-                  <Link
-                    className={cn(
-                      "flex h-[var(--navigation-height)] w-full items-center text-xl transition-[color,transform] duration-300 md:translate-y-0 md:text-sm md:transition-colors",
-                      pathname === item.href
-                        ? "text-primary font-semibold"
-                        : "text-muted-foreground hover:text-foreground",
-                      hamburgerMenuIsOpen ? "[&_a]:translate-y-0" : "",
-                    )}
-                    href={item.href}
-                  >
-                    {item.label}
-                  </Link>
-                </motion.li>
-              </>
+                  {item.label}
+                </Link>
+              </motion.li>
             ))}
             <SignedOut>
-              <li className="border-grey-dark border-b py-0.5 pl-6 md:border-none">
+              <motion.li
+                variants={mobileLinkVar}
+                key="sign-in"
+                className="border-grey-dark border-b py-0.5 pl-6 md:border-none"
+              >
                 <Link
                   className="flex h-[var(--navigation-height)] w-full items-center text-xl transition-[color,transform] duration-300 md:translate-y-0 md:text-sm md:transition-colors text-muted-foreground hover:text-foreground [&_a]:translate-y-0"
                   href="/sign-in"
                 >
                   Sign in
                 </Link>
-              </li>
+              </motion.li>
             </SignedOut>
             <SignedIn>
-              <li className="border-grey-dark border-b py-0.5 pl-6 md:border-none">
+              <motion.li
+                variants={mobileLinkVar}
+                key="user-button"
+                className="border-grey-dark border-b py-0.5 pl-6 md:border-none"
+              >
                 <UserButton />
-              </li>
+              </motion.li>
             </SignedIn>
           </motion.ul>
         </motion.nav>
