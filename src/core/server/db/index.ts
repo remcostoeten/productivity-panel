@@ -3,7 +3,7 @@ import { drizzle } from "drizzle-orm/libsql";
 
 const client = createClient({
   url: process.env.DB_URL || "default_db_url",
-  authToken: process.env.DB_AUTH_TOKEN || "default_auth_token",
+  authToken: process.env.AUTH_TOKEN || "default_auth_token",
 });
 
 export const db = drizzle(client);

@@ -4,6 +4,7 @@ $theme-colors: (
   "color-one": rgba(255, 106, 0, 0.8),
   "color-two": #fe8bbb,
   "color-three": #9e7aff,
+  "error": #ff4949,
 );
 
 @mixin apply-theme-colors {

@@ -3,6 +3,7 @@ import Particles from "@/components/ui/particles";
 import { SignIn } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
+import { Variants } from "framer-motion";
 
 export default function SignInPage() {
   return (
@@ -16,7 +17,10 @@ export default function SignInPage() {
         color="#FFFFFF"
       />
       <div className="auth !max-h-screen relative">
-        <Button className="z-50 underline opacity-30 hover:opacity-100 transition-all duration-500 text-white absolute top-4 left-4">
+        <Button
+          variant="outline"
+          className="z-50 underline opacity-30 hover:opacity-100 transition-all duration-500 text-white absolute top-4 left-4"
+        >
           <Link href="/">Back home </Link>
         </Button>
         <div className="scroll-container">

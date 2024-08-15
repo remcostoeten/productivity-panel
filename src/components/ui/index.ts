@@ -1,10 +1,11 @@
 export * from "./avatar";
-import { Slider } from '@/components/ui/slider';
+import { Slider } from "@/components/ui/slider";
 export * from "./scroll-area";
 export * from "./border-beam";
 export * from "./button";
 export * from "./card";
 export * from "./checkbox";
+export * from "./PopoutForm";
 export * from "./command";
 export * from "./dialog";
 export * from "./drawer";
@@ -25,3 +26,4 @@ export * from "./text-shimmer";
 export * from "./textarea";
 export * from "./tooltip";
 export * from "./fancy-box";
+export * from "./particles";

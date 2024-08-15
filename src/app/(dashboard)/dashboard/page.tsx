@@ -21,7 +21,7 @@ export default async function DashboardPage() {
       email: user.emailAddresses[0].emailAddress,
       firstName: user.firstName,
       lastName: user.lastName,
-      profileImageUrl: user.imageUrl,
+      profileImageUrl: user.profileImageUrl,
       emailVerified: user.emailAddresses[0].verification.status === "verified",
     });
 
