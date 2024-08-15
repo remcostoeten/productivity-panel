@@ -6,7 +6,6 @@ import TextShimmer from "@/components/ui/text-shimmer";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 import { useInView } from "framer-motion";
 import Image from "next/image";
-import Link from "next/link";
 import { useRef } from "react";
 
 export default function HeroSection() {

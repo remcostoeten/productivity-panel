@@ -10,15 +10,15 @@ const menuItems = [
     href: "/color-tool",
   },
   {
-    id:3 ,
+    id: 3,
     label: "Wishlist",
-    href: "/dashboard/wishlist"
-  }
+    href: "/dashboard/wishlist",
+  },
 ];
 
 export default menuItems;
 
 export const dashboardMenuItems = [
-    { href: "/lines-showcase", label: "Lines effect" },
-    { href: "/dashboard/clerk-flow", label: "Clerk flow" },
+  { href: "/lines-showcase", label: "Lines effect" },
+  { href: "/dashboard/clerk-flow", label: "Clerk flow" },
 ];

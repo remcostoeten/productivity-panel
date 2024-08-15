@@ -1,8 +1,11 @@
+import React from "react";
+
 interface TruncateProps {
   text: string;
   lines?: number;
   chars?: number;
   end?: string;
+  component?: keyof JSX.IntrinsicElements | React.JSXElementConstructor<any>;
 }
 
 const Truncate: React.FC<TruncateProps> = ({
@@ -10,6 +13,7 @@ const Truncate: React.FC<TruncateProps> = ({
   lines,
   chars,
   end = "...",
+  component: Component = React.Fragment,
 }) => {
   const truncateText = (text: string, chars?: number, lines?: number) => {
     if (chars && text.length > chars) {
@@ -24,7 +28,7 @@ const Truncate: React.FC<TruncateProps> = ({
     return text;
   };
 
-  return <div>{truncateText(text, chars, lines)}</div>;
+  return <Component>{truncateText(text, chars, lines)}</Component>;
 };
 
 export default Truncate;
