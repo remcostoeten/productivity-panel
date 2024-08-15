@@ -61,6 +61,7 @@ export default function WishlistComponent({ userId }: { userId: string }) {
   const handleAddWishlist = async (data: { name: string; budget: any }) => {
     try {
       await addWishlist(userId, data.name, Number(data.budget));
+      await fetchWishlists(userId); // Fetch updated wishlists after adding
       toast.success("Wishlist added successfully");
     } catch (error) {
       toast.error("Failed to add wishlist");
@@ -204,7 +205,7 @@ export default function WishlistComponent({ userId }: { userId: string }) {
                           </div>
                         </div>
                         <p className="text-muted-foreground">
-                          Budget: €{wishlist.budget}.-
+                          Budget: €{wishlist.budget?.toFixed(2) || "0.00"}.-
                         </p>
                       </CardHeader>
                       <CardContent className="bg-[#0c0c0c] px-6 py-4">
@@ -285,11 +286,13 @@ export default function WishlistComponent({ userId }: { userId: string }) {
                           />
                           <p className="text-muted-foreground">
                             Remaining: €
-                            {wishlist.budget -
+                            {(
+                              wishlist.budget -
                               (wishlist.items || []).reduce(
                                 (total, item) => total + (item.price || 0),
                                 0,
-                              )}
+                              )
+                            ).toFixed(2)}
                             .-
                           </p>
                         </Flex>

@@ -57,8 +57,12 @@ export const useWishlistStore = create<WishlistStore>((set, get) => ({
       console.log("Adding new wishlist:", { userId, name, budget });
       const newWishlist = await createWishlist(userId, name, budget);
       console.log("New wishlist created:", newWishlist);
+      
+      // Fetch updated wishlists after adding
+      const updatedWishlists = await getWishlistsByUser(userId);
+      
       set((state) => ({
-        wishlists: [...state.wishlists, newWishlist],
+        wishlists: updatedWishlists,
         error: null,
       }));
     } catch (error) {
