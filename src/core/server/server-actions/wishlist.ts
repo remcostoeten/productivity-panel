@@ -20,7 +20,6 @@ export async function createWishlist(
   budget: number,
 ) {
   try {
-    // First, check if the user exists
     const userResults = await db
       .select()
       .from(users)
@@ -29,13 +28,11 @@ export async function createWishlist(
       throw new Error("User not found");
     }
 
-    // If the user exists, proceed with creating the wishlist
     const id = uuidv4();
     await db.insert(wishlists).values({ id, name, budget, userId });
 
     return { success: true, id };
   } catch (error) {
-    console.error("Error creating wishlist:", error);
     if (error instanceof Error) {
       throw new Error(`Failed to create wishlist: ${error.message}`);
     } else {
@@ -59,15 +56,17 @@ export async function getWishlistsByUser(userId: string) {
     .leftJoin(wishlistItems, eq(wishlists.id, wishlistItems.wishlistId))
     .where(eq(wishlists.userId, userId));
 
-  const groupedResult = result.reduce((acc, curr) => {
+  return result.reduce((acc, curr) => {
     const wishlist = acc.find((w) => w.id === curr.wishlistId);
     if (wishlist) {
-      wishlist.items.push({
-        id: curr.itemId,
-        name: curr.itemName,
-        price: curr.itemPrice,
-        description: curr.itemDescription,
-      });
+      if (curr.itemId) {
+        wishlist.items.push({
+          id: curr.itemId,
+          name: curr.itemName,
+          price: curr.itemPrice,
+          description: curr.itemDescription,
+        });
+      }
     } else {
       acc.push({
         id: curr.wishlistId,
@@ -87,38 +86,26 @@ export async function getWishlistsByUser(userId: string) {
     }
     return acc;
   }, []);
-
-  return groupedResult;
 }
 
 export async function createWishlistItem(
   wishlistId: string,
   name: string,
   price: number,
-  description?: string,
-  url?: string,
-  category?: string,
+  description: string,
+  category: string
 ) {
-  try {
-    const newItem = {
-      id: nanoid(),
-      name,
-      price,
-      description,
-      url,
-      category,
-      wishlistId,
-    };
+  const newItem = {
+    id: nanoid(),
+    name,
+    price,
+    description,
+    category,
+    wishlistId,
+  };
 
-    console.log("Attempting to insert new item:", newItem);
-    console.log("Current schema:", db._.schema); // This will log your current schema
-    await db.insert(wishlistItems).values(newItem);
-    console.log("Item inserted successfully");
-    return newItem;
-  } catch (error) {
-    console.error("Error in createWishlistItem:", error);
-    throw error;
-  }
+  await db.insert(wishlistItems).values(newItem);
+  return newItem;
 }
 
 export async function getWishlistItemsByWishlist(wishlistId: string) {

@@ -1,16 +1,13 @@
 "use client";
 
 import {
+  Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-  Button,
 } from "@/components/ui";
-import {
-  dashboardMenuItems,
-  dropdownMenuItems,
-} from "@/core/data/header-menu-items";
+import { dashboardMenuItems } from "@/core/data/header-menu-items";
 import { menuAnimationVariants } from "@/core/helpers/animations/menu-animations";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
