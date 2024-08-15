@@ -1,28 +1,71 @@
 "use client";
 
-import { useState, useCallback, useEffect, useTransition } from "react";
-import { usePathname, useRouter } from "next/navigation";
-import { AnimatePresence, motion } from "framer-motion";
-import { UserButton } from "@clerk/nextjs";
-import { XIcon, AlignJustify } from "lucide-react";
-import { HamburgerMenuIcon } from "@radix-ui/react-icons";
-import Link from "next/link";
 import BrandLogo from "@/components/theme/BrandLogo";
+import { BorderMagicButtonAlt, Tooltip, TooltipTrigger } from "@/components/ui";
+import { ModernKbd } from "@/components/ui/kbd";
 import menuItems from "@/core/data/header-menu-items";
-import { cn } from "@/core/helpers/cn";
-import NavigationMenu from "./marketing-header-dropdown";
-import { BorderMagicButton, BorderMagicButtonAlt } from "@/components/ui";
 import {
-  mobilenavbarVariant,
   containerVariants,
   mobileLinkVar,
+  mobilenavbarVariant,
 } from "@/core/helpers/animations/menu-animations";
+import { cn } from "@/core/helpers/cn";
+import { SignedIn, SignedOut, UserButton, useClerk } from "@clerk/nextjs";
+import { HamburgerMenuIcon } from "@radix-ui/react-icons";
+import { TooltipContent } from "@radix-ui/react-tooltip";
+import { AnimatePresence, motion } from "framer-motion";
+import { AlignJustify, XIcon } from "lucide-react";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { useCallback, useEffect, useState, useTransition } from "react";
+import DashNavigationMenu from "./dash-header-dropdown";
+
+// Custom hook for keyboard shortcuts
+const useKeyboardShortcut = () => {
+  const router = useRouter();
+  const { signOut, openSignIn } = useClerk();
+
+  const handleLogin = useCallback(() => {
+    console.log("Logging in...");
+    openSignIn();
+  }, [openSignIn]);
+
+  const handleLogout = useCallback(() => {
+    console.log("Logging out...");
+    signOut(() => router.push("/"));
+  }, [signOut, router]);
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      const modifierKey = event.ctrlKey || event.metaKey;
+
+      if (modifierKey && event.key === "l") {
+        event.preventDefault();
+        handleLogin();
+      } else if (modifierKey && event.key === "o") {
+        event.preventDefault();
+        handleLogout();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [handleLogin, handleLogout]);
+
+  return { handleLogin, handleLogout };
+};
 
 export default function SiteHeader() {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
   const [hamburgerMenuIsOpen, setHamburgerMenuIsOpen] = useState(false);
+  const [notification, setNotification] = useState("");
+
+  let { handleLogin, handleLogout } = useKeyboardShortcut();
 
   const toggleHamburgerMenu = useCallback(() => {
     startTransition(() => {
@@ -49,12 +92,32 @@ export default function SiteHeader() {
     };
   }, [hamburgerMenuIsOpen, closeHamburgerNavigation]);
 
+  useEffect(() => {
+    const showNotification = (message) => {
+      setNotification(message);
+      setTimeout(() => setNotification(""), 3000);
+    };
+
+    const originalHandleLogin = handleLogin;
+    const originalHandleLogout = handleLogout;
+
+    handleLogin = () => {
+      originalHandleLogin();
+      showNotification("Logging in...");
+    };
+
+    handleLogout = () => {
+      originalHandleLogout();
+      showNotification("Logging out...");
+    };
+  }, [handleLogin, handleLogout]);
+
   const pathname = usePathname();
 
   return (
     <>
       <header className="animate-fade-in fixed left-0 top-0 z-50 w-full -translate-y-4 border-b opacity-0 backdrop-blur-md [--animation-delay:600ms]">
-        <div className="px-2 lg:px-0 sm:container flex h-14 items-center justify-between z-20">
+        <div className="px-2 lg:px-1 sm:container flex h-14 items-center justify-between z-20">
           <Link
             className="text-md flex items-center transition-all duration-500 origin-top"
             href="/"
@@ -76,15 +139,32 @@ export default function SiteHeader() {
                 {item.label}
               </Link>
             ))}
-            <NavigationMenu animationVariant="dropdownMenu" />
+            <SignedIn>
+              <DashNavigationMenu animationVariant="dropdownMenu" />
+            </SignedIn>
           </nav>
 
-          <div className="hidden md:flex ml-auto h-full items-center mr-4">
-            <UserButton />
-            <BorderMagicButtonAlt href="/dashboard">
-              {" "}
-              Dashboard
-            </BorderMagicButtonAlt>
+          <div className="hidden md:flex ml-auto space-x-4 h-full items-center mr-4">
+            <SignedOut>
+              <Tooltip>
+                <TooltipTrigger>
+                  <BorderMagicButtonAlt href="/sign-in">
+                    Sign in
+                  </BorderMagicButtonAlt>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <ModernKbd variant="login" />
+                </TooltipContent>
+              </Tooltip>
+            </SignedOut>
+            <Tooltip>
+              <TooltipTrigger>
+                <UserButton />
+              </TooltipTrigger>
+              <TooltipContent>
+                <ModernKbd variant="logout" />
+              </TooltipContent>
+            </Tooltip>
           </div>
           <button className="ml-6 md:hidden" onClick={toggleHamburgerMenu}>
             <span className="sr-only">Toggle menu</span>
@@ -146,9 +226,38 @@ export default function SiteHeader() {
                 </Link>
               </motion.li>
             ))}
+            <SignedOut>
+              <motion.li
+                variants={mobileLinkVar}
+                key="sign-in"
+                className="border-grey-dark border-b py-0.5 pl-6 md:border-none"
+              >
+                <Link
+                  className="flex h-[var(--navigation-height)] w-full items-center text-xl transition-[color,transform] duration-300 md:translate-y-0 md:text-sm md:transition-colors text-muted-foreground hover:text-foreground [&_a]:translate-y-0"
+                  href="/sign-in"
+                >
+                  Sign in
+                </Link>
+              </motion.li>
+            </SignedOut>
+            <SignedIn>
+              <motion.li
+                variants={mobileLinkVar}
+                key="user-button"
+                className="border-grey-dark border-b py-0.5 pl-6 md:border-none"
+              >
+                <UserButton />
+              </motion.li>
+            </SignedIn>
           </motion.ul>
         </motion.nav>
       </AnimatePresence>
+
+      {notification && (
+        <div className="fixed top-4 right-4 bg-primary text-white p-2 rounded">
+          {notification}
+        </div>
+      )}
     </>
   );
 }

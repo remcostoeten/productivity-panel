@@ -1,5 +1,3 @@
-import { Config } from 'tailwind-merge'
-
 const config = {
   darkMode: ['class'],
   content: [
@@ -21,10 +19,10 @@ const config = {
       fontFamily: {
         sans: ['var(--font-geist-sans)'],
         mono: ['var(--font-geist-mono)'],
-        // sans: ['var(--font-sans)', ...fontFamily.sans],
       },
       colors: {
         'theme-primary': 'var(--theme-primary)',
+        error: 'var(--error)',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
@@ -124,6 +122,14 @@ const config = {
           from: { transform: 'translateY(0)' },
           to: { transform: 'translateY(calc(-100% - var(--gap)))' },
         },
+        'shimmer-btn': {
+          from: {
+            backgroundPosition: '0 0',
+          },
+          to: {
+            backgroundPosition: '-200% 0',
+          },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -133,12 +139,13 @@ const config = {
         'fade-in': 'fade-in 1000ms var(--animation-delay, 0ms) ease forwards',
         'fade-up': 'fade-up 1000ms var(--animation-delay, 0ms) ease forwards',
         shimmer: 'shimmer 8s infinite',
+        'shimmer-btn': 'shimmer-btn 2s linear infinite',
         marquee: 'marquee var(--duration) infinite linear',
         'marquee-vertical': 'marquee-vertical var(--duration) linear infinite',
       },
     },
   },
   plugins: [require('tailwindcss-animate')],
-} satisfies Config
+}
 
 export default config

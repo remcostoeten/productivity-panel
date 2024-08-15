@@ -36,20 +36,20 @@ const tabs = [
 
 function DesignSystemShowcase() {
   return (
-      <Tabs defaultValue="logo" className="my-4 w-full">                                                                                                                                                                                                                                                                                                                                                                                                        
-        <TabsList className="grid w-full grid-cols-4">
-          {tabs.map((tab) => (
-            <TabsTrigger key={tab.id} value={tab.id}>
-              {tab.label}
-            </TabsTrigger>
-          ))}
-        </TabsList>
-          {tabs.map((tab) => (
-            <TabContent key={tab.id} value={tab.id}>
-              {tab.component}
-            </TabContent>
-          ))}
-      </Tabs>
+    <Tabs defaultValue="logo" className="my-4 w-full">
+      <TabsList className="grid w-full grid-cols-4">
+        {tabs.map((tab) => (
+          <TabsTrigger key={tab.id} value={tab.id}>
+            {tab.label}
+          </TabsTrigger>
+        ))}
+      </TabsList>
+      {tabs.map((tab) => (
+        <TabContent key={tab.id} value={tab.id}>
+          {tab.component}
+        </TabContent>
+      ))}
+    </Tabs>
   );
 }
 

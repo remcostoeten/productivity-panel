@@ -9,3 +9,7 @@
 .max-w-fit-content {
   max-width: fit-content;
 }
+
+.glow {
+  filter: drop-shadow(0 0 5px yellow);
+}

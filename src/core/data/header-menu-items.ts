@@ -9,18 +9,16 @@ const menuItems = [
     label: "Color UI picker",
     href: "/color-tool",
   },
+  {
+    id: 3,
+    label: "Wishlist",
+    href: "/dashboard/wishlist",
+  },
 ];
 
 export default menuItems;
 
-export const dropdownMenuItems = [
-  { href: "/design-system", label: "Design System" },
-  { href: "/color-tool", label: "Color UI picker" },
-  { href: "/color-array", label: "Color Array" },
-  { href: "/color-tweaker", label: "Color Tweaker" },
-];
-
 export const dashboardMenuItems = [
-  { href: "/clerk-flow", label: "Dashboard" },
+  { href: "/lines-showcase", label: "Lines effect" },
   { href: "/dashboard/clerk-flow", label: "Clerk flow" },
 ];

@@ -9,7 +9,7 @@
 @import "./components/_file-uploader";
 @import "./components/_native-switch";
 @import "./components/_vercel-card";
-@import "./components/ spinner-loader-effect";
+@import "./components/_radar-loader";
 
 /* Utillities */
 @import "./utils/_utillity-classes";
@@ -161,7 +161,12 @@ button[data-localization-key="userProfile.start.dangerSection.deleteAccountButto
 }
 
 .cl-footer {
+  top: -40px !important;
   @apply rounded-b-lg border-x border-b bg-background bg-gradient-to-t from-background to-background  text-muted-foreground;
+}
+
+.cl-internal-df7v37 {
+  display: none;
 }
 .cl-userButtonPopoverFooter {
   @apply rounded-b-lg bg-gradient-to-t from-background to-background;

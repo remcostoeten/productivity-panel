@@ -3,11 +3,13 @@ import { SphereMask } from "@/components/ui/sphere-mask";
 import ClientSection from "./_components/landing/client-section";
 import CallToActionSection from "./_components/landing/cta-section";
 import HeroSection from "./_components/landing/hero-section";
+import Blur from "@/components/ui/Blur";
 
 export default async function Page() {
   return (
     <>
-       <HeroSection />
+      <Blur />
+      <HeroSection />
       <ClientSection />
       <SphereMask />
       <CallToActionSection />
