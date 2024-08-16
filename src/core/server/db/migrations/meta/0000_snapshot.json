@@ -1,29 +1,28 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "be1d6903-efa7-4f99-acc4-d62589733194",
+  "id": "a026c569-be8c-4dce-8dbc-d8d34343f309",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "site_visits": {
       "name": "site_visits",
       "columns": {
-        "path": {
-          "name": "path",
+        "id": {
+          "name": "id",
           "type": "text",
-          "primaryKey": false,
+          "primaryKey": true,
           "notNull": true,
           "autoincrement": false
         },
-        "count": {
-          "name": "count",
-          "type": "integer",
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": 0
+          "notNull": false,
+          "autoincrement": false
         },
-        "last_visited": {
-          "name": "last_visited",
+        "timestamp": {
+          "name": "timestamp",
           "type": "integer",
           "primaryKey": false,
           "notNull": true,
@@ -32,7 +31,17 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "site_visits_user_id_users_id_fk": {
+          "name": "site_visits_user_id_users_id_fk",
+          "tableFrom": "site_visits",
+          "tableTo": "users",
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
@@ -73,7 +82,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": 0
+          "default": false
         },
         "last_sign_in": {
           "name": "last_sign_in",
@@ -184,6 +193,22 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(strftime('%s', 'now'))"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(strftime('%s', 'now'))"
         }
       },
       "indexes": {},
@@ -231,6 +256,22 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(strftime('%s', 'now'))"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(strftime('%s', 'now'))"
         }
       },
       "indexes": {},

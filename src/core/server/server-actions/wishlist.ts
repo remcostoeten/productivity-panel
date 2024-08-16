@@ -120,9 +120,32 @@ export async function getWishlistItemsByWishlist(wishlistId: string) {
 
 export async function updateWishlist(
   wishlistId: string,
-  updates: Partial<typeof wishlists.$inferInsert>,
+  updates: Partial<typeof wishlists.$inferInsert> & { updatedAt?: number },
 ) {
   await db.update(wishlists).set(updates).where(eq(wishlists.id, wishlistId));
+}
+
+export async function updateWishlistItem(
+  itemId: string,
+  updateData: Partial<{
+    name: string;
+    price: number;
+    description: string;
+    url: string;
+    category: string;
+  }>,
+) {
+  try {
+    await db
+      .update(wishlistItems)
+      .set({ ...updateData, updatedAt: Math.floor(Date.now() / 1000) })
+      .where(eq(wishlistItems.id, itemId));
+
+    return { success: true };
+  } catch (error) {
+    console.error("Error updating wishlist item:", error);
+    return { success: false, error: "Failed to update wishlist item" };
+  }
 }
 
 export async function updateWishlistName(wishlistId: string, newName: string) {

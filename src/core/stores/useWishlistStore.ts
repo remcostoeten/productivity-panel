@@ -5,6 +5,7 @@ import {
   deleteWishlistItem,
   getWishlistsByUser,
   updateWishlist,
+  updateWishlistItem,
 } from "../server/server-actions/wishlist";
 import { Wishlist } from "../types/types.wishlist";
 
@@ -28,6 +29,14 @@ type WishlistStore = {
     newBudget: number,
   ) => Promise<void>;
   updateWishlistName: (wishlistId: string, newName: string) => Promise<void>;
+  updateWishlistItem: (
+    itemId: string,
+    name: string,
+    price: number,
+    description: string,
+    url?: string,
+    category?: string,
+  ) => Promise<void>;
 };
 
 export const useWishlistStore = create<WishlistStore>((set, get) => ({
@@ -45,6 +54,42 @@ export const useWishlistStore = create<WishlistStore>((set, get) => ({
     } catch (error) {
       console.error("Error fetching wishlists:", error);
       set({ error: "Failed to fetch wishlists", isLoading: false });
+    }
+  },
+
+  updateWishlistItem: async (
+    itemId: string,
+    name: string,
+    price: number,
+    description: string,
+    url?: string,
+    category?: string,
+  ): Promise<void> => {
+    try {
+      console.log("Updating wishlist item:", {
+        itemId,
+        name,
+        price,
+        description,
+        url,
+        category,
+      });
+      await updateWishlistItem(itemId, { name, price, description, url });
+      console.log("Wishlist item updated successfully");
+
+      const updatedWishlists = get().wishlists.map((wishlist) => ({
+        ...wishlist,
+        items: (wishlist.items || []).map((item) =>
+          item.id === itemId
+            ? { ...item, name, price, description, url }
+            : item,
+        ),
+      }));
+
+      set({ wishlists: updatedWishlists, error: null });
+    } catch (error) {
+      console.error("Error updating wishlist item:", error);
+      set({ error: "Failed to update wishlist item" });
     }
   },
 

@@ -12,17 +12,27 @@ export default async function DashboardPage() {
 
   if (!userId || !user) {
     redirect("/sign-in");
+    return null;
   }
 
   try {
+    // Check if user email addresses exist and get the primary email
+    const primaryEmail = user.emailAddresses?.find(
+      (email) => email.id === user.primaryEmailAddressId,
+    );
+
+    if (!primaryEmail) {
+      throw new Error("User primary email address is missing.");
+    }
+
     // Create or update user in the database
     await createOrUpdateUser({
       id: userId,
-      email: user.emailAddresses[0].emailAddress,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      profileImageUrl: user.profileImageUrl,
-      emailVerified: user.emailAddresses[0].verification.status === "verified",
+      email: primaryEmail.emailAddress,
+      firstName: user.firstName ?? "",
+      lastName: user.lastName ?? "",
+      profileImageUrl: user.imageUrl ?? "",
+      emailVerified: primaryEmail.verification?.status === "verified" ?? false,
     });
 
     // Update last sign-in time (but don't increment count)
