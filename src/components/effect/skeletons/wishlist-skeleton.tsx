@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ParentSkeleton, SVGSkeleton } from "./index";
+import { ParentSkeleton, SVGSkeleton } from "./parent-skeleton";
 
 export default function WishlistSkeleton() {
   return (

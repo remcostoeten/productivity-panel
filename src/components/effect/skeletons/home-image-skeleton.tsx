@@ -1,6 +1,4 @@
-import Skeletons from "./parent-skeleton";
-
-const { SVGSkeleton } = Skeletons;
+import { SVGSkeleton } from "./parent-skeleton";
 
 export default function HomeImageSkeleton() {
   return (

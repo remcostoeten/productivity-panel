@@ -25,9 +25,4 @@ const SVGSkeleton = ({ className }) => (
   <svg className={className + " animate-pulse rounded bg-gray-300"} />
 );
 
-const Skeletons = {
-  ParentSkeleton,
-  SVGSkeleton,
-};
-
-export default Skeletons;
+export { ParentSkeleton, SVGSkeleton };
