@@ -13,7 +13,7 @@ export default function DashboardLayout({ children }: PageProps) {
             <ToolIntro
               title="Wishlists"
               description="Create and manage your wishlists."
-            />{" "}
+            />
             {children}
           </div>
         </div>
@@ -23,7 +23,7 @@ export default function DashboardLayout({ children }: PageProps) {
             "[mask-image:radial-gradient(300px_circle_at_center,white,transparent)]",
           )}
         />
-      </div>{" "}
+      </div>
     </>
   );
 }

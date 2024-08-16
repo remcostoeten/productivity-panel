@@ -3,7 +3,7 @@
 import { AnimatePulse } from "@/components/atoms/AnimatePulse";
 import { Flex } from "@/components/atoms/Flex";
 import Truncate from "@/components/atoms/Truncate";
-import { WishlistSkeleton } from "@/components/effect/skeleton-loaders";
+import { WishlistSkeleton } from "@/components/effect/skeletons";
 import { Button, Card, CardContent, CardHeader } from "@/components/ui";
 import {
   Dialog,

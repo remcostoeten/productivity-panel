@@ -1,12 +1,13 @@
 "use client";
 
+import { HomeImageSkeleton } from "@/components/effect/skeletons";
 import { BorderBeam } from "@/components/ui/border-beam";
 import { Button } from "@/components/ui/button";
 import TextShimmer from "@/components/ui/text-shimmer";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 import { useInView } from "framer-motion";
 import Image from "next/image";
-import { useRef } from "react";
+import { Suspense, useRef } from "react";
 
 export default function HeroSection() {
   const ref = useRef(null);
@@ -59,20 +60,22 @@ export default function HeroSection() {
             colorTo="var(--color-two)"
           />
 
-          <Image
-            width="1200"
-            height="729"
-            src="/hero-dark.webp"
-            alt="Hero Image"
-            className="relative hidden size-full rounded-[inherit] border object-contain dark:block"
-          />
-          <Image
-            width={1000}
-            height={1000}
-            src="/hero-light.webp"
-            alt="Hero Image"
-            className="relative block size-full rounded-[inherit]  border object-contain dark:hidden"
-          />
+          <Suspense fallback={<HomeImageSkeleton />}>
+            <Image
+              width="1200"
+              height="729"
+              src="/hero-dark.webp"
+              alt="Hero Image"
+              className="relative hidden size-full rounded-[inherit] border object-contain dark:block"
+            />
+            <Image
+              width={1000}
+              height={1000}
+              src="/hero-light.webp"
+              alt="Hero Image"
+              className="relative block size-full rounded-[inherit] border object-contain dark:hidden"
+            />
+          </Suspense>
         </div>
       </div>
     </section>
