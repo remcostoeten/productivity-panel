@@ -1,6 +1,7 @@
+
 import { sessionOptions, VisitorSession } from "@/core/lib/iron-session-config";
+import { db } from "@/core/server/db";
 import { siteVisits } from "@/core/server/db/schema";
-import { db } from "_templates/db-index";
 import { sql } from "drizzle-orm";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
