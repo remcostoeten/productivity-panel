@@ -5,6 +5,7 @@ $theme-colors: (
   "color-two": #fe8bbb,
   "color-three": #9e7aff,
   "error": #ff4949,
+  "body-gradient": linear-gradient(256.59deg, #000 23.98%, #171616 100.35%),
 );
 
 @mixin apply-theme-colors {

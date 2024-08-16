@@ -1,4 +1,4 @@
-import ThemeToggle from "@/components/theme/ThemeToggle";
+import PreLoader from "@/components/effect/LogoFlicker";
 import { cn } from "@/core/helpers/cn";
 import { ThemeProvider } from "@/core/lib/ next-theme-provider";
 import Providers from "@/core/lib/providers";
@@ -32,7 +32,7 @@ export default function RootLayout({ children }: PageProps) {
       <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
         <body
           className={cn(
-            "bg-background  min-h-screen font-sans transition-colors duration-500 antialiased",
+            "bg-body-gradient min-h-screen font-sans transition-colors duration-500 antialiased",
             fontSans.variable,
           )}
         >
@@ -41,8 +41,7 @@ export default function RootLayout({ children }: PageProps) {
             defaultTheme="dark"
             disableTransitionOnChange={true}
           >
-            {children}
-            <ThemeToggle />
+            <PreLoader duration={3000}>{children}</PreLoader>
           </ThemeProvider>
         </body>
       </html>

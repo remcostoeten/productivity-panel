@@ -1,12 +1,12 @@
 import { sql } from "drizzle-orm";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
-const siteVisits = sqliteTable("site_visits", {
-  path: text("path").notNull(),
-  count: integer("count").notNull().default(0),
-  lastVisited: integer("last_visited", { mode: "timestamp" })
+export const siteVisits = sqliteTable("site_visits", {
+  id: text("id").primaryKey(),
+  timestamp: integer("timestamp")
     .notNull()
     .default(sql`(strftime('%s', 'now'))`),
 });
 
-export default siteVisits;
+export type SiteVisit = typeof siteVisits.$inferSelect;
+export type NewSiteVisit = typeof siteVisits.$inferInsert;

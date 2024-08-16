@@ -21,6 +21,7 @@ const config = {
         mono: ['var(--font-geist-mono)'],
       },
       colors: {
+        'body-gradient': 'var(--body-gradient)',
         'theme-primary': 'var(--theme-primary)',
         error: 'var(--error)',
         border: 'hsl(var(--border))',
