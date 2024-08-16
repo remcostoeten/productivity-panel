@@ -8,7 +8,7 @@ export default {
   dialect: 'sqlite',
   dbCredentials: {
     url: process.env.DB_URL,
-    authToken: process.env.AUTH_TOKENf,
+    authToken: process.env.AUTH_TOKEN,
   },
   verbose: true,
 } satisfies Config
