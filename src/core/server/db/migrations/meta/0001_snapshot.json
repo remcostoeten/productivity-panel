@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "f7205213-cb2e-49cd-9673-83f381f85c0a",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "afe66e55-babe-48c7-a9b0-95c365677958",
+  "prevId": "f7205213-cb2e-49cd-9673-83f381f85c0a",
   "tables": {
     "site_visits": {
       "name": "site_visits",
@@ -124,7 +124,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "(strftime('%s', 'now'))"
+          "default": "CAST((julianday('now') - 2440587.5)*86400000 AS INTEGER)"
         },
         "updated_at": {
           "name": "updated_at",
@@ -132,7 +132,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "(strftime('%s', 'now'))"
+          "default": "CAST((julianday('now') - 2440587.5)*86400000 AS INTEGER)"
         }
       },
       "indexes": {

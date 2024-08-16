@@ -1,7 +1,7 @@
 import {
   createOrUpdateUser,
   getUserProfile,
-  updateLastSignIn,
+  updateSignInInfo,
 } from "@/core/server/server-actions/userActions";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
@@ -12,24 +12,30 @@ export default async function DashboardPage() {
 
   if (!userId || !user) {
     redirect("/sign-in");
+    return null;
   }
 
   try {
-    // Create or update user in the database
+    const primaryEmail = user.emailAddresses?.find(
+      (email) => email.id === user.primaryEmailAddressId,
+    );
+
+    if (!primaryEmail) {
+      throw new Error("User primary email address is missing.");
+    }
+
     await createOrUpdateUser({
       id: userId,
-      email: user.emailAddresses[0].emailAddress,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      profileImageUrl: user.profileImageUrl,
-      emailVerified: user.emailAddresses[0].verification.status === "verified",
+      email: primaryEmail.emailAddress,
+      firstName: user.firstName ?? "",
+      lastName: user.lastName ?? "",
+      profileImageUrl: user.imageUrl ?? "",
+      emailVerified: primaryEmail.verification?.status === "verified" ?? false,
     });
 
-    // Update last sign-in time (but don't increment count)
-    await updateLastSignIn();
+    await updateSignInInfo(userId);
 
-    // Fetch updated user profile
-    const userProfile = await getUserProfile();
+    const userProfile = await getUserProfile(userId);
 
     return (
       <div>
@@ -37,7 +43,7 @@ export default async function DashboardPage() {
         <p>You have signed in {userProfile.signInCount} times.</p>
         <p>
           Last sign-in:{" "}
-          {new Date(userProfile.lastSignIn * 1000).toLocaleString()}
+          {new Date(Number(userProfile.lastSignIn) * 1000).toLocaleString()}
         </p>
         {/* Rest of your dashboard component */}
       </div>

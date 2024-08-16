@@ -44,7 +44,7 @@
     "@radix-ui/react-tooltip": "^1.1.2",
     "@vercel/analytics": "^1.3.1",
     "@vercel/speed-insights": "^1.0.12",
-    "babel-plugin-react-compiler": "^0.0.0-experimental-10b7b82-20240813",
+    "babel-plugin-react-compiler": "^0.0.0-experimental-5f79ba2-20240815",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cmdk": "1.0.0",

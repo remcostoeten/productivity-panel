@@ -1,19 +1,15 @@
 "use server";
 
-import { ADMIN_EMAILS } from "@/core/data/site-config";
 import { db } from "@/core/server/db";
 import { users } from "@/core/server/db/schema";
-import { auth } from "@clerk/nextjs/server";
 import { eq, sql } from "drizzle-orm";
 
-export async function updateLastSignIn() {
-  const { userId } = auth();
-
-  if (!userId) {
-    throw new Error("Not authenticated");
-  }
-
-  await db.update(users).set({ lastSignIn: sql`(strftime('%s', 'now'))` });
+export async function updateLastSignIn(userId: string) {
+  const now = Math.floor(Date.now() / 1000);
+  await db
+    .update(users)
+    .set({ lastSignIn: now, updatedAt: now })
+    .where(eq(users.id, userId));
 
   return { success: true };
 }
@@ -26,8 +22,8 @@ export async function createOrUpdateUser(userData: {
   profileImageUrl?: string;
   emailVerified: boolean;
 }) {
-  const { id, email, firstName, lastName, profileImageUrl, emailVerified } =
-    userData;
+  const { id, email, firstName, lastName, profileImageUrl, emailVerified } = userData;
+  const now = Math.floor(Date.now() / 1000);
 
   const existingUser = await db
     .select()
@@ -36,16 +32,17 @@ export async function createOrUpdateUser(userData: {
     .limit(1);
 
   if (existingUser.length > 0) {
+    // Update existing user
     await db
       .update(users)
       .set({
         email,
-        firstName: userData.firstName,
+        firstName,
         lastName,
         profileImageUrl,
         emailVerified: emailVerified ? 1 : 0,
-        lastSignIn: sql`(strftime('%s', 'now'))`,
-        updatedAt: sql`(strftime('%s', 'now'))`,
+        lastSignIn: now,
+        updatedAt: now,
       })
       .where(eq(users.id, id));
 
@@ -59,11 +56,11 @@ export async function createOrUpdateUser(userData: {
       lastName,
       profileImageUrl,
       emailVerified: emailVerified ? 1 : 0,
-      isAdmin:
-        ADMIN_EMAILS.MAIN === email || ADMIN_EMAILS.SECONDARY === email ? 1 : 0,
-      lastSignIn: sql`(strftime('%s', 'now'))`,
-      createdAt: sql`(strftime('%s', 'now'))`,
-      updatedAt: sql`(strftime('%s', 'now'))`,
+      isAdmin: 0, // Default to non-admin
+      lastSignIn: now,
+      createdAt: now,
+      updatedAt: now,
+      signInCount: 1, // Initialize sign-in count
     });
 
     console.log(`User ${id} created`);
@@ -72,13 +69,7 @@ export async function createOrUpdateUser(userData: {
   return { success: true, id };
 }
 
-export async function getUserProfile() {
-  const { userId } = auth();
-
-  if (!userId) {
-    throw new Error("Not authenticated");
-  }
-
+export async function getUserProfile(userId: string) {
   const userProfile = await db
     .select()
     .from(users)
@@ -92,22 +83,33 @@ export async function getUserProfile() {
   return userProfile[0];
 }
 
-export async function updateUserProfile(updateData: {
+export async function updateUserProfile(userId: string, updateData: {
   firstName?: string;
   lastName?: string;
   profileImageUrl?: string;
 }) {
-  const { userId } = auth();
-
-  if (!userId) {
-    throw new Error("Not authenticated");
-  }
+  const now = Math.floor(Date.now() / 1000);
 
   await db
     .update(users)
     .set({
       ...updateData,
-      updatedAt: sql`(strftime('%s', 'now'))`,
+      updatedAt: now,
+    })
+    .where(eq(users.id, userId));
+
+  return { success: true };
+}
+
+export async function updateSignInInfo(userId: string) {
+  const now = Math.floor(Date.now() / 1000);
+
+  await db
+    .update(users)
+    .set({
+      lastSignIn: now,
+      signInCount: sql`${users.signInCount} + 1`,
+      updatedAt: now,
     })
     .where(eq(users.id, userId));
 
