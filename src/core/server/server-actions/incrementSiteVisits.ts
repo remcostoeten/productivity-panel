@@ -1,10 +1,10 @@
 "use server";
 
 import { sessionOptions, VisitorSession } from "@/core/lib/iron-session-config";
-import { db } from "_templates/db-index";
 import { sql } from "drizzle-orm";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
+import { db } from "../db";
 import { siteVisits } from "../db/schema";
 
 export async function incrementSiteVisit() {
