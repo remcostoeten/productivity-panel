@@ -52,5 +52,5 @@
   "findUnusedExports.detectCircularImports": true,
   "debug.console.fontFamily": "JetBrains Mono",
   "editor.lineNumbers": "on",
-  "tabler.icons": true
+"tabler.icons": true
 }

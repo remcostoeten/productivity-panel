@@ -119,16 +119,21 @@ export default function PopoutForm({
   };
 
   const handleSubmit = () => {
-    const isValid = fields.every((field) => formData[field.name]?.trim());
+    const requiredFields = fields.filter(
+      (field) => field.name !== "description",
+    );
+    const isValid = requiredFields.every((field) =>
+      formData[field.name]?.trim(),
+    );
+
     if (isValid) {
       onSubmit(formData);
       setIsOpen(false);
       setFormData({});
     } else {
-      toast.error("Please fill in all fields");
+      toast.error("Please fill in all required fields");
     }
   };
-
   return (
     <motion.div
       animate={{

@@ -1,5 +1,6 @@
 "use client";
 
+import { incrementSiteVisit } from "@/core/server/server-actions/incrementSiteVisits";
 import { ClerkProvider } from "@clerk/nextjs";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { Analytics } from "@vercel/analytics/react";
@@ -7,9 +8,14 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { useRouter } from "next/navigation";
 import posthog from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
+import { useEffect } from "react";
 
 export default function Providers({ children }: PageProps) {
   const router = useRouter();
+
+  useEffect(() => {
+    incrementSiteVisit();
+  }, []);
 
   if (typeof window !== "undefined") {
     if (

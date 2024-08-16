@@ -62,7 +62,7 @@ export async function POST(req: Request) {
 
     if (email_addresses && primary_email_address_id) {
       const primaryEmail = email_addresses.find(
-        (email) => email.id === primary_email_address_id
+        (email) => email.id === primary_email_address_id,
       );
 
       if (primaryEmail) {

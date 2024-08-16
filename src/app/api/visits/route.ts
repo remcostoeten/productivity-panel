@@ -1,13 +1,12 @@
-"use server";
-
 import { sessionOptions, VisitorSession } from "@/core/lib/iron-session-config";
+import { siteVisits } from "@/core/server/db/schema";
 import { db } from "_templates/db-index";
 import { sql } from "drizzle-orm";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
-import { siteVisits } from "../db/schema";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function incrementSiteVisit() {
+export async function GET(request: NextRequest) {
   const session = await getIronSession<VisitorSession>(
     cookies(),
     sessionOptions,
@@ -22,4 +21,6 @@ export async function incrementSiteVisit() {
     session.hasVisited = true;
     await session.save();
   }
+
+  return NextResponse.json({ message: "Visit recorded" });
 }

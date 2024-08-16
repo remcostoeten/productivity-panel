@@ -1,4 +1,3 @@
-
 export type BezierCurve = [number, number, number, number];
 
 const BEZIER_CURVES = {

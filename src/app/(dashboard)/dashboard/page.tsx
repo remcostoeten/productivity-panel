@@ -1,7 +1,7 @@
 import {
   createOrUpdateUser,
   getUserProfile,
-  updateSignInInfo,
+  updateLastSignIn,
 } from "@/core/server/server-actions/userActions";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
@@ -16,6 +16,7 @@ export default async function DashboardPage() {
   }
 
   try {
+    // Check if user email addresses exist and get the primary email
     const primaryEmail = user.emailAddresses?.find(
       (email) => email.id === user.primaryEmailAddressId,
     );
@@ -24,6 +25,7 @@ export default async function DashboardPage() {
       throw new Error("User primary email address is missing.");
     }
 
+    // Create or update user in the database
     await createOrUpdateUser({
       id: userId,
       email: primaryEmail.emailAddress,
@@ -33,9 +35,11 @@ export default async function DashboardPage() {
       emailVerified: primaryEmail.verification?.status === "verified" ?? false,
     });
 
-    await updateSignInInfo(userId);
+    // Update last sign-in time (but don't increment count)
+    await updateLastSignIn();
 
-    const userProfile = await getUserProfile(userId);
+    // Fetch updated user profile
+    const userProfile = await getUserProfile();
 
     return (
       <div>
@@ -43,7 +47,7 @@ export default async function DashboardPage() {
         <p>You have signed in {userProfile.signInCount} times.</p>
         <p>
           Last sign-in:{" "}
-          {new Date(Number(userProfile.lastSignIn) * 1000).toLocaleString()}
+          {new Date(userProfile.lastSignIn * 1000).toLocaleString()}
         </p>
         {/* Rest of your dashboard component */}
       </div>

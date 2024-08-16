@@ -9,8 +9,12 @@ export const wishlists = sqliteTable("wishlists", {
   userId: text("user_id")
     .notNull()
     .references(() => users.id),
-  createdAt: integer("created_at").notNull().default(sql`(strftime('%s', 'now'))`),
-  updatedAt: integer("updated_at").notNull().default(sql`(strftime('%s', 'now'))`),
+  createdAt: integer("created_at")
+    .notNull()
+    .default(sql`(strftime('%s', 'now'))`),
+  updatedAt: integer("updated_at")
+    .notNull()
+    .default(sql`(strftime('%s', 'now'))`),
 });
 
 export const wishlistItems = sqliteTable("wishlist_items", {
@@ -23,12 +27,15 @@ export const wishlistItems = sqliteTable("wishlist_items", {
   wishlistId: text("wishlist_id")
     .notNull()
     .references(() => wishlists.id),
-  createdAt: integer("created_at").notNull().default(sql`(strftime('%s', 'now'))`),
-  updatedAt: integer("updated_at").notNull().default(sql`(strftime('%s', 'now'))`),
+  createdAt: integer("created_at")
+    .notNull()
+    .default(sql`(strftime('%s', 'now'))`),
+  updatedAt: integer("updated_at")
+    .notNull()
+    .default(sql`(strftime('%s', 'now'))`),
 });
 
 export type Wishlist = typeof wishlists.$inferSelect;
 export type NewWishlist = typeof wishlists.$inferInsert;
-
 export type WishlistItem = typeof wishlistItems.$inferSelect;
 export type NewWishlistItem = typeof wishlistItems.$inferInsert;
