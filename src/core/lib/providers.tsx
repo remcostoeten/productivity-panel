@@ -2,15 +2,13 @@
 
 import { ClerkProvider } from "@clerk/nextjs";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { useRouter } from "next/navigation";
 import posthog from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
 
-interface ProvidersProps {
-  children: React.ReactNode;
-}
-
-export default function Providers({ children }: ProvidersProps) {
+export default function Providers({ children }: PageProps) {
   const router = useRouter();
 
   if (typeof window !== "undefined") {
@@ -48,7 +46,11 @@ export default function Providers({ children }: ProvidersProps) {
         }}
         navigate={(to) => router.push(to)}
       >
-        <TooltipProvider>{children}</TooltipProvider>
+        <TooltipProvider>
+          {children}
+          <Analytics />
+          <SpeedInsights />
+        </TooltipProvider>
       </ClerkProvider>
     </PostHogProvider>
   );
