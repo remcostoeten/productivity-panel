@@ -60,26 +60,33 @@ export async function POST(req: Request) {
       primary_email_address_id,
     } = evt.data;
 
-    if ("email_addresses" in evt.data) {
+    if (email_addresses && primary_email_address_id) {
       const primaryEmail = email_addresses.find(
-        (email) => email.id === primary_email_address_id,
+        (email) => email.id === primary_email_address_id
       );
 
       if (primaryEmail) {
-        await createOrUpdateUser({
-          id,
-          email: primaryEmail.email_address,
-          firstName: first_name || null,
-          lastName: last_name || null,
-          profileImageUrl: image_url || undefined,
-          emailVerified: primaryEmail.verification !== null,
-        });
+        try {
+          await createOrUpdateUser({
+            id,
+            email: primaryEmail.email_address,
+            firstName: first_name || null,
+            lastName: last_name || null,
+            profileImageUrl: image_url || undefined,
+            emailVerified: primaryEmail.verification !== null,
+          });
 
-        console.log(`User ${id} ${eventType}`);
+          console.log(`User ${id} ${eventType}`);
 
-        return new NextResponse("User created or updated", {
-          status: 200,
-        });
+          return new NextResponse("User created or updated", {
+            status: 200,
+          });
+        } catch (error) {
+          console.error(`Error ${eventType} user:`, error);
+          return new NextResponse(`Error ${eventType} user`, {
+            status: 500,
+          });
+        }
       }
     }
   }

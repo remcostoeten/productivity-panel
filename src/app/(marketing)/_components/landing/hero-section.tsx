@@ -35,11 +35,13 @@ export default function HeroSection() {
         <br className="hidden sm:block" /> All data is stored for you as an
         individual user. Sign up with ease.{" "}
       </p>
+
       <Button
         variant="shimmer"
         withArrow={true}
         arrowPosition="right"
         href="/dashboard"
+        className="animate-fade-in opacity-0 [--animation-delay:600ms]"
       >
         Go to dashboard
       </Button>

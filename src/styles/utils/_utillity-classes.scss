@@ -13,3 +13,7 @@
 .glow {
   filter: drop-shadow(0 0 5px yellow);
 }
+
+.body-gradient {
+  background-image: var(--body-gradient);
+}
