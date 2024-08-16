@@ -4,17 +4,23 @@ import { AnimatePulse } from "@/components/atoms/AnimatePulse";
 import { Flex } from "@/components/atoms/Flex";
 import Truncate from "@/components/atoms/Truncate";
 import { WishlistSkeleton } from "@/components/effect/skeletons";
-import { Button, Card, CardContent, CardHeader } from "@/components/ui";
 import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+  Input,
+  Label,
+} from "@/components/ui/";
 import PopoutForm from "@/components/ui/PopoutForm";
-import { deleteEntireWishlist } from "@/core/server/server-actions/wishlist";
+import {
+  deleteEntireWishlist,
+  updateWishlistItem,
+} from "@/core/server/server-actions/wishlist";
 import { useWishlistStore } from "@/core/stores/useWishlistStore";
 import { WishlistItem } from "@/core/types/types.wishlist";
 import { AnimatePresence, motion } from "framer-motion";
@@ -38,9 +44,17 @@ export default function WishlistComponent({ userId }: { userId: string }) {
   const [localWishlists, setLocalWishlists] = useState([]);
   const [isUpdateWishlistModalOpen, setIsUpdateWishlistModalOpen] =
     useState(false);
-  const [selectedWishlistId, setSelectedWishlistId] = useState(null);
+  const [isUpdateWishlistItemModalOpen, setIsUpdateWishlistItemModalOpen] =
+    useState(false);
+  const [selectedWishlistId, setSelectedWishlistId] = useState<string | null>(
+    null,
+  );
   const [newName, setNewName] = useState("");
   const [newBudget, setNewBudget] = useState("");
+  const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
+  const [newItemName, setNewItemName] = useState("");
+  const [newItemPrice, setNewItemPrice] = useState("");
+  const [newItemDescription, setNewItemDescription] = useState("");
 
   useEffect(() => {
     if (userId) {
@@ -152,14 +166,46 @@ export default function WishlistComponent({ userId }: { userId: string }) {
     }
   };
 
-  function remainingColor(budget: number, total: number) {
+  const handleUpdateWishlistItem = async () => {
+    if (
+      !selectedItemId ||
+      (!newItemName && !newItemPrice && !newItemDescription)
+    ) {
+      toast.error("No changes to update or invalid item selected");
+      return;
+    }
+
+    try {
+      const updateData: Record<string, string | number> = {};
+      if (newItemName) updateData.name = newItemName;
+      if (newItemPrice) updateData.price = Number(newItemPrice);
+      if (newItemDescription) updateData.description = newItemDescription;
+
+      await updateWishlistItem(selectedItemId, updateData);
+      await fetchWishlists(userId);
+      toast.success("Item updated successfully");
+      setIsUpdateWishlistItemModalOpen(false);
+      resetItemUpdateForm();
+    } catch (error) {
+      toast.error("Failed to update item");
+    }
+  };
+
+  const resetItemUpdateForm = () => {
+    setSelectedItemId(null);
+    setNewItemName("");
+    setNewItemPrice("");
+    setNewItemDescription("");
+  };
+
+  const remainingColor = (budget: number, total: number) => {
     const remaining = budget - total;
     if (remaining < 0) {
       return "text-error";
     } else if (remaining > 0 && remaining < budget / 4) {
       return "text-yellow-500";
     }
-  }
+  };
 
   if (isLoading) return <WishlistSkeleton />;
 
@@ -223,19 +269,20 @@ export default function WishlistComponent({ userId }: { userId: string }) {
                           {(wishlist.items || []).map((item: WishlistItem) => (
                             <li
                               key={item.id}
-                              className="grid grid-cols-[1fr_auto] pb-4 border-b  items-center gap-4"
+                              className="grid grid-cols-[1fr_auto] pb-4 border-b items-center gap-4"
                             >
                               <div className="grid gap-1">
                                 <h3 className="font-medium">
                                   <Truncate text={item.name} chars="50" />
                                 </h3>
-                                <p className="text-sm text-muted-foreground">
-                                  <Truncate
-                                    chars="100"
-                                    text={item.description}
-                                  />
-                                </p>
-
+                                {item.description ? (
+                                  <p className="text-sm text-muted-foreground">
+                                    <Truncate
+                                      chars="100"
+                                      text={item.description}
+                                    />
+                                  </p>
+                                ) : null}
                                 {item.url && (
                                   <a
                                     href={item.url}
@@ -254,19 +301,37 @@ export default function WishlistComponent({ userId }: { userId: string }) {
                                 <div className="flex items-center justify-between flex-wrap text-wrap break-words">
                                   €{item.price}.-
                                 </div>
-                                <Button
-                                  variant="outline"
-                                  size="icon"
-                                  className="text-neutral-400 hover:text-neutral-300"
-                                  onClick={() =>
-                                    handleRemoveSingleWishlistItem(
-                                      wishlist.id,
-                                      item.id,
-                                    )
-                                  }
-                                >
-                                  <TrashIcon size={16} />
-                                </Button>
+                                <Flex gap="1">
+                                  <Button
+                                    variant="outline"
+                                    size="icon"
+                                    className="text-neutral-400 hover:text-neutral-300"
+                                    onClick={() => {
+                                      setSelectedItemId(item.id);
+                                      setNewItemName(item.name);
+                                      setNewItemPrice(item.price.toString());
+                                      setNewItemDescription(
+                                        item.description || "",
+                                      );
+                                      setIsUpdateWishlistItemModalOpen(true);
+                                    }}
+                                  >
+                                    <EditIcon />
+                                  </Button>
+                                  <Button
+                                    variant="outline"
+                                    size="icon"
+                                    className="text-neutral-400 hover:text-neutral-300"
+                                    onClick={() =>
+                                      handleRemoveSingleWishlistItem(
+                                        wishlist.id,
+                                        item.id,
+                                      )
+                                    }
+                                  >
+                                    <TrashIcon size={16} />
+                                  </Button>
+                                </Flex>
                               </div>
                             </li>
                           ))}
@@ -348,6 +413,56 @@ export default function WishlistComponent({ userId }: { userId: string }) {
           />
         </div>
       </div>
+      <Dialog
+        open={isUpdateWishlistItemModalOpen}
+        onOpenChange={(open) => {
+          setIsUpdateWishlistItemModalOpen(open);
+          if (!open) resetItemUpdateForm();
+        }}
+      >
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Update Wishlist Item</DialogTitle>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="newItemName" className="text-right">
+                New Name
+              </Label>
+              <Input
+                id="newItemName"
+                value={newItemName}
+                onChange={(e) => setNewItemName(e.target.value)}
+                className="col-span-3"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="newItemPrice" className="text-right">
+                New Price
+              </Label>
+              <Input
+                id="newItemPrice"
+                type="number"
+                value={newItemPrice}
+                onChange={(e) => setNewItemPrice(e.target.value)}
+                className="col-span-3"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="newItemDescription" className="text-right">
+                New Description
+              </Label>
+              <Input
+                id="newItemDescription"
+                value={newItemDescription}
+                onChange={(e) => setNewItemDescription(e.target.value)}
+                className="col-span-3"
+              />
+            </div>
+          </div>
+          <Button onClick={handleUpdateWishlistItem}>Update Item</Button>
+        </DialogContent>
+      </Dialog>
       <Dialog
         open={isUpdateWishlistModalOpen}
         onOpenChange={setIsUpdateWishlistModalOpen}
