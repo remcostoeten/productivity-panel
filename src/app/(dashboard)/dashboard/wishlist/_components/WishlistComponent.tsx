@@ -18,49 +18,53 @@ import {
 } from "@/components/ui/";
 import PopoutForm from "@/components/ui/PopoutForm";
 import {
-  deleteEntireWishlist,
-  updateWishlistItem,
+  delete_entire_wishlist,
+  update_wishlist_item,
 } from "@/core/server/server-actions/wishlist";
-import { useWishlistStore } from "@/core/stores/useWishlistStore";
+import { use_wishlist_store } from "@/core/stores/useWishlistStore";
 import { WishlistItem } from "@/core/types/types.wishlist";
 import { AnimatePresence, motion } from "framer-motion";
 import { EditIcon, LinkIcon, Trash2Icon, TrashIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 
-export default function WishlistComponent({ userId }: { userId: string }) {
+export default function WishlistComponent({ user_id }: { user_id: string }) {
   const {
     wishlists,
-    isLoading,
+    is_loading,
     error,
-    fetchWishlists,
-    addWishlist,
-    addWishlistItem,
-    removeWishlistItem,
-    updateWishlistName,
-    updateWishlistBudget,
-  } = useWishlistStore();
+    fetch_wishlists,
+    add_wishlist,
+    add_wishlist_item,
+    remove_wishlist_item,
+    update_wishlist_name,
+    update_wishlist_budget,
+  } = use_wishlist_store();
 
-  const [localWishlists, setLocalWishlists] = useState([]);
-  const [isUpdateWishlistModalOpen, setIsUpdateWishlistModalOpen] =
+  const [local_wishlists, set_local_wishlists] = useState([]);
+  const [is_update_wishlist_modal_open, set_is_update_wishlist_modal_open] =
     useState(false);
-  const [isUpdateWishlistItemModalOpen, setIsUpdateWishlistItemModalOpen] =
-    useState(false);
-  const [selectedWishlistId, setSelectedWishlistId] = useState<string | null>(
+  const [
+    is_update_wishlist_item_modal_open,
+    set_is_update_wishlist_item_modal_open,
+  ] = useState(false);
+  const [selected_wishlist_id, set_selected_wishlist_id] = useState<
+    string | null
+  >(null);
+  const [new_name, set_new_name] = useState("");
+  const [new_budget, set_new_budget] = useState("");
+  const [selected_item_id, set_selected_item_id] = useState<string | null>(
     null,
   );
-  const [newName, setNewName] = useState("");
-  const [newBudget, setNewBudget] = useState("");
-  const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
-  const [newItemName, setNewItemName] = useState("");
-  const [newItemPrice, setNewItemPrice] = useState("");
-  const [newItemDescription, setNewItemDescription] = useState("");
+  const [new_item_name, set_new_item_name] = useState("");
+  const [new_item_price, set_new_item_price] = useState("");
+  const [new_item_description, set_new_item_description] = useState("");
 
   useEffect(() => {
-    if (userId) {
-      fetchWishlists(userId);
+    if (user_id) {
+      fetch_wishlists(user_id);
     }
-  }, [userId, fetchWishlists]);
+  }, [user_id, fetch_wishlists]);
 
   useEffect(() => {
     if (error) {
@@ -69,46 +73,46 @@ export default function WishlistComponent({ userId }: { userId: string }) {
   }, [error]);
 
   useEffect(() => {
-    const filteredWishlists = wishlists.filter((wishlist) => wishlist != null);
-    setLocalWishlists(filteredWishlists);
+    const filtered_wishlists = wishlists.filter((wishlist) => wishlist != null);
+    set_local_wishlists(filtered_wishlists);
   }, [wishlists]);
 
-  const handleAddWishlist = async (data: { name: string; budget: any }) => {
+  const handle_add_wishlist = async (data: { name: string; budget: any }) => {
     try {
-      await addWishlist(userId, data.name, Number(data.budget));
-      await fetchWishlists(userId); // Fetch updated wishlists after adding
+      await add_wishlist(user_id, data.name, Number(data.budget));
+      await fetch_wishlists(user_id); // Fetch updated wishlists after adding
       toast.success("Wishlist added successfully");
     } catch (error) {
       toast.error("Failed to add wishlist");
     }
   };
 
-  const handleAddWishlistItem = async (
-    wishlistId: string,
+  const handle_add_wishlist_item = async (
+    wishlist_id: string,
     data: Record<string, string | string[]>,
   ) => {
     const { name, price, description, url } = data;
 
     try {
-      await addWishlistItem(
-        wishlistId,
+      await add_wishlist_item(
+        wishlist_id,
         name as string,
         Number(price),
         description as string,
       );
 
-      await fetchWishlists(userId);
+      await fetch_wishlists(user_id);
       toast.success("Item added successfully");
     } catch (error) {
       toast.error("Failed to add item");
     }
   };
 
-  const removeEntireWishlist = async (wishlistId: string) => {
+  const remove_entire_wishlist = async (wishlist_id: string) => {
     try {
-      await deleteEntireWishlist(wishlistId);
-      setLocalWishlists((prev) =>
-        prev.filter((wishlist) => wishlist && wishlist.id !== wishlistId),
+      await delete_entire_wishlist(wishlist_id);
+      set_local_wishlists((prev) =>
+        prev.filter((wishlist) => wishlist && wishlist.id !== wishlist_id),
       );
       toast.success("Wishlist removed successfully");
     } catch (error) {
@@ -116,19 +120,19 @@ export default function WishlistComponent({ userId }: { userId: string }) {
     }
   };
 
-  const handleRemoveSingleWishlistItem = async (
-    wishlistId: string,
-    itemId: string,
+  const handle_remove_single_wishlist_item = async (
+    wishlist_id: string,
+    item_id: string,
   ) => {
     try {
-      await removeWishlistItem(itemId);
-      setLocalWishlists((prev) =>
+      await remove_wishlist_item(item_id);
+      set_local_wishlists((prev) =>
         prev.map((wishlist) => {
-          if (wishlist && wishlist.id === wishlistId) {
+          if (wishlist && wishlist.id === wishlist_id) {
             return {
               ...wishlist,
               items: (wishlist.items || []).filter(
-                (item) => item.id !== itemId,
+                (item) => item.id !== item_id,
               ),
             };
           }
@@ -141,23 +145,26 @@ export default function WishlistComponent({ userId }: { userId: string }) {
     }
   };
 
-  const handleUpdateWishlist = async () => {
-    if (selectedWishlistId && (newName || newBudget !== "")) {
+  const handle_update_wishlist = async () => {
+    if (selected_wishlist_id && (new_name || new_budget !== "")) {
       try {
-        if (newName) {
-          await updateWishlistName(selectedWishlistId, newName);
+        if (new_name) {
+          await update_wishlist_name(selected_wishlist_id, new_name);
         }
-        if (newBudget !== "") {
-          await updateWishlistBudget(selectedWishlistId, Number(newBudget));
+        if (new_budget !== "") {
+          await update_wishlist_budget(
+            selected_wishlist_id,
+            Number(new_budget),
+          );
         }
 
-        setIsUpdateWishlistModalOpen(false);
-        setNewName("");
-        setNewBudget("");
-        setSelectedWishlistId(null);
+        set_is_update_wishlist_modal_open(false);
+        set_new_name("");
+        set_new_budget("");
+        set_selected_wishlist_id(null);
         toast.success("Wishlist updated successfully");
 
-        await fetchWishlists(userId);
+        await fetch_wishlists(user_id);
       } catch (error) {
         toast.error("Failed to update wishlist");
       }
@@ -166,39 +173,39 @@ export default function WishlistComponent({ userId }: { userId: string }) {
     }
   };
 
-  const handleUpdateWishlistItem = async () => {
+  const handle_update_wishlist_item = async () => {
     if (
-      !selectedItemId ||
-      (!newItemName && !newItemPrice && !newItemDescription)
+      !selected_item_id ||
+      (!new_item_name && !new_item_price && !new_item_description)
     ) {
       toast.error("No changes to update or invalid item selected");
       return;
     }
 
     try {
-      const updateData: Record<string, string | number> = {};
-      if (newItemName) updateData.name = newItemName;
-      if (newItemPrice) updateData.price = Number(newItemPrice);
-      if (newItemDescription) updateData.description = newItemDescription;
+      const update_data: Record<string, string | number> = {};
+      if (new_item_name) update_data.name = new_item_name;
+      if (new_item_price) update_data.price = Number(new_item_price);
+      if (new_item_description) update_data.description = new_item_description;
 
-      await updateWishlistItem(selectedItemId, updateData);
-      await fetchWishlists(userId);
+      await update_wishlist_item(selected_item_id, update_data);
+      await fetch_wishlists(user_id);
       toast.success("Item updated successfully");
-      setIsUpdateWishlistItemModalOpen(false);
-      resetItemUpdateForm();
+      set_is_update_wishlist_item_modal_open(false);
+      reset_item_update_form();
     } catch (error) {
       toast.error("Failed to update item");
     }
   };
 
-  const resetItemUpdateForm = () => {
-    setSelectedItemId(null);
-    setNewItemName("");
-    setNewItemPrice("");
-    setNewItemDescription("");
+  const reset_item_update_form = () => {
+    set_selected_item_id(null);
+    set_new_item_name("");
+    set_new_item_price("");
+    set_new_item_description("");
   };
 
-  const remainingColor = (budget: number, total: number) => {
+  const remaining_color = (budget: number, total: number) => {
     const remaining = budget - total;
     if (remaining < 0) {
       return "text-error";
@@ -207,19 +214,19 @@ export default function WishlistComponent({ userId }: { userId: string }) {
     }
   };
 
-  if (isLoading) return <WishlistSkeleton />;
+  if (is_loading) return <WishlistSkeleton />;
 
   return (
     <div className="w-full max-w-4xl max-w-screen mx-auto">
       <div className="grid max-w-screen gap-4">
         <div className="grid gap-6 max-w-screen">
           <AnimatePresence>
-            {localWishlists.length === 0 ? (
+            {local_wishlists.length === 0 ? (
               <p className="text-2xl">
                 There are no lists yet! Get busy<AnimatePulse>✍️</AnimatePulse>
               </p>
             ) : null}
-            {localWishlists.map(
+            {local_wishlists.map(
               (wishlist) =>
                 wishlist && (
                   <motion.div
@@ -244,8 +251,8 @@ export default function WishlistComponent({ userId }: { userId: string }) {
                               size="icon"
                               className="text-neutral-400 hover:text-neutral-300"
                               onClick={() => {
-                                setSelectedWishlistId(wishlist.id);
-                                setIsUpdateWishlistModalOpen(true);
+                                set_selected_wishlist_id(wishlist.id);
+                                set_is_update_wishlist_modal_open(true);
                               }}
                             >
                               <EditIcon />
@@ -254,7 +261,9 @@ export default function WishlistComponent({ userId }: { userId: string }) {
                               variant="outline"
                               size="icon"
                               className="text-neutral-400 hover:text-neutral-300"
-                              onClick={() => removeEntireWishlist(wishlist.id)}
+                              onClick={() =>
+                                remove_entire_wishlist(wishlist.id)
+                              }
                             >
                               <Trash2Icon size={16} />
                             </Button>
@@ -307,13 +316,15 @@ export default function WishlistComponent({ userId }: { userId: string }) {
                                     size="icon"
                                     className="text-neutral-400 hover:text-neutral-300"
                                     onClick={() => {
-                                      setSelectedItemId(item.id);
-                                      setNewItemName(item.name);
-                                      setNewItemPrice(item.price.toString());
-                                      setNewItemDescription(
+                                      set_selected_item_id(item.id);
+                                      set_new_item_name(item.name);
+                                      set_new_item_price(item.price.toString());
+                                      set_new_item_description(
                                         item.description || "",
                                       );
-                                      setIsUpdateWishlistItemModalOpen(true);
+                                      set_is_update_wishlist_item_modal_open(
+                                        true,
+                                      );
                                     }}
                                   >
                                     <EditIcon />
@@ -323,7 +334,7 @@ export default function WishlistComponent({ userId }: { userId: string }) {
                                     size="icon"
                                     className="text-neutral-400 hover:text-neutral-300"
                                     onClick={() =>
-                                      handleRemoveSingleWishlistItem(
+                                      handle_remove_single_wishlist_item(
                                         wishlist.id,
                                         item.id,
                                       )
@@ -358,7 +369,7 @@ export default function WishlistComponent({ userId }: { userId: string }) {
                               },
                             ]}
                             onSubmit={(data) =>
-                              handleAddWishlistItem(wishlist.id, data)
+                              handle_add_wishlist_item(wishlist.id, data)
                             }
                             defaultWidth={148}
                             defaultHeight={52}
@@ -368,7 +379,7 @@ export default function WishlistComponent({ userId }: { userId: string }) {
                           <p className="flex flex-col sm:block">
                             Remaining:
                             <span
-                              className={remainingColor(
+                              className={remaining_color(
                                 wishlist.budget,
                                 (wishlist.items || []).reduce(
                                   (total, item) => total + (item.price || 0),
@@ -405,7 +416,7 @@ export default function WishlistComponent({ userId }: { userId: string }) {
                 prefix: "€",
               },
             ]}
-            onSubmit={handleAddWishlist}
+            onSubmit={handle_add_wishlist}
             defaultWidth={156}
             defaultHeight={52}
             expandedWidth={320}
@@ -414,10 +425,10 @@ export default function WishlistComponent({ userId }: { userId: string }) {
         </div>
       </div>
       <Dialog
-        open={isUpdateWishlistItemModalOpen}
+        open={is_update_wishlist_item_modal_open}
         onOpenChange={(open) => {
-          setIsUpdateWishlistItemModalOpen(open);
-          if (!open) resetItemUpdateForm();
+          set_is_update_wishlist_item_modal_open(open);
+          if (!open) reset_item_update_form();
         }}
       >
         <DialogContent className="sm:max-w-[425px]">
@@ -426,46 +437,60 @@ export default function WishlistComponent({ userId }: { userId: string }) {
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="newItemName" className="text-right">
+              <Label htmlFor="new_item_name" className="text-right">
                 New Name
               </Label>
               <Input
-                id="newItemName"
-                value={newItemName}
-                onChange={(e) => setNewItemName(e.target.value)}
+                id="new_item_name"
+                value={new_item_name}
+                onChange={(e) => set_new_item_name(e.target.value)}
                 className="col-span-3"
               />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="newItemPrice" className="text-right">
+              <Label htmlFor="new_item_price" className="text-right">
                 New Price
               </Label>
               <Input
-                id="newItemPrice"
+                id="new_item_price"
                 type="number"
-                value={newItemPrice}
-                onChange={(e) => setNewItemPrice(e.target.value)}
+                value={new_item_price}
+                onChange={(e) => set_new_item_price(e.target.value)}
                 className="col-span-3"
               />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="newItemDescription" className="text-right">
+              <Label htmlFor="new_item_description" className="text-right">
                 New Description
               </Label>
               <Input
-                id="newItemDescription"
-                value={newItemDescription}
-                onChange={(e) => setNewItemDescription(e.target.value)}
+                id="new_item_description"
+                value={new_item_description}
+                onChange={(e) => set_new_item_description(e.target.value)}
                 className="col-span-3"
               />
             </div>
           </div>
-          <Button onClick={handleUpdateWishlistItem}>Update Item</Button>
+          <Button onClick={handle_update_wishlist_item}>Update Item</Button>
+
+          <Button
+            variant="outline"
+            onClick={() => set_is_update_wishlist_item_modal_open(false)}
+          >
+            Cancel
+          </Button>
         </DialogContent>
       </Dialog>
       <Dialog
-        open={isUpdateWishlistModalOpen}
-        onOpenChange={setIsUpdateWishlistModalOpen}
+        open={is_update_wishlist_modal_open}
+        onOpenChange={(open) => {
+          set_is_update_wishlist_modal_open(open);
+          if (!open) {
+            set_new_name("");
+            set_new_budget("");
+            set_selected_wishlist_id(null);
+          }
+        }}
       >
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
@@ -473,30 +498,36 @@ export default function WishlistComponent({ userId }: { userId: string }) {
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="newName" className="text-right">
+              <Label htmlFor="new_name" className="text-right">
                 New Name
               </Label>
               <Input
-                id="newName"
-                value={newName}
-                onChange={(e) => setNewName(e.target.value)}
+                id="new_name"
+                value={new_name}
+                onChange={(e) => set_new_name(e.target.value)}
                 className="col-span-3"
               />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="newBudget" className="text-right">
+              <Label htmlFor="new_budget" className="text-right">
                 New Budget
               </Label>
               <Input
-                id="newBudget"
+                id="new_budget"
                 type="number"
-                value={newBudget}
-                onChange={(e) => setNewBudget(e.target.value)}
+                value={new_budget}
+                onChange={(e) => set_new_budget(e.target.value)}
                 className="col-span-3"
               />
             </div>
           </div>
-          <Button onClick={handleUpdateWishlist}>Update Wishlist</Button>
+          <Button onClick={handle_update_wishlist}>Update Wishlist</Button>
+          <Button
+            variant="outline"
+            onClick={() => set_is_update_wishlist_modal_open(false)}
+          >
+            Cancel
+          </Button>
         </DialogContent>
       </Dialog>
     </div>

@@ -1,36 +1,45 @@
+"use client";
+
 import { create } from "zustand";
 import {
-  createWishlist,
-  createWishlistItem,
-  deleteWishlistItem,
-  getWishlistsByUser,
-  updateWishlist,
-  updateWishlistItem,
+  create_wishlist,
+  create_wishlist_item,
+  delete_wishlist_item,
+  get_wishlists_by_user,
+  update_wishlist,
+  update_wishlist_item,
 } from "../server/server-actions/wishlist";
 import { Wishlist } from "../types/types.wishlist";
 
 type WishlistStore = {
   wishlists: Wishlist[];
-  isLoading: boolean;
+  is_loading: boolean;
   error: string | null;
-  fetchWishlists: (userId: string) => Promise<void>;
-  addWishlist: (userId: string, name: string, budget: number) => Promise<void>;
-  addWishlistItem: (
-    wishlistId: string,
+  fetch_wishlists: (user_id: string) => Promise<void>;
+  add_wishlist: (
+    user_id: string,
+    name: string,
+    budget: number,
+  ) => Promise<void>;
+  add_wishlist_item: (
+    wishlist_id: string,
     name: string,
     price: number,
     description: string,
     url?: string,
     category?: string,
   ) => Promise<Wishlist>;
-  removeWishlistItem: (itemId: string) => Promise<void>;
-  updateWishlistBudget: (
-    wishlistId: string,
-    newBudget: number,
+  remove_wishlist_item: (item_id: string) => Promise<void>;
+  update_wishlist_budget: (
+    wishlist_id: string,
+    new_budget: number,
   ) => Promise<void>;
-  updateWishlistName: (wishlistId: string, newName: string) => Promise<void>;
-  updateWishlistItem: (
-    itemId: string,
+  update_wishlist_name: (
+    wishlist_id: string,
+    new_name: string,
+  ) => Promise<void>;
+  update_wishlist_item: (
+    item_id: string,
     name: string,
     price: number,
     description: string,
@@ -39,26 +48,26 @@ type WishlistStore = {
   ) => Promise<void>;
 };
 
-export const useWishlistStore = create<WishlistStore>((set, get) => ({
+export const use_wishlist_store = create<WishlistStore>((set, get) => ({
   wishlists: [],
-  isLoading: false,
+  is_loading: false,
   error: null,
 
-  fetchWishlists: async (userId: string): Promise<void> => {
-    console.log("Fetching wishlists for user:", userId);
-    set({ isLoading: true, error: null });
+  fetch_wishlists: async (user_id: string): Promise<void> => {
+    console.log("Fetching wishlists for user:", user_id);
+    set({ is_loading: true, error: null });
     try {
-      const wishlists = await getWishlistsByUser(userId);
+      const wishlists = await get_wishlists_by_user(user_id);
       console.log("Fetched wishlists:", wishlists);
-      set({ wishlists, isLoading: false, error: null });
+      set({ wishlists, is_loading: false, error: null });
     } catch (error) {
       console.error("Error fetching wishlists:", error);
-      set({ error: "Failed to fetch wishlists", isLoading: false });
+      set({ error: "Failed to fetch wishlists", is_loading: false });
     }
   },
 
-  updateWishlistItem: async (
-    itemId: string,
+  update_wishlist_item: async (
+    item_id: string,
     name: string,
     price: number,
     description: string,
@@ -67,47 +76,47 @@ export const useWishlistStore = create<WishlistStore>((set, get) => ({
   ): Promise<void> => {
     try {
       console.log("Updating wishlist item:", {
-        itemId,
+        item_id,
         name,
         price,
         description,
         url,
         category,
       });
-      await updateWishlistItem(itemId, { name, price, description, url });
+      await update_wishlist_item(item_id, { name, price, description, url });
       console.log("Wishlist item updated successfully");
 
-      const updatedWishlists = get().wishlists.map((wishlist) => ({
+      const updated_wishlists = get().wishlists.map((wishlist) => ({
         ...wishlist,
         items: (wishlist.items || []).map((item) =>
-          item.id === itemId
+          item.id === item_id
             ? { ...item, name, price, description, url }
             : item,
         ),
       }));
 
-      set({ wishlists: updatedWishlists, error: null });
+      set({ wishlists: updated_wishlists, error: null });
     } catch (error) {
       console.error("Error updating wishlist item:", error);
       set({ error: "Failed to update wishlist item" });
     }
   },
 
-  addWishlist: async (
-    userId: string,
+  add_wishlist: async (
+    user_id: string,
     name: string,
     budget: number,
   ): Promise<void> => {
     try {
-      console.log("Adding new wishlist:", { userId, name, budget });
-      const newWishlist = await createWishlist(userId, name, budget);
-      console.log("New wishlist created:", newWishlist);
+      console.log("Adding new wishlist:", { user_id, name, budget });
+      const new_wishlist = await create_wishlist(user_id, name, budget);
+      console.log("New wishlist created:", new_wishlist);
 
       // Fetch updated wishlists after adding
-      const updatedWishlists = await getWishlistsByUser(userId);
+      const updated_wishlists = await get_wishlists_by_user(user_id);
 
       set((state) => ({
-        wishlists: updatedWishlists,
+        wishlists: updated_wishlists,
         error: null,
       }));
     } catch (error) {
@@ -116,8 +125,8 @@ export const useWishlistStore = create<WishlistStore>((set, get) => ({
     }
   },
 
-  addWishlistItem: async (
-    wishlistId: string,
+  add_wishlist_item: async (
+    wishlist_id: string,
     name: string,
     price: number,
     description: string,
@@ -126,31 +135,31 @@ export const useWishlistStore = create<WishlistStore>((set, get) => ({
   ): Promise<Wishlist> => {
     try {
       console.log("Adding new wishlist item:", {
-        wishlistId,
+        wishlist_id,
         name,
         price,
         description,
         url,
         category,
       });
-      const newItem = await createWishlistItem(
-        wishlistId,
+      const new_item = await create_wishlist_item(
+        wishlist_id,
         name,
         price,
         description,
         url,
       );
-      console.log("New item created:", newItem);
+      console.log("New item created:", new_item);
 
-      const updatedWishlists = get().wishlists.map((wishlist) =>
-        wishlist.id === wishlistId
-          ? { ...wishlist, items: [...(wishlist.items || []), newItem] }
+      const updated_wishlists = get().wishlists.map((wishlist) =>
+        wishlist.id === wishlist_id
+          ? { ...wishlist, items: [...(wishlist.items || []), new_item] }
           : wishlist,
       );
 
-      set({ wishlists: updatedWishlists, error: null });
+      set({ wishlists: updated_wishlists, error: null });
 
-      return updatedWishlists.find((w) => w.id === wishlistId) as Wishlist;
+      return updated_wishlists.find((w) => w.id === wishlist_id) as Wishlist;
     } catch (error) {
       console.error("Error adding wishlist item:", error);
       set({ error: "Failed to add wishlist item" });
@@ -158,60 +167,62 @@ export const useWishlistStore = create<WishlistStore>((set, get) => ({
     }
   },
 
-  removeWishlistItem: async (itemId: string): Promise<void> => {
+  remove_wishlist_item: async (item_id: string): Promise<void> => {
     try {
-      console.log("Removing wishlist item:", itemId);
-      await deleteWishlistItem(itemId);
+      console.log("Removing wishlist item:", item_id);
+      await delete_wishlist_item(item_id);
       console.log("Wishlist item removed successfully");
 
-      const updatedWishlists = get().wishlists.map((wishlist) => ({
+      const updated_wishlists = get().wishlists.map((wishlist) => ({
         ...wishlist,
-        items: (wishlist.items || []).filter((item) => item.id !== itemId),
+        items: (wishlist.items || []).filter((item) => item.id !== item_id),
       }));
 
-      set({ wishlists: updatedWishlists, error: null });
+      set({ wishlists: updated_wishlists, error: null });
     } catch (error) {
       console.error("Error removing wishlist item:", error);
       set({ error: "Failed to remove wishlist item" });
     }
   },
 
-  updateWishlistName: async (
-    wishlistId: string,
-    newName: string,
+  update_wishlist_name: async (
+    wishlist_id: string,
+    new_name: string,
   ): Promise<void> => {
     try {
-      console.log("Updating wishlist name:", { wishlistId, newName });
-      await updateWishlist(wishlistId, { name: newName });
+      console.log("Updating wishlist name:", { wishlist_id, new_name });
+      await update_wishlist(wishlist_id, { name: new_name });
       console.log("Wishlist name updated successfully");
 
-      const updatedWishlists = get().wishlists.map((wishlist) =>
-        wishlist.id === wishlistId ? { ...wishlist, name: newName } : wishlist,
+      const updated_wishlists = get().wishlists.map((wishlist) =>
+        wishlist.id === wishlist_id
+          ? { ...wishlist, name: new_name }
+          : wishlist,
       );
 
-      set({ wishlists: updatedWishlists, error: null });
+      set({ wishlists: updated_wishlists, error: null });
     } catch (error) {
       console.error("Error updating wishlist name:", error);
       set({ error: "Failed to update wishlist name" });
     }
   },
 
-  updateWishlistBudget: async (
-    wishlistId: string,
-    newBudget: number,
+  update_wishlist_budget: async (
+    wishlist_id: string,
+    new_budget: number,
   ): Promise<void> => {
     try {
-      console.log("Updating wishlist budget:", { wishlistId, newBudget });
-      await updateWishlist(wishlistId, { budget: newBudget });
+      console.log("Updating wishlist budget:", { wishlist_id, new_budget });
+      await update_wishlist(wishlist_id, { budget: new_budget });
       console.log("Wishlist budget updated successfully");
 
-      const updatedWishlists = get().wishlists.map((wishlist) =>
-        wishlist.id === wishlistId
-          ? { ...wishlist, budget: newBudget }
+      const updated_wishlists = get().wishlists.map((wishlist) =>
+        wishlist.id === wishlist_id
+          ? { ...wishlist, budget: new_budget }
           : wishlist,
       );
 
-      set({ wishlists: updatedWishlists, error: null });
+      set({ wishlists: updated_wishlists, error: null });
     } catch (error) {
       console.error("Error updating wishlist budget:", error);
       set({ error: "Failed to update wishlist budget" });

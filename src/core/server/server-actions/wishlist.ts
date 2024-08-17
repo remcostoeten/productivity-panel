@@ -4,35 +4,35 @@ import { db } from "@/core/server/db";
 import { eq } from "drizzle-orm";
 import { nanoid } from "nanoid";
 import { v4 as uuidv4 } from "uuid";
-import { users, wishlistItems, wishlists } from "../db/schema";
+import { users, wishlist_items, wishlists } from "../db/schema";
 
-export async function deleteWishlistItem(itemId: string) {
-  await db.delete(wishlistItems).where(eq(wishlistItems.id, itemId));
+export async function delete_wishlist_item(item_id: string) {
+  await db.delete(wishlist_items).where(eq(wishlist_items.id, item_id));
 }
 
-export async function deleteEntireWishlist(wishlistId: string) {
+export async function delete_entire_wishlist(wishlist_id: string) {
   await db
-    .delete(wishlistItems)
-    .where(eq(wishlistItems.wishlistId, wishlistId));
-  await db.delete(wishlists).where(eq(wishlists.id, wishlistId));
+    .delete(wishlist_items)
+    .where(eq(wishlist_items.wishlist_id, wishlist_id));
+  await db.delete(wishlists).where(eq(wishlists.id, wishlist_id));
 }
 
-export async function createWishlist(
-  userId: string,
+export async function create_wishlist(
+  user_id: string,
   name: string,
   budget: number,
 ) {
   try {
-    const userResults = await db
+    const user_results = await db
       .select()
       .from(users)
-      .where(eq(users.id, userId));
-    if (userResults.length === 0) {
+      .where(eq(users.id, user_id));
+    if (user_results.length === 0) {
       throw new Error("User not found");
     }
 
     const id = uuidv4();
-    await db.insert(wishlists).values({ id, name, budget, userId });
+    await db.insert(wishlists).values({ id, name, budget, user_id });
 
     return { success: true, id };
   } catch (error) {
@@ -44,44 +44,44 @@ export async function createWishlist(
   }
 }
 
-export async function getWishlistsByUser(userId: string) {
+export async function get_wishlists_by_user(user_id: string) {
   const result = await db
     .select({
-      wishlistId: wishlists.id,
-      wishlistName: wishlists.name,
-      wishlistBudget: wishlists.budget,
-      itemId: wishlistItems.id,
-      itemName: wishlistItems.name,
-      itemPrice: wishlistItems.price,
-      itemDescription: wishlistItems.description,
+      wishlist_id: wishlists.id,
+      wishlist_name: wishlists.name,
+      wishlist_budget: wishlists.budget,
+      item_id: wishlist_items.id,
+      item_name: wishlist_items.name,
+      item_price: wishlist_items.price,
+      item_description: wishlist_items.description,
     })
     .from(wishlists)
-    .leftJoin(wishlistItems, eq(wishlists.id, wishlistItems.wishlistId))
-    .where(eq(wishlists.userId, userId));
+    .leftJoin(wishlist_items, eq(wishlists.id, wishlist_items.wishlist_id))
+    .where(eq(wishlists.user_id, user_id));
 
   return result.reduce((acc, curr) => {
-    const wishlist = acc.find((w) => w.id === curr.wishlistId);
+    const wishlist = acc.find((w) => w.id === curr.wishlist_id);
     if (wishlist) {
-      if (curr.itemId) {
+      if (curr.item_id) {
         wishlist.items.push({
-          id: curr.itemId,
-          name: curr.itemName,
-          price: curr.itemPrice,
-          description: curr.itemDescription,
+          id: curr.item_id,
+          name: curr.item_name,
+          price: curr.item_price,
+          description: curr.item_description,
         });
       }
     } else {
       acc.push({
-        id: curr.wishlistId,
-        name: curr.wishlistName,
-        budget: curr.wishlistBudget,
-        items: curr.itemId
+        id: curr.wishlist_id,
+        name: curr.wishlist_name,
+        budget: curr.wishlist_budget,
+        items: curr.item_id
           ? [
               {
-                id: curr.itemId,
-                name: curr.itemName,
-                price: curr.itemPrice,
-                description: curr.itemDescription,
+                id: curr.item_id,
+                name: curr.item_name,
+                price: curr.item_price,
+                description: curr.item_description,
               },
             ]
           : [],
@@ -91,43 +91,43 @@ export async function getWishlistsByUser(userId: string) {
   }, []);
 }
 
-export async function createWishlistItem(
-  wishlistId: string,
+export async function create_wishlist_item(
+  wishlist_id: string,
   name: string,
   price: number,
   description: string,
   category: string,
 ) {
-  const newItem = {
+  const new_item = {
     id: nanoid(),
     name,
     price,
     description,
     category,
-    wishlistId,
+    wishlist_id,
   };
 
-  await db.insert(wishlistItems).values(newItem);
-  return newItem;
+  await db.insert(wishlist_items).values(new_item);
+  return new_item;
 }
 
-export async function getWishlistItemsByWishlist(wishlistId: string) {
+export async function get_wishlist_items_by_wishlist(wishlist_id: string) {
   return await db
     .select()
-    .from(wishlistItems)
-    .where(eq(wishlistItems.wishlistId, wishlistId));
+    .from(wishlist_items)
+    .where(eq(wishlist_items.wishlist_id, wishlist_id));
 }
 
-export async function updateWishlist(
-  wishlistId: string,
-  updates: Partial<typeof wishlists.$inferInsert> & { updatedAt?: number },
+export async function update_wishlist(
+  wishlist_id: string,
+  updates: Partial<typeof wishlists.$inferInsert> & { updated_at?: number },
 ) {
-  await db.update(wishlists).set(updates).where(eq(wishlists.id, wishlistId));
+  await db.update(wishlists).set(updates).where(eq(wishlists.id, wishlist_id));
 }
 
-export async function updateWishlistItem(
-  itemId: string,
-  updateData: Partial<{
+export async function update_wishlist_item(
+  item_id: string,
+  update_data: Partial<{
     name: string;
     price: number;
     description: string;
@@ -137,9 +137,9 @@ export async function updateWishlistItem(
 ) {
   try {
     await db
-      .update(wishlistItems)
-      .set({ ...updateData, updatedAt: Math.floor(Date.now() / 1000) })
-      .where(eq(wishlistItems.id, itemId));
+      .update(wishlist_items)
+      .set({ ...update_data, updated_at: Math.floor(Date.now() / 1000) })
+      .where(eq(wishlist_items.id, item_id));
 
     return { success: true };
   } catch (error) {
@@ -148,6 +148,9 @@ export async function updateWishlistItem(
   }
 }
 
-export async function updateWishlistName(wishlistId: string, newName: string) {
-  await updateWishlist(wishlistId, { name: newName });
+export async function update_wishlist_name(
+  wishlist_id: string,
+  new_name: string,
+) {
+  await update_wishlist(wishlist_id, { name: new_name });
 }
