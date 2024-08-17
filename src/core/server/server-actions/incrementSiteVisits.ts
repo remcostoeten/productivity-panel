@@ -5,7 +5,7 @@ import { sql } from "drizzle-orm";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 import { db } from "../db";
-import { siteVisits } from "../db/schema";
+import { site_visits } from "../db/schema";
 
 export async function incrementSiteVisit() {
   const session = await getIronSession<VisitorSession>(
@@ -14,7 +14,7 @@ export async function incrementSiteVisit() {
   );
 
   if (!session.hasVisited) {
-    await db.insert(siteVisits).values({
+    await db.insert(site_visits).values({
       id: crypto.randomUUID(),
       timestamp: sql`(strftime('%s', 'now'))`,
     });
