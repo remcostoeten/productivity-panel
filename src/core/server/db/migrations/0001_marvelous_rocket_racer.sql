@@ -1,0 +1,1 @@
+ALTER TABLE `users` ADD `show_preloader` integer DEFAULT true NOT NULL;
