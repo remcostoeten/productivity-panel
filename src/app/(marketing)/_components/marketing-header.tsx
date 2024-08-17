@@ -4,16 +4,16 @@ import BrandLogo from "@/components/theme/BrandLogo";
 import { BorderMagicButtonAlt, Tooltip, TooltipTrigger } from "@/components/ui";
 import { ModernKbd } from "@/components/ui/kbd";
 import UniqueBadge from "@/components/ui/UniqueBadge";
-import menuItems from "@/core/data/header-menu-items";
+import menuItems from "@/core/data/menu-items";
 import {
   containerVariants,
   mobileLinkVar,
   mobilenavbarVariant,
 } from "@/core/helpers/animations/menu-animations";
 import { cn } from "@/core/helpers/cn";
+import { TooltipContent } from "@c/ui";
 import { SignedIn, SignedOut, UserButton, useClerk } from "@clerk/nextjs";
 import { HamburgerMenuIcon } from "@radix-ui/react-icons";
-import { TooltipContent } from "@radix-ui/react-tooltip";
 import { AnimatePresence, motion } from "framer-motion";
 import { AlignJustify, XIcon } from "lucide-react";
 import Link from "next/link";
@@ -117,8 +117,8 @@ export default function SiteHeader() {
 
   return (
     <>
-      <header className="container animate-fade-in fixed left-0 top-0 z-50 w-full -translate-y-4 border-white/20 border-b opacity-0 backdrop-blur-md [--animation-delay:600ms]">
-        <div className="px-2 lg:px-1 sm:container flex h-14 items-center justify-between z-20">
+      <header className="px-8 sm:px-0 animate-fade-in fixed left-0 top-0 z-50 w-full -translate-y-4 border-white/20 border-b opacity-0 backdrop-blur-md [--animation-delay:600ms]">
+        <div className="px-2 lg:px-1 container flex h-14 items-center justify-between z-20">
           <Link
             className="space-x-4 text-md flex items-center transition-all duration-500 origin-top"
             href="/"
