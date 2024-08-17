@@ -19,6 +19,9 @@ export const users = sqliteTable("users", {
   updatedAt: integer("updated_at")
     .notNull()
     .default(sql`(strftime('%s', 'now'))`),
+  showPreloader: integer("show_preloader", { mode: "boolean" })
+    .notNull()
+    .default(true),
 });
 
 export type User = typeof users.$inferSelect;
