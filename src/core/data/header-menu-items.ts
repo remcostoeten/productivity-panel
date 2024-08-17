@@ -24,3 +24,12 @@ export const dashboardMenuItems = [
   { href: "/dashboard", label: "Dashboard" },
   { href: "/dashboard/notes", label: "Notes" },
 ];
+
+export const footerLinks = [
+  { href: "/", label: "Home" },
+  { href: "dashboard", label: "Dashboard" },
+  { href: "/color-tool", label: "Color tool" },
+  { href: "#", label: "Help" },
+  { href: "#", label: "Terms of service" },
+  { href: "#", label: "Privacy policy" },
+];

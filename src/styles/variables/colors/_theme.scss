@@ -5,7 +5,16 @@ $theme-colors: (
   "color-two": #fe8bbb,
   "color-three": #9e7aff,
   "error": #ff4949,
+  "success": #2cffd1,
+
+  // Dark colors. Dark-bg = footer for exmaple.
+  "dark-bg": #040404,
   "body-gradient": linear-gradient(256.59deg, #000 23.98%, #171616 100.35%),
+  //   Border color
+  "seperator": #131313,
+
+  //    text-colors
+  "muted": #909090,
 );
 
 @mixin apply-theme-colors {
