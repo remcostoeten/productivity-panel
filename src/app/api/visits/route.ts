@@ -1,4 +1,3 @@
-
 import { sessionOptions, VisitorSession } from "@/core/lib/iron-session-config";
 import { db } from "@/core/server/db";
 import { siteVisits } from "@/core/server/db/schema";
@@ -14,7 +13,7 @@ export async function GET(request: NextRequest) {
   );
 
   if (!session.hasVisited) {
-    await db.insert(siteVisits).values({
+    await db.insert(site_visits).values({
       id: crypto.randomUUID(),
       timestamp: sql`(strftime('%s', 'now'))`,
     });

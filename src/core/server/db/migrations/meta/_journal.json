@@ -1,5 +1,13 @@
 {
   "version": "7",
   "dialect": "sqlite",
-  "entries": []
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1723905379500,
+      "tag": "0000_steep_shadow_king",
+      "breakpoints": true
+    }
+  ]
 }
