@@ -16,7 +16,7 @@ export async function updateLastSignIn() {
   try {
     await db
       .update(users)
-      .set({ lastSignIn: sql`(strftime('%s', 'now'))` })
+      .set({ last_sign_in: sql`(strftime('%s', 'now'))` })
       .where(eq(users.id, userId));
     return { success: true };
   } catch (error) {
@@ -28,13 +28,19 @@ export async function updateLastSignIn() {
 export async function createOrUpdateUser(userData: {
   id: string;
   email: string;
-  firstName: string | null;
-  lastName: string | null;
-  profileImageUrl?: string;
-  emailVerified: boolean;
+  first_name: string | null;
+  last_name: string | null;
+  profile_image_url?: string;
+  email_verified: boolean;
 }) {
-  const { id, email, firstName, lastName, profileImageUrl, emailVerified } =
-    userData;
+  const {
+    id,
+    email,
+    first_name,
+    last_name,
+    profile_image_url,
+    email_verified,
+  } = userData;
 
   try {
     const existingUser = await db
@@ -48,12 +54,12 @@ export async function createOrUpdateUser(userData: {
         .update(users)
         .set({
           email,
-          firstName,
-          lastName,
-          profileImageUrl,
-          emailVerified: emailVerified ? 1 : 0,
-          lastSignIn: sql`(strftime('%s', 'now'))`,
-          updatedAt: sql`(strftime('%s', 'now'))`,
+          first_name,
+          last_name,
+          profile_image_url,
+          email_verified: email_verified ? 1 : 0,
+          last_sign_in: sql`(strftime('%s', 'now'))`,
+          updated_at: sql`(strftime('%s', 'now'))`,
         })
         .where(eq(users.id, id));
 
@@ -62,18 +68,18 @@ export async function createOrUpdateUser(userData: {
       await db.insert(users).values({
         id,
         email,
-        firstName,
-        lastName,
-        profileImageUrl,
-        emailVerified: emailVerified ? 1 : 0,
-        isAdmin:
+        first_name,
+        last_name,
+        profile_image_url,
+        email_verified: email_verified ? 1 : 0,
+        is_admin:
           email === process.env.ADMIN_EMAIL_MAIN ||
           email === process.env.ADMIN_EMAIL_SECONDARY
             ? 1
             : 0,
-        lastSignIn: sql`(strftime('%s', 'now'))`,
-        createdAt: sql`(strftime('%s', 'now'))`,
-        updatedAt: sql`(strftime('%s', 'now'))`,
+        last_sign_in: sql`(strftime('%s', 'now'))`,
+        created_at: sql`(strftime('%s', 'now'))`,
+        updated_at: sql`(strftime('%s', 'now'))`,
       });
 
       console.log(`User ${id} created`);
@@ -114,9 +120,9 @@ export async function getUserProfile() {
 
 // Update the profile of the authenticated user
 export async function updateUserProfile(updateData: {
-  firstName?: string;
-  lastName?: string;
-  profileImageUrl?: string;
+  first_name?: string;
+  last_name?: string;
+  profile_image_url?: string;
 }) {
   const { userId } = auth();
 
@@ -129,7 +135,7 @@ export async function updateUserProfile(updateData: {
       .update(users)
       .set({
         ...updateData,
-        updatedAt: sql`(strftime('%s', 'now'))`,
+        updated_at: sql`(strftime('%s', 'now'))`,
       })
       .where(eq(users.id, userId));
 

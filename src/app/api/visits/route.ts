@@ -1,7 +1,6 @@
-
 import { sessionOptions, VisitorSession } from "@/core/lib/iron-session-config";
 import { db } from "@/core/server/db";
-import { siteVisits } from "@/core/server/db/schema";
+import { site_visits } from "@/core/server/db/schema";
 import { sql } from "drizzle-orm";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
@@ -14,7 +13,7 @@ export async function GET(request: NextRequest) {
   );
 
   if (!session.hasVisited) {
-    await db.insert(siteVisits).values({
+    await db.insert(site_visits).values({
       id: crypto.randomUUID(),
       timestamp: sql`(strftime('%s', 'now'))`,
     });
