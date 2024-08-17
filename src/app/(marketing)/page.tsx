@@ -1,4 +1,3 @@
-import Blur from "@/components/ui/Blur";
 import Particles from "@/components/ui/particles";
 import { SphereMask } from "@/components/ui/sphere-mask";
 import ClientSection from "./_components/landing/client-section";
@@ -8,7 +7,6 @@ import HeroSection from "./_components/landing/hero-section";
 export default async function Page() {
   return (
     <>
-      <Blur />
       <HeroSection />
       <ClientSection />
       <SphereMask />

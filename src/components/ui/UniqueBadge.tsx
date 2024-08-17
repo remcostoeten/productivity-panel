@@ -1,10 +1,13 @@
-interface UniqueBadgeProps {
+import { cn } from "@/core/helpers/cn";
+
+type UniqueBadgeProps = {
   text: string;
   textColor?: string;
   backgroundColor?: string;
   borderColor?: string;
   size?: "sm" | "md" | "lg";
-}
+  className?: string;
+};
 
 export default function UniqueBadge({
   text,
@@ -12,6 +15,7 @@ export default function UniqueBadge({
   backgroundColor = "bg-[#ff6c00]/10 ",
   borderColor = "border-[#ff6c00]/20",
   size = "md",
+  className,
 }: UniqueBadgeProps) {
   const sizeClasses = {
     sm: "px-1 text-xs",
@@ -31,7 +35,10 @@ export default function UniqueBadge({
 
   return (
     <span
-      className={`relative ${backgroundColor} ${sizeClasses[size]} font-medium ${textColor} ${darkModeClasses.backgroundColor}`}
+      className={cn(
+        `relative ${backgroundColor} ${sizeClasses[size]} font-medium ${textColor} ${darkModeClasses.backgroundColor}`,
+        className, // Merge additional classes
+      )}
     >
       {text}
       {["top", "bottom", "left", "right"].map((side) => (
