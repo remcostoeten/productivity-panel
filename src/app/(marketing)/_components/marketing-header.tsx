@@ -3,6 +3,7 @@
 import BrandLogo from "@/components/theme/BrandLogo";
 import { BorderMagicButtonAlt, Tooltip, TooltipTrigger } from "@/components/ui";
 import { ModernKbd } from "@/components/ui/kbd";
+import UniqueBadge from "@/components/ui/UniqueBadge";
 import menuItems from "@/core/data/header-menu-items";
 import {
   containerVariants,
@@ -123,6 +124,7 @@ export default function SiteHeader() {
             href="/"
           >
             <BrandLogo />
+            <UniqueBadge text="Beta " size="sm" />{" "}
           </Link>
           <nav className="hidden md:flex justify-center items-center content-center w-full">
             {menuItems.map((item) => (

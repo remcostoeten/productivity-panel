@@ -20,5 +20,7 @@ export default menuItems;
 
 export const dashboardMenuItems = [
   { href: "/lines-showcase", label: "Lines effect" },
-  { href: "/dashboard/clerk-flow", label: "Clerk flow" },
+  { href: "/clerk-flow", label: "Clerk flow" },
+  { href: "/dashboard", label: "Dashboard" },
+  { href: "/dashboard/notes", label: "Notes" },
 ];
