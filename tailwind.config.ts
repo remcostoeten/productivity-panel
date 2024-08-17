@@ -21,9 +21,18 @@ const config = {
         mono: ['var(--font-geist-mono)'],
       },
       colors: {
+        // Custom theme specific colors
+        error: 'var(--error)',
+        success: 'var(--success)',
         'body-gradient': 'var(--body-gradient)',
         'theme-primary': 'var(--theme-primary)',
-        error: 'var(--error)',
+        seperator: 'var(--seperator)',
+
+        muted: {
+          DEFAULT: 'var(--muted)',
+          foreground: 'var(--muted)',
+        },
+        // Shadcn colors
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
@@ -41,10 +50,10 @@ const config = {
           DEFAULT: 'hsl(var(--destructive))',
           foreground: 'hsl(var(--destructive-foreground))',
         },
-        muted: {
-          DEFAULT: 'hsl(var(--muted))',
-          foreground: 'hsl(var(--muted-foreground))',
-        },
+        // muted: {
+        //   DEFAULT: 'hsl(var(--muted))',
+        //   foreground: 'hsl(var(--muted-foreground))',
+        // },
         accent: {
           DEFAULT: 'hsl(var(--accent))',
           foreground: 'hsl(var(--accent-foreground))',
