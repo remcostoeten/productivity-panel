@@ -10,11 +10,10 @@ import useFileUpload from "./ _hooks/use-file-upload";
 import AddFolderDialog from "./_components/AddFolderDialog";
 import ButtonBar from "./_components/ButtonBar";
 import ColorFolder from "./_components/color-folder";
-import ColorToolIntro from "./_components/ColorToolPageIntro";
+import ToolIntro from "./_components/ColorToolPageIntro";
 import FileUploadUi from "./_components/FileUploadUi";
 import MoveColorDialog from "./_components/MoveColorDialog";
 import { ColorItem, Folder } from "./types.color-tool";
-import ToolIntro from "./_components/ColorToolPageIntro";
 
 export default function ColorToolPage() {
   const [folders, setFolders] = useState<Folder[]>([]);
