@@ -29,16 +29,14 @@ export default function DashboardLayout({ children }: PageProps) {
         }}
       />
       <SiteHeader />
-      <div className="relative flex min-h-screen grid place-items-normal pt-8 rounded-lg">
-        <div className="w-full max-w-4xl mx-auto p-6 text-foreground"></div>
-        <DotPattern
-          color="rgba(255,255,255,.2"
-          className={cn(
-            "[mask-image:radial-gradient(300px_circle_at_center,white,transparent)]",
-          )}
-        />
-        {children}
-      </div>
+      <main className="mt-marketing-header">{children}</main>
+      <div className="w-full max-w-4xl mx-auto p-6 text-foreground"></div>
+      <DotPattern
+        color="rgba(255,255,255,.2"
+        className={cn(
+          "[mask-image:radial-gradient(300px_circle_at_center,white,transparent)]",
+        )}
+      />
     </>
   );
 }

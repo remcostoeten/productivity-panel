@@ -1,3 +1,5 @@
+// In src/core/server/db/schema/users.ts
+
 import { sql } from "drizzle-orm";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
@@ -13,15 +15,15 @@ export const users = sqliteTable("users", {
   emailVerified: integer("email_verified", { mode: "boolean" })
     .notNull()
     .default(false),
+  showPreloader: integer("show_preloader", { mode: "boolean" })
+    .notNull()
+    .default(true),
   createdAt: integer("created_at")
     .notNull()
     .default(sql`(strftime('%s', 'now'))`),
   updatedAt: integer("updated_at")
     .notNull()
     .default(sql`(strftime('%s', 'now'))`),
-  showPreloader: integer("show_preloader", { mode: "boolean" })
-    .notNull()
-    .default(true),
 });
 
 export type User = typeof users.$inferSelect;

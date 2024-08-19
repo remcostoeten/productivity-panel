@@ -53,11 +53,12 @@ export async function createOrUpdateUser(userData: {
           profileImageUrl,
           emailVerified: emailVerified ? 1 : 0,
           lastSignIn: sql`(strftime('%s', 'now'))`,
+          signInCount: sql`${users.signInCount} + 1`, // Increment sign-in count
           updatedAt: sql`(strftime('%s', 'now'))`,
         })
         .where(eq(users.id, id));
 
-      console.log(`User ${id} updated`);
+      console.log(`User ${id} updated and sign-in count incremented`);
     } else {
       await db.insert(users).values({
         id,
@@ -72,11 +73,12 @@ export async function createOrUpdateUser(userData: {
             ? 1
             : 0,
         lastSignIn: sql`(strftime('%s', 'now'))`,
+        signInCount: 1, // Set initial sign-in count for new users
         createdAt: sql`(strftime('%s', 'now'))`,
         updatedAt: sql`(strftime('%s', 'now'))`,
       });
 
-      console.log(`User ${id} created`);
+      console.log(`User ${id} created with initial sign-in count`);
     }
 
     return { success: true, id };

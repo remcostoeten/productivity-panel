@@ -15,6 +15,20 @@
       "when": 1723905970196,
       "tag": "0001_marvelous_rocket_racer",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1724014265839,
+      "tag": "0002_chemical_baron_zemo",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1724026290537,
+      "tag": "0003_early_tomas",
+      "breakpoints": true
     }
   ]
 }

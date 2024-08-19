@@ -1,5 +1,5 @@
+import ToolIntro from "@/app/(marketing)/(dev-tools)/color-tool/_components/ColorToolPageIntro";
 import SiteHeader from "@/app/(marketing)/_components/marketing-header";
-import ToolIntro from "@/app/(marketing)/color-tool/_components/ColorToolPageIntro";
 import DotPattern from "@/components/effect/dots-pattern";
 import { cn } from "@/core/helpers/cn";
 

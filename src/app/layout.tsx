@@ -1,9 +1,12 @@
+import SiteVisitStats from "@/components/auth/SiteVisitStats";
+import UserInfoButton from "@/components/auth/UserInfoButton";
 import PreLoader from "@/components/effect/LogoFlicker";
 import { cn } from "@/core/helpers/cn";
-import { ThemeProvider } from "@/core/lib/ next-theme-provider";
 import Providers from "@/core/lib/providers";
+import { getUserPreloaderPreference } from "@/core/server/server-actions/get-user-preloader-preference.ts";
 import "@styles/app.scss";
 import type { Metadata } from "next";
+import { ThemeProvider } from "next-themes";
 import { Inter as FontSans } from "next/font/google";
 import localFont from "next/font/local";
 
@@ -26,13 +29,15 @@ const geistMono = localFont({
   variable: "--font-geist-mono",
 });
 
-export default function RootLayout({ children }: PageProps) {
+export default async function RootLayout({ children }: PageProps) {
+  const showPreloader = await getUserPreloaderPreference();
+
   return (
     <Providers>
       <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
         <body
           className={cn(
-            "bg-body-gradient min-h-screen font-sans transition-colors duration-500 antialiased",
+            " min-h-screen font-sans transition-colors duration-500 antialiased",
             fontSans.variable,
           )}
         >
@@ -41,7 +46,14 @@ export default function RootLayout({ children }: PageProps) {
             defaultTheme="dark"
             disableTransitionOnChange={true}
           >
-            <PreLoader duration={3000}>{children}</PreLoader>
+            {showPreloader ? (
+              <PreLoader duration={3000}>{children}</PreLoader>
+            ) : (
+              children
+            )}
+            <UserInfoButton />
+
+            <SiteVisitStats />
           </ThemeProvider>
         </body>
       </html>

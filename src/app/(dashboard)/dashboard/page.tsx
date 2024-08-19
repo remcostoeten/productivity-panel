@@ -49,7 +49,6 @@ export default async function DashboardPage() {
           Last sign-in:{" "}
           {new Date(userProfile.lastSignIn * 1000).toLocaleString()}
         </p>
-        {/* Rest of your dashboard component */}
       </div>
     );
   } catch (error) {
