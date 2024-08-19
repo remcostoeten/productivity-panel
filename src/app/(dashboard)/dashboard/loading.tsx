@@ -1,10 +1,10 @@
 import { Center } from "@/components/atoms/Center";
-import SimpleSpinner from "@/components/effect/loaders/simple-spinner";
+import AbstractLoader from "@/components/effect/loaders/abstract-loader";
 
 export default function Loading() {
   return (
     <Center as="main" fullScreen>
-      <SimpleSpinner />
+      <AbstractLoader />
     </Center>
   );
 }

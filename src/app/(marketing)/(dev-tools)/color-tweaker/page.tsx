@@ -8,7 +8,7 @@ export default function ColorTweakerPage() {
         title="Color Tweaker"
         description="Easil get variants of a color by adjusting the lightness or darkness of the color. This allows to generate nice hover or active states while stil looking like your design sytem"
       />
-      <ColorAdjuster />
+      <ColorAdjuster title={"a"} items={[]} />
     </>
   );
 }

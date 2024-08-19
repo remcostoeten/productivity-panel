@@ -22,7 +22,10 @@ export default async function Footer() {
         <nav className="hidden sm:flex flex-wrap justify-center gap-4">
           {footerLinks.map(({ href, label }, index) => (
             <React.Fragment key={label}>
-              <Link href={href} className="hover:text-white">
+              <Link
+                href={href}
+                className="trans-all-300-in-out-quad hover:text-white"
+              >
                 {label}
               </Link>
               {index < footerLinks.length - 1 && (

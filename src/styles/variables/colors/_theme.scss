@@ -1,5 +1,6 @@
 $theme-colors: (
-  "theme-primary": #ff6a00a2,
+  "theme-primary": #ff6c00,
+  "theme-primary--alt": #ff6c00,
   "theme-primary--darker": #ff5b00,
   "color-one": rgba(255, 106, 0, 0.8),
   "color-two": #fe8bbb,
@@ -7,13 +8,20 @@ $theme-colors: (
   "error": #ff4949,
   "success": #2cffd1,
 
-  // Dark colors. Dark-bg = footer for exmaple.
+  // dark theme colors
   "dark-bg": #040404,
+  // footer
+  "dark-section": #0c0c0c,
+  // cards, alt-sections
+  "dark-section--lighter": #131313,
+
+  // bg-card-alt, bg-section-alt
+  // bg for card for example
   "body-gradient": linear-gradient(256.59deg, #000 23.98%, #171616 100.35%),
-  //   Border color
+  // Border color
   "seperator": #131313,
 
-  //    text-colors
+  // text-colors
   "muted": #909090,
 );
 
