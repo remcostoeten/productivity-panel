@@ -1,12 +1,5 @@
 import { create } from "zustand";
-import {
-  createWishlist,
-  createWishlistItem,
-  deleteWishlistItem,
-  getWishlistsByUser,
-  updateWishlist,
-  updateWishlistItem,
-} from "../server/server-actions/wishlist";
+
 import { Wishlist } from "../types/types.wishlist";
 
 type WishlistStore = {

@@ -21,7 +21,10 @@ export * from "./select";
 export * from "./slider";
 export * from "./sphere-mask";
 export * from "./switch";
+export * from "./table";
 export * from "./tabs";
 export * from "./text-shimmer";
 export * from "./textarea";
+export * from "./toggle-group";
 export * from "./tooltip";
+

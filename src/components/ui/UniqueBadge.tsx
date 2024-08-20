@@ -57,7 +57,7 @@ type BorderSideProps = {
   side: "top" | "bottom" | "left" | "right";
   borderColor: string;
   darkBorderColor: string;
-}
+};
 
 function BorderSide({ side, borderColor, darkBorderColor }: BorderSideProps) {
   const isVertical = side === "left" || side === "right";

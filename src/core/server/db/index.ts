@@ -2,8 +2,9 @@ import { createClient } from "@libsql/client";
 import { drizzle } from "drizzle-orm/libsql";
 
 const client = createClient({
-  url: process.env.DB_URL,
-  authToken: process.env.AUTH_TOKEN,
+  url: "libsql://nlziet-remcostoeten.turso.io",
+  authToken:
+    "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MjQwNzQ5MDEsImlkIjoiZGQxZTU2MmQtODM3MC00NTAyLWI3N2QtYTY1ZGY5ZDkwMTdkIn0.UhtvP0dGpBpN-w23Jnh7bP_3OYmLVYqy2bO-s1sKM4DnYcONgCIC8RfGdfApjZD8x0l3WNqTIhX9kYcEuWppCg",
 });
 
 export const db = drizzle(client);

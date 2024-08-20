@@ -32,9 +32,12 @@
     "incremental": false,
     "baseUrl": ".",
     "paths": {
+       "~/*": ["./*"],
       "@/*": ["./src/*"],
-      "@ui/*": ["./src/components/ui/*"],
       "@c/*": ["./src/components/*"],
+      "@ui/*": ["./src/components/ui/*"],
+      "@dash/*": ["./src/app/(dashboard)/dashboard/*"],
+      "@pages/*": ["./src/app/(marketing)/*"],
       "@core/*": ["./src/core/*"],
       "@server/*": ["./src/core/server/*"],
       "@styles/*": ["./src/styles/*"]

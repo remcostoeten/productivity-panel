@@ -21,9 +21,12 @@ export type CodeContentProps = {
 };
 
 export type CodeHighlightProps = {
-  title: string;
+  title?: string;
   fileIcon: string;
   avatarSrc: string;
   language?: string;
-  children?: React.ReactNode;
+  children?: ReactNode;
+  center?: boolean;
+  mx?: number | string;
+    my?: number | string;
 };

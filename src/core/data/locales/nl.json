@@ -1,0 +1,33 @@
+{
+    "TravelAllowance": {
+        "title": "Travel Cost Calculator",
+        "darkMode": "Dark Mode",
+        "inputData": "Input Data",
+        "returnTrip": "Return Trip",
+        "frequency": "Frequency",
+        "daysPerWeek": "Number of Days per Week",
+        "reimbursementPercentage": "Reimbursement Percentage",
+        "fuelPrice": "Fuel Price",
+        "kilometerReimbursement": "Kilometer Reimbursement",
+        "vehicleType": "Vehicle Type",
+        "calculate": "Calculate",
+        "results": "Results",
+        "finalAmount": "Final Amount",
+        "overview": "Overview",
+        "details": "Details",
+        "distance": "Distance",
+        "reimbursement": "Reimbursement",
+        "costs": "Costs",
+        "difference": "Difference",
+        "missedReimbursement": "Missed Reimbursement",
+        "selectedVehicle": "Selected Vehicle",
+        "enterDataPrompt": "First enter your data and click \"Calculate\" to see the results.",
+        "calculationComplete": "Calculation Complete",
+        "calculationSuccess": "Your travel cost calculation was successfully completed.",
+        "perWeek": "Per Week",
+        "perMonth": "Per Month",
+        "car": "Car",
+        "truck": "Truck",
+        "bike": "Bike"
+    }
+}

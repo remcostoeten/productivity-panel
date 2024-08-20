@@ -1,3 +1,5 @@
+// File: src/core/server/db/schema/notes.ts
+
 import { sql } from "drizzle-orm";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { users } from "./users";
@@ -35,7 +37,38 @@ export const wishlistItems = sqliteTable("wishlist_items", {
     .default(sql`(strftime('%s', 'now'))`),
 });
 
+export const wishlistFolders = sqliteTable("wishlist_folders", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => users.id),
+  createdAt: integer("created_at")
+    .notNull()
+    .default(sql`(strftime('%s', 'now'))`),
+  updatedAt: integer("updated_at")
+    .notNull()
+    .default(sql`(strftime('%s', 'now'))`),
+});
+
+export const wishlistToFolder = sqliteTable("wishlist_to_folder", {
+  id: text("id").primaryKey(),
+  wishlistId: text("wishlist_id")
+    .notNull()
+    .references(() => wishlists.id),
+  folderId: text("folder_id")
+    .notNull()
+    .references(() => wishlistFolders.id),
+  createdAt: integer("created_at")
+    .notNull()
+    .default(sql`(strftime('%s', 'now'))`),
+});
+
 export type Wishlist = typeof wishlists.$inferSelect;
 export type NewWishlist = typeof wishlists.$inferInsert;
 export type WishlistItem = typeof wishlistItems.$inferSelect;
 export type NewWishlistItem = typeof wishlistItems.$inferInsert;
+export type WishlistFolder = typeof wishlistFolders.$inferSelect;
+export type NewWishlistFolder = typeof wishlistFolders.$inferInsert;
+export type WishlistToFolder = typeof wishlistToFolder.$inferSelect;
+export type NewWishlistToFolder = typeof wishlistToFolder.$inferInsert;

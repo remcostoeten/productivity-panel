@@ -1,14 +1,16 @@
 "use client";
 
 import { incrementSiteVisit } from "@/core/server/server-actions/incrementSiteVisits";
+import { TooltipProvider } from "@c/ui/tooltip";
 import { ClerkProvider } from "@clerk/nextjs";
-import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { i18n } from "next-i18next";
 import { useRouter } from "next/navigation";
 import posthog from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
 import { useEffect } from "react";
+import { I18nextProvider } from "react-i18next";
 
 export default function Providers({ children }: PageProps) {
   const router = useRouter();
@@ -50,13 +52,14 @@ export default function Providers({ children }: PageProps) {
             card: "bg-[#fafafa]",
           },
         }}
-        navigate={(to) => router.push(to)}
       >
-        <TooltipProvider>
-          {children}
-          <Analytics />
-          <SpeedInsights />
-        </TooltipProvider>
+        <I18nextProvider i18n={i18n}>
+          <TooltipProvider>
+            {children}
+            <Analytics />
+            <SpeedInsights />
+          </TooltipProvider>
+        </I18nextProvider>
       </ClerkProvider>
     </PostHogProvider>
   );

@@ -1,5 +1,3 @@
-import type { Config } from 'drizzle-kit'
-
 /** @type {import('drizzle-kit').Config} */
 export default {
   driver: 'turso',
@@ -7,8 +5,9 @@ export default {
   schema: './src/core/server/db/schema/index.ts',
   dialect: 'sqlite',
   dbCredentials: {
-    url: process.env.DB_URL,
-    authToken: process.env.AUTH_TOKEN,
+    url: 'libsql://nlziet-remcostoeten.turso.io',
+    authToken:
+      'eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MjQwNzQ5MDEsImlkIjoiZGQxZTU2MmQtODM3MC00NTAyLWI3N2QtYTY1ZGY5ZDkwMTdkIn0.UhtvP0dGpBpN-w23Jnh7bP_3OYmLVYqy2bO-s1sKM4DnYcONgCIC8RfGdfApjZD8x0l3WNqTIhX9kYcEuWppCg',
   },
   verbose: true,
 } satisfies Config

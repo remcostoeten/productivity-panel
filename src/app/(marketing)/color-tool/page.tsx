@@ -5,16 +5,15 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui";
 import CodeHighlight from "@/components/ui/CodeHighlight/CodeHighlight";
 import { Suspense, useEffect, useRef, useState } from "react";
+import PageIntro from "../../../components/theme/shells/PageIntro";
 import { useColorPicker } from "./ _hooks/use-color-picker";
 import useFileUpload from "./ _hooks/use-file-upload";
 import AddFolderDialog from "./_components/AddFolderDialog";
 import ButtonBar from "./_components/ButtonBar";
 import ColorFolder from "./_components/color-folder";
-import ColorToolIntro from "./_components/ColorToolPageIntro";
 import FileUploadUi from "./_components/FileUploadUi";
 import MoveColorDialog from "./_components/MoveColorDialog";
 import { ColorItem, Folder } from "./types.color-tool";
-import ToolIntro from "./_components/ColorToolPageIntro";
 
 export default function ColorToolPage() {
   const [folders, setFolders] = useState<Folder[]>([]);
@@ -228,7 +227,7 @@ export default function ColorToolPage() {
   return (
     <div className="w-full max-w-4xl mx-auto  bg-background text-foreground">
       <div className="flex flex-col -center justify-between mb-6">
-        <ToolIntro
+        <PageIntro
           title="Color Picker"
           description="The Color Picker feature streamlines color management with an intuitive
       interface for uploading images, picking colors, and generating CSS

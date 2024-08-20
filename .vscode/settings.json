@@ -2,7 +2,7 @@
   "editor.tabSize": 4,
   "editor.insertSpaces": true,
   "editor.detectIndentation": false,
-  "files.autoSave": "onFocusChange",
+  "files.autoSave": "afterDelay",
   "editor.formatOnSave": true,
   "editor.formatOnSaveMode": "file",
   "editor.codeActionsOnSave": {
@@ -30,7 +30,7 @@
     "**/*.lock": true
   },
   "workbench.sideBar.location": "right",
-  "editor.fontFamily": "\"Jetbrains Sans\"",
+  "editor.fontFamily": "\"Jetbrains Mono\"",
   "git.enableSmartCommit": true,
   "terminal.integrated.enableMultiLinePasteWarning": "auto",
   "vscode_custom_css.imports": [
@@ -52,5 +52,6 @@
   "findUnusedExports.detectCircularImports": true,
   "debug.console.fontFamily": "JetBrains Mono",
   "editor.lineNumbers": "on",
+  "editor.fontSize": 12, // Set the font size for line numbers
   "tabler.icons": true
 }

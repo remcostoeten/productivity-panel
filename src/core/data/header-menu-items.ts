@@ -1,8 +1,8 @@
 const menuItems = [
   {
     id: 1,
-    label: "Design System",
-    href: "/design-system",
+    label: "Commuting costs",
+    href: "/commuting-costs",
   },
   {
     id: 2,
