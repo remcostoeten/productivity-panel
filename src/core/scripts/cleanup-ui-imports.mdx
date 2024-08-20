@@ -1,0 +1,83 @@
+# Import Updater Script
+
+This Python script is designed to update import statements in `.tsx` files within a specified directory. It consolidates multiple imports from the `@/components/ui/` directory into a single import statement from `@/components/ui/`.
+
+## Features
+
+- Recursively searches for `.tsx` files in the `src/app` and `src/components` directories.
+- Consolidates imports from `@/components/ui/*` into a single import from `@/components/ui/`.
+- Can also be run on a specific file using command-line arguments.
+
+Thus it refactors files with such imports:
+
+```tsx
+import { useState } from "react";
+import { DesignSystemWrapper } from "@/components/DesignSystemWrapper";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { PlusCircle, Clipboard } from "lucide-react";
+```
+
+to
+
+```tsx
+import { DesignSystemWrapper } from "@/components/DesignSystemWrapper";
+import {
+  Button,
+  Input,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  Switch,
+} from "@/components/ui/";
+import { useState } from "react";
+```
+
+## Requirements
+
+- Have a index.ts file in your ui folder like so:
+
+```tsx
+//src/components/ui/index.ts
+//... export everyy individual ui file
+
+export * from "./switch";
+export * from "./tabs";
+export * from "./text-shimmer";
+export * from "./textarea";
+export * from "./tooltip";
+```
+
+- Python 3.x
+
+### Running the Script
+
+**Open a terminal and navigate to the directory containing the script.**
+To update the entire `src/app` and `src/components` directories, run the script without any arguments:
+
+```bash title="Terminal"
+python cleanup-ui-imports.py
+```
+
+This looks Recursively in the `src/app` and `src/components` directories for `.tsx` files and updates the imports of all files with a `.tsx` extension. It auto excludes `/ui` folder in `src/components` and `src/app` directories. 
+
+To update a specific file, pass the file path as an argument:
+
+```bash title="Terminal"
+python cleanup-ui-imports.py src/components/MyComponent.tsx
+```
+
+This updates the imports in the specified file only.
+
+
+
