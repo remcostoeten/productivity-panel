@@ -70,5 +70,73 @@ $bezier: cubic-bezier(0.215, 0.61, 0.335, 1);
   animation: fadeIn 1s 750ms ease-in-out forwards;
 }
 /*______________________________________________*/
+@keyframes loading {
+  0%,
+  80%,
+  100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+  }
+}
 
+@keyframes loading-bar {
+  0%,
+  100% {
+    transform: scaleY(0.5);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes loading-pulse {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes loading-wave {
+  0%,
+  100% {
+    transform: scaleY(0.5);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes loading-spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes loading-bounce {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-delay-0 {
+  animation-delay: 0s;
+}
+.animate-delay-300 {
+  animation-delay: 0.3s;
+}
+.animate-delay-600 {
+  animation-delay: 0.6s;
+}
 /*______________________________________________*/

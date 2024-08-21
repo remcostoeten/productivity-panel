@@ -1,11 +1,6 @@
-import { Button } from "@/components/ui";
 import NativeSwitch from "@/components/ui/NativeSwitch";
+import { Button, Tooltip, TooltipContent, TooltipTrigger } from "@c/ui";
 import { QuestionMarkCircledIcon } from "@radix-ui/react-icons";
-import {
-  Tooltip,
-  TooltipTrigger,
-  TooltipContent,
-} from "@radix-ui/react-tooltip";
 import { ButtonBarProps } from "../types.color-tool";
 
 export default function ButtonBar({
@@ -18,7 +13,7 @@ export default function ButtonBar({
   setUseCssVariables,
 }: ButtonBarProps) {
   return (
-    <div className="flex items-end gap-2">
+    <div className="flex items-end gap-2 flex-wrap">
       <Button variant="outline" onClick={handleClearLocalStorage}>
         Clear Local Storage
       </Button>

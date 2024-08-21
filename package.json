@@ -51,6 +51,7 @@
     "clsx": "^2.1.1",
     "cmdk": "1.0.0",
     "drizzle-orm": "^0.33.0",
+    "emblor": "^1.4.4",
     "framer-motion": "^11.3.22",
     "iron-session": "^8.0.2",
     "lucide-react": "^0.424.0",

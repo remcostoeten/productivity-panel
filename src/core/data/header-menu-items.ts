@@ -24,3 +24,11 @@ export const dashboardMenuItems = [
   { href: "/dashboard", label: "Dashboard" },
   { href: "/dashboard/notes", label: "Notes" },
 ];
+
+export const designSystemMenuItems = [
+  { href: "/design-system/color-tool", label: "Tailwind config picker" },
+  { href: "/design-system/color-tool", label: "Tailwind colors" },
+  { href: "/design-system/color-adjuster", label: "Light/darken color" },
+  { href: "/design-system/tag-input", label: "Tag input component" },
+  { href: "/design-system/loaders", label: "Loaders showcase" },
+];
