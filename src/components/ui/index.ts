@@ -18,6 +18,7 @@ export * from "./PopoutForm";
 export * from "./popover";
 export * from "./scroll-area";
 export * from "./select";
+export * from "./seperator";
 export * from "./slider";
 export * from "./sphere-mask";
 export * from "./switch";

@@ -35,7 +35,7 @@ export default function NativeSwitch({
   };
 
   return (
-    <div className={`native-switch ${sizeClass} ${className}`}>
+    <div className={`native-switch  ${sizeClass} ${className}`}>
       <input
         type="checkbox"
         id="switch"
@@ -43,7 +43,9 @@ export default function NativeSwitch({
         onChange={handleChange}
         {...props}
       />
-      <label htmlFor="switch">Toggle</label>
+      <label className="border-input border border-1" htmlFor="switch">
+        Toggle
+      </label>
     </div>
   );
 }

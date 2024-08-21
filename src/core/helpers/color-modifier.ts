@@ -179,3 +179,47 @@ export const lighten = (color: string, percentage: number): string =>
 //       </div>
 //     );
 //   };
+// utils/colorUtils.ts
+
+export function adjustColor(
+  color: string,
+  percentage: number,
+  adjustment: "lighter" | "darker",
+): string {
+  let r, g, b, a;
+  if (color.startsWith("#")) {
+    const hex = color.slice(1);
+    r = parseInt(hex.slice(0, 2), 16);
+    g = parseInt(hex.slice(2, 4), 16);
+    b = parseInt(hex.slice(4, 6), 16);
+    a = 1;
+  } else {
+    const match = color.match(
+      /rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)/,
+    );
+    if (match) {
+      [, r, g, b, a = "1"] = match.map(Number);
+    } else {
+      throw new Error("Invalid color format");
+    }
+  }
+
+  const factor =
+    adjustment === "lighter" ? 1 + percentage / 100 : 1 - percentage / 100;
+  r = Math.min(255, Math.max(0, Math.round(r * factor)));
+  g = Math.min(255, Math.max(0, Math.round(g * factor)));
+  b = Math.min(255, Math.max(0, Math.round(b * factor)));
+
+  return `rgba(${r}, ${g}, ${b}, ${a})`;
+}
+
+export function rgbaToHex(rgba: string): string {
+  const match = rgba.match(
+    /rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)/,
+  );
+  if (match) {
+    const [, r, g, b] = match.map(Number);
+    return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
+  }
+  throw new Error("Invalid RGBA format");
+}
