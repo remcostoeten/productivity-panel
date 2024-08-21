@@ -4,7 +4,10 @@ import BrandLogo from "@/components/theme/BrandLogo";
 import { BorderMagicButtonAlt, Tooltip, TooltipTrigger } from "@/components/ui";
 import { ModernKbd } from "@/components/ui/kbd";
 import UniqueBadge from "@/components/ui/UniqueBadge";
-import menuItems from "@/core/data/header-menu-items";
+import menuItems, {
+  dashboardMenuItems,
+  designSystemMenuItems,
+} from "@/core/data/header-menu-items";
 import {
   containerVariants,
   mobileLinkVar,
@@ -19,9 +22,8 @@ import { AlignJustify, XIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState, useTransition } from "react";
-import DashNavigationMenu from "./dash-header-dropdown";
+import ReusableDropdownMenu from "./dash-header-dropdown";
 
-// Custom hook for keyboard shortcuts
 const useKeyboardShortcut = () => {
   const router = useRouter();
   const { signOut, openSignIn } = useClerk();
@@ -147,7 +149,16 @@ export default function SiteHeader() {
               </Link>
             ))}
             <SignedIn>
-              <DashNavigationMenu animationVariant="dropdownMenu" />
+              <ReusableDropdownMenu
+                label="Dashboard"
+                menuItems={dashboardMenuItems}
+                animationVariant="dropdownMenu"
+              />
+              <ReusableDropdownMenu
+                label="Design System"
+                menuItems={designSystemMenuItems}
+                animationVariant="dropdownMenu"
+              />
             </SignedIn>
           </nav>
 

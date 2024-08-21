@@ -1,11 +1,12 @@
 import PreLoader from "@/components/effect/LogoFlicker";
 import { cn } from "@/core/helpers/cn";
-import { ThemeProvider } from "@/core/lib/ next-theme-provider";
 import Providers from "@/core/lib/providers";
 import "@styles/app.scss";
 import type { Metadata } from "next";
+import { ThemeProvider } from "next-themes";
 import { Inter as FontSans } from "next/font/google";
 import localFont from "next/font/local";
+import SiteHeader from "./(marketing)/_components/marketing-header";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -41,7 +42,10 @@ export default function RootLayout({ children }: PageProps) {
             defaultTheme="dark"
             disableTransitionOnChange={true}
           >
-            <PreLoader duration={3000}>{children}</PreLoader>
+            <SiteHeader />
+            <PreLoader duration={3000}>
+              <main className="mt-marketing-header">{children}</main>
+            </PreLoader>
           </ThemeProvider>
         </body>
       </html>

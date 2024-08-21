@@ -22,8 +22,9 @@ export type CodeContentProps = {
 
 export type CodeHighlightProps = {
   title: string;
-  fileIcon: string;
-  avatarSrc: string;
+  fileIcon?: string;
+  avatarSrc?: string;
   language?: string;
   children?: React.ReactNode;
+  disableMinWidth?: boolean;
 };

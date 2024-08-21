@@ -12,9 +12,14 @@ import { Button } from "../button";
 type FileHeaderProps = {
   title?: string;
   onCopy: () => void;
+  disableMinWidth?: boolean;
 };
 
-export default function FileHeader({ title, onCopy }: FileHeaderProps) {
+export default function FileHeader({
+  title,
+  onCopy,
+  disableMinWidth = false,
+}: FileHeaderProps) {
   if (typeof title !== "string") {
     console.error("Invalid title prop");
     return null;
@@ -37,7 +42,9 @@ export default function FileHeader({ title, onCopy }: FileHeaderProps) {
   }
 
   return (
-    <header className="flex gap-5 justify-between px-4 py-2 w-full whitespace-nowrap bg-black rounded-md bg-blend-normal text-neutral-400 max-md:flex-wrap max-md:max-w-full min-w-[400px]">
+    <header
+      className={`flex gap-5 justify-between px-4 py-2 w-full whitespace-nowrap bg-black rounded-md bg-blend-normal text-neutral-400 max-md:flex-wrap max-md:max-w-full ${disableMinWidth ? "" : "min-w-[400px]"}`}
+    >
       <div className="flex gap-2 my-auto">
         <Icon />
         <div className="my-auto">{title}</div>
