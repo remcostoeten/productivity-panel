@@ -4,9 +4,8 @@ import { Flex } from "@/components/atoms/Flex";
 import Paragraph from "@/components/atoms/Paragraph";
 import { createFolder } from "@/core/server/server-actions/folder-actions";
 import { motion } from "framer-motion";
-import { useState } from "react";
 import toast from "react-hot-toast";
-import { OnboardingProps } from "../types.notes";
+import { OnboardingProps } from "../../types.notes";
 
 export default function Onboarding({ onComplete }: OnboardingProps) {
   const [step, setStep] = useState(0);
