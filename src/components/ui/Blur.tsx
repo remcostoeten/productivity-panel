@@ -13,8 +13,8 @@ export default function Blur({ className }: BlurProps) {
         className,
       )}
     >
-      <div className="fix-safari-blur blur-[106px] h-56 bg-gradient-to-br from-violet-200 to-theme-primary dark:from-theme-primary"></div>
-      <div className="fix-safari-blur blur-[106px] h-32 bg-gradient-to-r from-fuchsia-200 to-ptheme-primary dark:to-theme-primary"></div>
+      <div className="fix-safari-blur blur-[106px] h-56 bg-gradient-to-br from-violet-200 to-primary dark:from-primary"></div>
+      <div className="fix-safari-blur blur-[106px] h-32 bg-gradient-to-r from-fuchsia-200 to-primary dark:to-primary"></div>
     </div>
   );
 }

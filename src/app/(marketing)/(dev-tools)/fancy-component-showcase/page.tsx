@@ -22,16 +22,10 @@ const FancyComponentsPage: React.FC = () => {
         >
           <FancySearchInput
             width="100%"
-            borderAfterColor="linear-gradient(90deg, theme-primary--darker 0%, theme-primary 100%)"
-            borderHeight="12px"
-            placeholder="Search here..."
-          />
-          <FancySearchInput
-            width="100%"
             borderColor="#FF6464"
-            borderAfterColor="linear-gradient(90deg, bg-theme-primary--darker 0%, bg-theme-primary 100%)"
+            borderAfterColor="linear-gradient(90deg, bg-primary--darker 0%, bg-primary 100%)"
             inputAlt={true}
-            placeholder="Another search..."
+            placeholder="Click here to search..."
           />
         </div>
       </section>

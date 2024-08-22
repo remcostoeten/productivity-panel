@@ -28,8 +28,8 @@ const config = {
         'body-gradient': 'var(--body-gradient)', // used in footer
 
         // Custom theme specific colors
-        'theme-primary': 'var(--theme-primary)', // orange (logo etc)
-        'theme-primary--darker': 'var(--theme-primary--darker)', // primary  hover etc
+        primary: '#ff6c00', // orange (logo etc)
+        'primary--darker': 'var(--primary--darker)', // primary  hover etc
 
         // Text colors
         muted: {

@@ -1,7 +1,7 @@
 import Particles from "@/components/ui/particles";
 import ClientSection from "./_components/landing/client-section";
-import CallToActionSection from "./_components/landing/cta-section";
 import HeroSection from "./_components/landing/hero-section";
+import { SphereMask } from "@/components/ui";
 import CallToActionSection from "./_components/landing/cta-section";
 
 const containerVariants = {

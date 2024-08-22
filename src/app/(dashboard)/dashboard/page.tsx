@@ -1,3 +1,4 @@
+import { default as OnboardingFlow } from "@/components/auth/OnboardingFlow";
 import {
   createOrUpdateUser,
   getUserProfile,
@@ -42,14 +43,15 @@ export default async function DashboardPage() {
     const userProfile = await getUserProfile();
 
     return (
-      <div>
-        <h1>Welcome to your dashboard, {userProfile.firstName}!</h1>
-        <p>You have signed in {userProfile.signInCount} times.</p>
-        <p>
-          Last sign-in:{" "}
-          {new Date(userProfile.lastSignIn * 1000).toLocaleString()}
-        </p>
-      </div>
+      //   <div>
+      //     <h1>Welcome to your dashboard, {userProfile.firstName}!</h1>
+      //     <p>You have signed in {userProfile.signInCount} times.</p>
+      //     <p>
+      //       Last sign-in:{" "}
+      //       {new Date(userProfile.lastSignIn * 1000).toLocaleString()}
+      //     </p>
+      //   </div>
+      <OnboardingFlow />
     );
   } catch (error) {
     console.error("Error in DashboardPage:", error);

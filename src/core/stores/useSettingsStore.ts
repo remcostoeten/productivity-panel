@@ -14,6 +14,7 @@ export const useUserSettingsStore = create<UserSettingsState>()(
         firstName: "",
         lastName: "",
         username: "",
+        dateOfBirth: "",
         bio: "",
       },
       settings: {
@@ -30,7 +31,6 @@ export const useUserSettingsStore = create<UserSettingsState>()(
         set((state) => ({ formData: { ...state.formData, ...data } })),
       updateSettings: (settings) =>
         set((state) => ({ settings: { ...state.settings, ...settings } })),
-      // Implement other actions here
     }),
     {
       name: "user-settings-storage",

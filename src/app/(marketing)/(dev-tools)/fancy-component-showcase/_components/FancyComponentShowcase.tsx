@@ -16,15 +16,6 @@ const FancyComponentsPage: React.FC = () => {
 
         <div style={{ marginBottom: "20px" }}>
           <FancySearchInput
-            width="400px"
-            borderColor="blue"
-            borderHeight="3px"
-            placeholder="Search here..."
-          />
-        </div>
-
-        <div style={{ marginBottom: "20px" }}>
-          <FancySearchInput
             width="350px"
             borderColor="#FF6464"
             borderAfterColor="linear-gradient(90deg, #00C6FF 0%, #0072FF 100%)"

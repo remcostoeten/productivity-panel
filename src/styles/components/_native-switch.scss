@@ -30,7 +30,7 @@
   }
 
   input:checked + label {
-    background: var(--theme-primary);
+    background: var(--primary);
   }
 
   input:checked + label:after {

@@ -6,15 +6,12 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import CustomInput from "./CustomInput";
 import OptionButton from "./OptionButton";
-import TemplateSection from "./TemplateSection";
 
 interface RepositoryCreationProps {
   onComplete: () => void;
 }
 
-const RepositoryCreationComponent: React.FC<RepositoryCreationProps> = ({
-  onComplete,
-}) => {
+function RepositoryCreationComponent({ onComplete }: RepositoryCreationProps) {
   const [step, setStep] = useState(0);
 
   const handleCreateFolder = async (name: string) => {
@@ -70,13 +67,13 @@ const RepositoryCreationComponent: React.FC<RepositoryCreationProps> = ({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="flex flex-col justify-center self-stretch px-28 py-16 rounded-2xl border border-solid bg-neutral-950 border-neutral-800 max-md:px-5"
+      className="flex flex-col gap-2 justify-center self-stretch rounded-2xl border border-solid bg-neutral-950 border-neutral-800 max-md:px-5 w-full"
     >
       <motion.h1
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.5 }}
-        className="px-96 pb-px text-lg font-medium leading-none text-center text-zinc-100 max-md:px-5 max-md:max-w-full"
+        className=" pb-px text-lg font-medium leading-none text-center text-zinc-100 max-md:px-5 max-md:max-w-full"
       >
         Let's create your first repo
       </motion.h1>
@@ -84,11 +81,11 @@ const RepositoryCreationComponent: React.FC<RepositoryCreationProps> = ({
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4, duration: 0.5 }}
-        className="px-80 pb-7 text-sm leading-none text-center text-stone-500 max-md:px-5 max-md:max-w-full"
+        className="px-10 pb-7 text-sm leading-none text-center text-stone-500 max-md:px-5 max-md:max-w-full"
       >
         Start blank or choose one of our templates
       </motion.p>
-      <div className="flex flex-col items-center pr-72 pl-72 max-w-full w-[956px] max-md:px-5">
+      <div className="flex flex-col items-center  max-w-full  max-md:px-5">
         <div className="flex flex-col w-full max-w-[353px]">
           <AnimatePresence mode="wait">
             {step === 0 ? (
@@ -141,6 +138,6 @@ const RepositoryCreationComponent: React.FC<RepositoryCreationProps> = ({
       </div>
     </motion.section>
   );
-};
+}
 
 export default RepositoryCreationComponent;

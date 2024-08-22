@@ -1,6 +1,6 @@
 import { Flex } from "@/components/atoms/Flex";
 import { Button } from "@/components/ui/button";
-import { footerLinks } from "@/core/data/menu-items";
+import { footerLinks } from "@/core/data/landing-menu-items";
 import { siteConfig } from "@/core/data/site-config";
 import { getLatestDeploymentInfo } from "@/core/server/server-actions/latest-deployment";
 import { GitHubLogoIcon, LinkedInLogoIcon } from "@radix-ui/react-icons";

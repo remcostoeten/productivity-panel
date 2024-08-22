@@ -1,59 +1,132 @@
 "use client";
+import { Input, Textarea } from "@/components/ui";
+import { checkUsernameAvailability } from "@/core/server/server-actions/userActions";
+import { useEffect, useState } from "react";
 
-import { Button } from "@/components/ui";
-import { useRouter } from "next/navigation";
-import DangerZone from "./_components/DangerZone";
-import { UserProfile } from "./_components/UserProfile";
-import { useUserSettings } from "./_hooks/useUserSettings";
-import UserPreferences from "./UserPreferences";
+type UserResource = {
+  username: string;
+};
 
-export default function SettingsPage() {
-  const router = useRouter();
-  const {
-    user,
-    isLoaded,
-    isSignedIn,
-    formData,
-    settings,
-    handleInputChange,
-    handleToggle,
-    handleSave,
-    handleDeleteAccount,
-  } = useUserSettings();
+type UserProfileProps = {
+  user: UserResource;
+  formData: {
+    firstName: string;
+    lastName: string;
+    username: string;
+    bio: string;
+    dateOfBirth: string; // Added dateOfBirth to match the form
+  };
+  handleInputChange: (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => void;
+};
 
-  if (!isLoaded || !isSignedIn) {
-    return <div>Loading...</div>;
-  }
+export default function UserProfile({
+  user,
+  formData,
+  handleInputChange,
+}: UserProfileProps) {
+  const [usernameAvailable, setUsernameAvailable] = useState(true);
+
+  useEffect(() => {
+    const checkUsername = async () => {
+      if (formData.username && formData.username !== user.username) {
+        const available = await checkUsernameAvailability(formData.username);
+        setUsernameAvailable(available);
+      } else {
+        setUsernameAvailable(true);
+      }
+    };
+    checkUsername();
+  }, [formData.username, user.username]);
 
   return (
-    <div className="min-h-screen bg-[#0D1117] text-gray-300">
-      <header className="flex justify-between items-center p-4 border-b border-gray-800">
-        {/* Header content */}
-      </header>
-      <main className="max-w-3xl mx-auto mt-8 p-6">
-        <UserProfile
-          user={user}
-          formData={formData}
-          handleInputChange={handleInputChange}
-        />
-        <UserPreferences settings={settings} handleToggle={handleToggle} />
-        <div className="flex justify-start space-x-4 mt-8">
-          <Button
-            variant="outline"
-            className="bg-transparent text-gray-300 border-gray-600 hover:bg-gray-800"
-            onClick={() => router.push("/")}
+    <div className="space-y-4">
+      <h2 className="text-2xl font-bold">Profile Information</h2>
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label
+            htmlFor="firstName"
+            className="block text-sm font-medium text-gray-300"
           >
-            Cancel
-          </Button>
-          <Button
-            onClick={handleSave}
-            className="bg-orange-500 text-white hover:bg-orange-600"
-          >
-            Save
-          </Button>
+            First Name
+          </label>
+          <Input
+            id="firstName"
+            name="firstName"
+            value={formData.firstName}
+            onChange={handleInputChange}
+            className="mt-1"
+          />
         </div>
-        <DangerZone onDeleteAccount={handleDeleteAccount} />
-      </main>
+        <div>
+          <label
+            htmlFor="lastName"
+            className="block text-sm font-medium text-gray-300"
+          >
+            Last Name
+          </label>
+          <Input
+            id="lastName"
+            name="lastName"
+            value={formData.lastName}
+            onChange={handleInputChange}
+            className="mt-1"
+          />
+        </div>
+      </div>
+      <div>
+        <label
+          htmlFor="username"
+          className="block text-sm font-medium text-gray-300"
+        >
+          Username
+        </label>
+        <Input
+          id="username"
+          name="username"
+          value={formData.username}
+          onChange={handleInputChange}
+          className={`mt-1 ${!usernameAvailable ? "border-error" : ""}`}
+        />
+        {!usernameAvailable && (
+          <p className="text-error text-sm mt-1">
+            This username is already taken.
+          </p>
+        )}
+      </div>
+      <div>
+        <label
+          htmlFor="dateOfBirth"
+          className="block text-sm font-medium text-gray-300"
+        >
+          Date of Birth
+        </label>
+        <Input
+          id="dateOfBirth"
+          name="dateOfBirth"
+          type="date"
+          value={formData.dateOfBirth}
+          onChange={handleInputChange}
+          className="mt-1"
+        />
+      </div>
+      <div>
+        <label
+          htmlFor="bio"
+          className="block text-sm font-medium text-gray-300"
+        >
+          Bio
+        </label>
+        <Textarea
+          id="bio"
+          name="bio"
+          value={formData.bio}
+          onChange={handleInputChange}
+          className="mt-1"
+          rows={4}
+        />
+      </div>
     </div>
   );
 }

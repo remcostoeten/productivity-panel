@@ -1,5 +1,6 @@
 "use client";
 
+import { Tooltip, TooltipContent, TooltipTrigger } from "@c/ui";
 import { cn } from "@core/helpers/cn";
 import { ArrowLeftIcon, ArrowRightIcon } from "@radix-ui/react-icons";
 import { Slot } from "@radix-ui/react-slot";
@@ -23,11 +24,13 @@ const buttonVariants = cva(
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
         shimmer:
-          "h-12 animate-shimmer-btn items-center justify-center rounded-md border border-theme-primary/40   shimmer-btn   bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-slate-400 transition-colors  ",
+          "h-12 animate-shimmer-btn items-center justify-center rounded-md border border-primary/40   shimmer-btn   bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-slate-400 transition-colors  ",
         borderMagic:
           "relative inline-flex h-9 overflow-hidden rounded-full p-[1px]  ",
         borderMagicAlt:
           "relative inline-flex h-12 overflow-hidden rounded-full p-[1px] ",
+        iconTooltip:
+          "p-2 rounded-full hover:bg-accent hover:text-accent-foreground",
       },
       size: {
         default: "h-10 px-4 py-2",
@@ -51,6 +54,7 @@ export interface ButtonProps
   arrowPosition?: "left" | "right";
   href?: string;
   target?: string;
+  tooltipContent?: string;
 }
 
 const Button = forwardRef<
@@ -67,6 +71,7 @@ const Button = forwardRef<
       arrowPosition = "right",
       href,
       target,
+      tooltipContent,
       ...props
     },
     ref,
@@ -74,7 +79,7 @@ const Button = forwardRef<
     const Comp = asChild ? Slot : href ? "a" : "button";
     const isAnchor = href !== undefined;
 
-    return (
+    const ButtonContent = (
       <Comp
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref as React.Ref<HTMLAnchorElement | HTMLButtonElement>}
@@ -84,7 +89,7 @@ const Button = forwardRef<
       >
         {variant === "borderMagic" && (
           <>
-            <span className="  absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#fff_0%,#ffff_50%,#ffff00_100%)] opacity-50" />
+            <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#fff_0%,#ffff_50%,#ffff00_100%)] opacity-50" />
             <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 px-3 py-1 text-xs font-medium text-white backdrop-blur-3xl">
               {props.children}
             </span>
@@ -124,6 +129,17 @@ const Button = forwardRef<
           )}
       </Comp>
     );
+
+    if (variant === "iconTooltip" && tooltipContent) {
+      return (
+        <Tooltip delayyDuration={55}>
+          <TooltipTrigger asChild>{ButtonContent}</TooltipTrigger>
+          <TooltipContent side="right">{tooltipContent}</TooltipContent>
+        </Tooltip>
+      );
+    }
+
+    return ButtonContent;
   },
 );
 Button.displayName = "Button";

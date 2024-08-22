@@ -1,7 +1,11 @@
 import { UserResource } from "@clerk/types";
 import { ChangeEvent } from "react";
 
-export type UserProfileProps = {
+export default function UserProfileProps({
+  user,
+  formData,
+  handleInputChange,
+}: {
   user: UserResource;
   formData: {
     firstName: string;
@@ -12,7 +16,9 @@ export type UserProfileProps = {
   handleInputChange: (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => void;
-};
+}) {
+  return {};
+}
 
 export type UserPreferencesProps = {
   settings: {

@@ -30,7 +30,7 @@ const InputField: React.FC<
   const [isOpen, setIsOpen] = useState(false);
 
   const inputClass =
-    "w-full rounded-[6px] border-border !border-1 !border-red-400 px-2 py-[6px] text-sm text-white placeholder:text-white/30 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-theme-primary";
+    "w-full rounded-[6px] border-border !border-1 !border-red-400 px-2 py-[6px] text-sm text-white placeholder:text-white/30 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
 
   if (type === "textarea") {
     return (
@@ -210,7 +210,7 @@ export default function PopoutForm({
               <div className="flex justify-between">
                 <button
                   type="submit"
-                  className="text-neutral-200 bg-theme-primary py-1 font-medium px-2 rounded-lg"
+                  className="text-neutral-200 bg-primary py-1 font-medium px-2 rounded-lg"
                   onClick={handleSubmit}
                 >
                   Submit

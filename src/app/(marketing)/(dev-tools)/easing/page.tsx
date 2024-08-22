@@ -110,7 +110,7 @@ const CubicBezierShowcase = () => {
             </Flex>
             <div className="h-10 border-1 border-border border relative overflow-hidden">
               <div
-                className={`w-6 h-12 bg-theme-primary absolute `}
+                className={`w-6 h-12 bg-primary absolute `}
                 style={{
                   left: "0",
                   animation: isAnimating

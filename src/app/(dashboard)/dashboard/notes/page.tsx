@@ -3,7 +3,7 @@ import IntroFlow from "./IntroFlow";
 
 export default function NotesPage() {
   return (
-    <Center fullScreen className="-mt-marketing-header">
+    <Center className="h-screen">
       <IntroFlow />
     </Center>
   );

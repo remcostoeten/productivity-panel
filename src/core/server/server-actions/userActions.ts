@@ -114,30 +114,47 @@ export async function getUserProfile() {
   }
 }
 
-// Update the profile of the authenticated user
 export async function updateUserProfile(updateData: {
   firstName?: string;
   lastName?: string;
+  username?: string;
+  dateOfBirth?: string;
+  bio?: string;
   profileImageUrl?: string;
 }) {
   const { userId } = auth();
-
   if (!userId) {
     throw new Error("Not authenticated");
   }
-
   try {
+    const { dateOfBirth, ...otherData } = updateData;
     await db
       .update(users)
       .set({
-        ...updateData,
+        ...otherData,
+        dateOfBirth: dateOfBirth
+          ? new Date(dateOfBirth).getTime() / 1000
+          : undefined,
         updatedAt: sql`(strftime('%s', 'now'))`,
       })
       .where(eq(users.id, userId));
-
     return { success: true };
   } catch (error) {
     console.error("Error updating user profile:", error);
     throw new Error("Failed to update user profile");
+  }
+}
+
+export async function checkUsernameAvailability(username: string) {
+  try {
+    const existingUser = await db
+      .select({ id: users.id })
+      .from(users)
+      .where(eq(users.username, username))
+      .limit(1);
+    return existingUser.length === 0;
+  } catch (error) {
+    console.error("Error checking username availability:", error);
+    throw new Error("Failed to check username availability");
   }
 }

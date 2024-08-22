@@ -9,6 +9,7 @@ import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
 import { Inter as FontSans } from "next/font/google";
 import localFont from "next/font/local";
+import SiteHeader from "./(marketing)/_components/marketing-header";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -46,6 +47,7 @@ export default async function RootLayout({ children }: PageProps) {
             defaultTheme="dark"
             disableTransitionOnChange={true}
           >
+            <SiteHeader />
             {showPreloader ? (
               <PreLoader duration={3000}>{children}</PreLoader>
             ) : (

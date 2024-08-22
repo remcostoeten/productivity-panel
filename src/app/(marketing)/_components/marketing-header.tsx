@@ -1,10 +1,16 @@
 "use client";
 
+import { SettingsModal } from "@/components/auth/SettingsModal";
 import BrandLogo from "@/components/theme/BrandLogo";
-import { BorderMagicButtonAlt, Tooltip, TooltipTrigger } from "@/components/ui";
+import {
+  BorderMagicButtonAlt,
+  Button,
+  Tooltip,
+  TooltipTrigger,
+} from "@/components/ui";
 import { ModernKbd } from "@/components/ui/kbd";
 import UniqueBadge from "@/components/ui/UniqueBadge";
-import menuItems from "@/core/data/menu-items";
+import menuItems from "@/core/data/landing-menu-items";
 import {
   containerVariants,
   mobileLinkVar,
@@ -22,7 +28,6 @@ import { useCallback, useEffect, useState, useTransition } from "react";
 import DashNavigationMenu from "./dash-header-dropdown";
 import DesignSystemNavigationMenu from "./design-dropdown";
 
-// Custom hook for keyboard shortcuts
 const useKeyboardShortcut = () => {
   const router = useRouter();
   const { signOut, openSignIn } = useClerk();
@@ -62,12 +67,15 @@ const useKeyboardShortcut = () => {
 
 export default function SiteHeader() {
   const [isPending, startTransition] = useTransition();
-  const router = useRouter();
-
+  const [isModalOpen, setModalOpen] = useState(false);
   const [hamburgerMenuIsOpen, setHamburgerMenuIsOpen] = useState(false);
   const [notification, setNotification] = useState("");
 
-  let { handleLogin, handleLogout } = useKeyboardShortcut();
+  const pathname = usePathname();
+
+  if (pathname.includes("dash")) {
+    return null;
+  }
 
   const toggleHamburgerMenu = useCallback(() => {
     startTransition(() => {
@@ -94,34 +102,12 @@ export default function SiteHeader() {
     };
   }, [hamburgerMenuIsOpen, closeHamburgerNavigation]);
 
-  useEffect(() => {
-    const showNotification = (message) => {
-      setNotification(message);
-      setTimeout(() => setNotification(""), 3000);
-    };
-
-    const originalHandleLogin = handleLogin;
-    const originalHandleLogout = handleLogout;
-
-    handleLogin = () => {
-      originalHandleLogin();
-      showNotification("Logging in...");
-    };
-
-    handleLogout = () => {
-      originalHandleLogout();
-      showNotification("Logging out...");
-    };
-  }, [handleLogin, handleLogout]);
-
-  const pathname = usePathname();
+  const openModal = () => setModalOpen(true);
+  const closeModal = () => setModalOpen(false);
 
   return (
     <>
-      <header
-        className="px-8 sm:px
-      -0 animate-fade-in fixed left-0 top-0 z-50 w-full -translate-y-4 border-white/20 border-b opacity-0 backdrop-blur-md [--animation-delay:600ms]"
-      >
+      <header className="px-8 sm:px-0 animate-fade-in fixed left-0 top-0 z-50 w-full -translate-y-4 border-white/20 border-b opacity-0 backdrop-blur-md [--animation-delay:600ms]">
         <div className="px-2 lg:px-1 container flex h-14 items-center justify-between z-20">
           <Link
             className="space-x-4 text-md flex items-center transition-all duration-500 origin-top"
@@ -133,7 +119,7 @@ export default function SiteHeader() {
               textColor="text-white/40"
               className="animate-pulse"
               size="sm"
-            />{" "}
+            />
           </Link>
           <nav className="hidden md:flex justify-center items-center content-center w-full">
             {menuItems.map((item) => (
@@ -237,6 +223,10 @@ export default function SiteHeader() {
                 </Link>
               </motion.li>
             ))}
+            <Button onClick={openModal} className="bg-blue-500 text-white">
+              Open Settings
+            </Button>
+            <SettingsModal isOpen={isModalOpen} onClose={closeModal} />
             <SignedOut>
               <motion.li
                 variants={mobileLinkVar}

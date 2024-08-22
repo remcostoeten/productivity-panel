@@ -1,4 +1,15 @@
-d'use client'
+'use client'
+
+import { Flex } from "@/components/atoms/Flex";
+import Paragraph from "@/components/atoms/Paragraph";
+import { Note } from "@/core/server/db/schema";
+import { createNote, deleteNote, getNotes, updateNote } from "@/core/server/server-actions/note-actions";
+import { AnimatePresence, motion } from "framer-motion";
+import { FolderTree, Plus, Search } from "lucide-react";
+import { useFormStatus } from "react-dom";
+import toast from "react-hot-toast";
+import Onboarding from "./Onboarding";
+
 
 export const NotesApp: React.FC = () => {
   const [isOnboarding, setIsOnboarding] = React.useState(true);

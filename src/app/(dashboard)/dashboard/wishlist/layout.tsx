@@ -1,12 +1,10 @@
 import ToolIntro from "@/app/(marketing)/(dev-tools)/color-tool/_components/ColorToolPageIntro";
-import SiteHeader from "@/app/(marketing)/_components/marketing-header";
 import DotPattern from "@/components/effect/dots-pattern";
 import { cn } from "@/core/helpers/cn";
 
 export default function DashboardLayout({ children }: PageProps) {
   return (
     <>
-      <SiteHeader />
       <div className="relative flex min-h-screen  place-items-normal pt-8 rounded-lg  ">
         <div className="w-full max-w-4xl mx-auto text-foreground">
           <div className="flex flex-col justify-between my-10">
