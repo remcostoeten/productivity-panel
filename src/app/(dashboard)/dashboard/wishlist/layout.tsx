@@ -1,6 +1,6 @@
-import ToolIntro from "@/app/(marketing)/(dev-tools)/color-tool/_components/ColorToolPageIntro";
 import DotPattern from "@/components/effect/dots-pattern";
 import { cn } from "@/core/helpers/cn";
+import ToolIntro from "~/src/app/design-system/color-tool/_components/ColorToolPageIntro";
 
 export default function DashboardLayout({ children }: PageProps) {
   return (

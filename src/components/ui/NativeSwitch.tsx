@@ -58,7 +58,9 @@ export default function NativeSwitch({
         disabled={isPending}
         {...props}
       />
-      <label htmlFor="switch">Toggle</label>
+      <label className="border-input border border-1" htmlFor="switch">
+        Toggle
+      </label>
     </div>
   );
 }

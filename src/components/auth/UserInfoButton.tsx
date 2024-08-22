@@ -11,6 +11,7 @@ import {
 import { getUserProfile } from "@/core/server/server-actions/userActions";
 import { UserIcon } from "lucide-react";
 import { useState } from "react";
+import type { UserProfile } from "~/src/core/types/user-profile.types";
 
 export default function UserInfoButton() {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,6 +20,10 @@ export default function UserInfoButton() {
   const fetchUserProfile = async () => {
     try {
       const profile = await getUserProfile();
+      if (!profile) {
+        console.error("User profile not found");
+        return;
+      }
       setUserProfile(profile);
     } catch (error) {
       console.error("Failed to fetch user profile:", error);
@@ -33,10 +38,10 @@ export default function UserInfoButton() {
   return (
     <>
       <Button
-        className="fixed bottom-4 right-4 rounded-full p-3"
+        className="fixed bottom-4 size-[40px] bg-input right-4  border border-orange-700/20 rounded-full hover:bg-muted/70 p-3"
         onClick={handleOpenModal}
       >
-        <UserIcon className="h-6 w-6" />
+        <UserIcon className="h-6 w-6 text-white" />
       </Button>
 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>

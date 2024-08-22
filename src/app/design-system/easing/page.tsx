@@ -41,13 +41,13 @@ const durations = [
 
 const CubicBezierShowcase = () => {
   const [isAnimating, setIsAnimating] = useState(false);
-  const [selectedDuration, setSelectedDuration] = useState(1000);
+  const [selectedDuration, setSelectedDuration] = useState(1500);
   const [copiedClass, setCopiedClass] = useState(null);
   const [count, setCount] = useState(0);
 
   const toggleAnimation = () => {
-    setIsAnimating(true); // {{ edit_1 }}
-    repeatAnimation(); // Start the animation
+    setIsAnimating(true);
+    repeatAnimation();
   };
 
   const copyToClipboard = (name) => {
@@ -60,12 +60,12 @@ const CubicBezierShowcase = () => {
 
   function repeatAnimation() {
     const interval = setInterval(() => {
-      setCount((prevCount) => prevCount + 1); // {{ edit_2 }}
+      setCount((prevCount) => prevCount + 1);
     }, selectedDuration);
   }
 
   function renderCount() {
-    return <div>{count}</div>; // {{ edit_3 }}
+    return <div>{count}</div>;
   }
 
   return (
@@ -76,7 +76,7 @@ const CubicBezierShowcase = () => {
         </Button>
         <Select onValueChange={(value) => setSelectedDuration(Number(value))}>
           <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Select duration" />
+            <SelectValue placeholder={selectedDuration} />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
@@ -110,7 +110,7 @@ const CubicBezierShowcase = () => {
             </Flex>
             <div className="h-10 border-1 border-border border relative overflow-hidden">
               <div
-                className={`w-6 h-12 bg-primary absolute `}
+                className={`w-6 h-12 bg-primary--darker absolute `}
                 style={{
                   left: "0",
                   animation: isAnimating

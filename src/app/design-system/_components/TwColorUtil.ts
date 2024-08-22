@@ -1,4 +1,4 @@
-import config from "@/../tailwind.config";
+import config from "~/tailwind.config";
 
 export function GetCustomColors() {
   const colors = config.theme?.extend?.colors || {};

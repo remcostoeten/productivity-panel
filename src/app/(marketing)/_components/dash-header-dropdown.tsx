@@ -7,19 +7,27 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui";
-import { dashboardMenuItems } from "@/core/data/landing-menu-items";
 import { menuAnimationVariants } from "@/core/helpers/animations/menu-animations";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import React from "react";
 
-type DashNavigationMenuProps = {
+type MenuItem = {
+  href: string;
+  label: string;
+};
+
+type ReusableDropdownMenuProps = {
+  label: string;
+  menuItems: MenuItem[];
   animationVariant?: keyof typeof menuAnimationVariants;
 };
 
-export default function DashNavigationMenu({
+export default function ReusableDropdownMenu({
+  label,
+  menuItems,
   animationVariant = "elegant",
-}: DashNavigationMenuProps) {
+}: ReusableDropdownMenuProps) {
   const [isOpen, setIsOpen] = React.useState(false);
 
   const currentVariant = menuAnimationVariants[animationVariant];
@@ -31,7 +39,7 @@ export default function DashNavigationMenu({
           variant="ghost"
           className="h-8 w-auto px-3 text-text hover:text-text-accent hover:bg-section-hover transition-all duration-300 ease-in-out"
         >
-          dash
+          {label}
           <motion.span
             animate={{ rotate: isOpen ? 180 : 0 }}
             transition={{ duration: 0.3, ease: [0.6, 0.05, -0.01, 0.9] }}
@@ -53,7 +61,7 @@ export default function DashNavigationMenu({
               animate="visible"
               exit="exit"
             >
-              {dashboardMenuItems.map((item, index) => (
+              {menuItems.map((item, index) => (
                 <DropdownMenuItem key={item.href} asChild>
                   <motion.a
                     href={item.href}

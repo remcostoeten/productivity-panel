@@ -10,7 +10,7 @@ import {
 } from "@/components/ui";
 import { ModernKbd } from "@/components/ui/kbd";
 import UniqueBadge from "@/components/ui/UniqueBadge";
-import menuItems from "@/core/data/landing-menu-items";
+import menuItems, { dashboardMenuItems } from "@/core/data/landing-menu-items";
 import {
   containerVariants,
   mobileLinkVar,
@@ -25,8 +25,9 @@ import { AlignJustify, XIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState, useTransition } from "react";
-import DashNavigationMenu from "./dash-header-dropdown";
 import DesignSystemNavigationMenu from "./design-dropdown";
+import { designSystemMenuItems } from "~/src/core/data/header-menu-items";
+import ReusableDropdownMenu from "./dash-header-dropdown";
 
 const useKeyboardShortcut = () => {
   const router = useRouter();
@@ -138,7 +139,16 @@ export default function SiteHeader() {
             ))}
             <DesignSystemNavigationMenu />
             <SignedIn>
-              <DashNavigationMenu animationVariant="dropdownMenu" />
+              <ReusableDropdownMenu
+                label="Dashboard"
+                menuItems={dashboardMenuItems}
+                animationVariant="dropdownMenu"
+              />
+              <ReusableDropdownMenu
+                label="Design System"
+                menuItems={designSystemMenuItems}
+                animationVariant="dropdownMenu"
+              />
             </SignedIn>
           </nav>
 

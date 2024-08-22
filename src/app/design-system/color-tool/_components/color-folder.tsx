@@ -13,6 +13,7 @@ import {
 } from "@/components/ui";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import { CopyIcon, EditIcon, MoveIcon, TrashIcon } from "lucide-react";
+import React from "react";
 import { ColorFolderProps } from "../types.color-tool";
 
 export default function ColorFolder({

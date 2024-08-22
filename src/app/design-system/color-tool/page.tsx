@@ -1,21 +1,17 @@
-/* eslint-disable @next/next/no-img-element */
-/* eslint-disable react/jsx-no-comment-textnodes */
 "use client";
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui";
 import CodeHighlight from "@/components/ui/CodeHighlight/CodeHighlight";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@c/ui";
 import { Suspense, useEffect, useRef, useState } from "react";
+import { DesignSystemWrapper } from "../_components/DesignSystemWrapper";
 import { useColorPicker } from "./ _hooks/use-color-picker";
 import useFileUpload from "./ _hooks/use-file-upload";
 import AddFolderDialog from "./_components/AddFolderDialog";
 import ButtonBar from "./_components/ButtonBar";
 import ColorFolder from "./_components/color-folder";
-import ColorToolIntro from "./_components/ColorToolPageIntro";
 import FileUploadUi from "./_components/FileUploadUi";
 import MoveColorDialog from "./_components/MoveColorDialog";
 import { ColorItem, Folder } from "./types.color-tool";
-import ToolIntro from "./_components/ColorToolPageIntro";
-
 export default function ColorToolPage() {
   const [folders, setFolders] = useState<Folder[]>([]);
   const [activeFolder, setActiveFolder] = useState<string>("");
@@ -224,29 +220,25 @@ export default function ColorToolPage() {
     setGeneratedCode(`${rootCode}\n`);
     setTailwindCode(`${tailwindConfigCode}`);
   };
-
   return (
-    <div className="w-full max-w-4xl mx-auto  bg-background text-foreground">
-      <div className="flex flex-col -center justify-between mb-6">
-        <ToolIntro
-          title="Color Picker"
-          description="The Color Picker feature streamlines color management with an intuitive
+    <div>
+      <DesignSystemWrapper
+        title="Color Picker"
+        description="The Color Picker feature streamlines color management with an intuitive
       interface for uploading images, picking colors, and generating CSS
       variables. Users can organize colors into folders, manipulate them, and
       get code snippets for easy integration. All data is saved locally for
       easy access."
-        />{" "}
-        <ButtonBar
-          pickingColor={pickingColor}
-          setPickingColor={setPickingColor}
-          handleClearLocalStorage={handleClearLocalStorage}
-          setIsAddFolderDialogOpen={setIsAddFolderDialogOpen}
-          generateCode={generateCode}
-          useCssVariables={useCssVariables}
-          setUseCssVariables={setUseCssVariables}
-        />
-      </div>
-
+      />
+      <ButtonBar
+        pickingColor={pickingColor}
+        setPickingColor={setPickingColor}
+        handleClearLocalStorage={handleClearLocalStorage}
+        setIsAddFolderDialogOpen={setIsAddFolderDialogOpen}
+        generateCode={generateCode}
+        useCssVariables={useCssVariables}
+        setUseCssVariables={setUseCssVariables}
+      />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-card p-4 rounded-lg shadow-md">
           <h2 className="text-lg font-bold mb-4">Upload Image</h2>

@@ -18,7 +18,9 @@
     "f": "prettier --write \"**/*.{ts,tsx,mdx}\" --cache",
     "rebuild": "bun clean && bun install && bun run f && bun run build",
     "shad": "bunx --bun shadcn-ui@latest add",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "update-imports": "python src/core/scripts/cleanup-ui-imports.py",
+    "update-imports-file": "python src/core/scripts/cleanup-ui-imports.py --i path/to/file.tsx"
   },
   "dependencies": {
     "@clerk/elements": "^0.13.0",
@@ -50,6 +52,7 @@
     "clsx": "^2.1.1",
     "cmdk": "1.0.0",
     "drizzle-orm": "^0.33.0",
+    "emblor": "^1.4.4",
     "framer-motion": "^11.3.22",
     "iron-session": "^8.0.2",
     "lucide-react": "^0.424.0",
