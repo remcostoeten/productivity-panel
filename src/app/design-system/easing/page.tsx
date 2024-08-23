@@ -12,7 +12,7 @@ import {
 } from "@/components/ui";
 import { Copy } from "lucide-react";
 import { useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import {
   BezierShowcaseDuration,
   ShowcaseCubicBeziers,
@@ -50,7 +50,6 @@ const CubicBezierShowcase = () => {
 
   return (
     <div className="p-4 container">
-      <Toaster />
       <div className="flex justify-between items-center mb-4">
         <Button onClick={toggleAnimation}>
           {isAnimating ? "Stop Animation" : "Start Animation"}
