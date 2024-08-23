@@ -6,6 +6,8 @@ export type OnboardingProps = {
 
 export type FolderTreeProps = {
   onSelectFolder: (folderId: string) => void;
+  folders: string[];
+  level: number;
 };
 
 export type FolderNodeProps = {

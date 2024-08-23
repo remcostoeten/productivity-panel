@@ -1,9 +1,10 @@
-import SiteHeader from "@/app/(marketing)/_components/marketing-header";
 import DotPattern from "@/components/effect/dots-pattern";
+import Aside from "@/components/theme/layout/Aside";
+import Sidebar from "@/components/theme/layout/Sidebar";
 import { cn } from "@/core/helpers/cn";
 import { Toaster } from "react-hot-toast";
 
-export default function DashboardLayout({ children }: PageProps) {
+export default function RootLayout({ children }: { children: PageProps }) {
   return (
     <>
       <Toaster
@@ -28,16 +29,16 @@ export default function DashboardLayout({ children }: PageProps) {
           },
         }}
       />
-      <SiteHeader />
-      <div className="relative flex min-h-screen grid place-items-normal pt-8 rounded-lg">
-        <div className="w-full max-w-4xl mx-auto p-6 text-foreground"></div>
+      <div className="flex h-screen bg-[#0D0D0C] text-white relative">
+        <Sidebar />
+        <Aside />
+        <main className="flex-1 overflow-auto">{children}</main>
         <DotPattern
           color="rgba(255,255,255,.2"
           className={cn(
             "[mask-image:radial-gradient(300px_circle_at_center,white,transparent)]",
           )}
         />
-        {children}
       </div>
     </>
   );

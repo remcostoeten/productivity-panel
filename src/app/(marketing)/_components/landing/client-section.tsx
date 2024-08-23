@@ -17,7 +17,7 @@ export default function ClientSection() {
                 <Image
                   alt="Google"
                   src="https://cdn.nyxbui.design/companies/Google.svg"
-                  className="h-8 w-28 px-2 dark:brightness-0 dark:invert"
+                  className="h-8 w-28 px-2"
                   width={28}
                   height={8}
                 />
@@ -26,7 +26,7 @@ export default function ClientSection() {
                 <Image
                   alt="Microsoft"
                   src="https://cdn.nyxbui.design/companies/Microsoft.svg"
-                  className="h-8 w-28 px-2 dark:brightness-0 dark:invert"
+                  className="h-8 w-28 px-2"
                   width={28}
                   height={8}
                 />
@@ -35,7 +35,7 @@ export default function ClientSection() {
                 <Image
                   alt="GitHub"
                   src="https://cdn.nyxbui.design/companies/GitHub.svg"
-                  className="h-8 w-28 px-2 dark:brightness-0 dark:invert"
+                  className="h-8 w-28 px-2"
                   width={28}
                   height={8}
                 />
@@ -45,7 +45,7 @@ export default function ClientSection() {
                 <Image
                   alt="Uber"
                   src="https://cdn.nyxbui.design/companies/Uber.svg"
-                  className="h-8 w-28 px-2 dark:brightness-0 dark:invert"
+                  className="h-8 w-28 px-2"
                   width={28}
                   height={8}
                 />
@@ -54,7 +54,7 @@ export default function ClientSection() {
                 <Image
                   alt="Notion"
                   src="https://cdn.nyxbui.design/companies/Notion.svg"
-                  className="h-8 w-28 px-2 dark:brightness-0 dark:invert"
+                  className="h-8 w-28 px-2"
                   width={28}
                   height={8}
                 />

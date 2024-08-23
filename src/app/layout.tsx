@@ -1,6 +1,9 @@
+import SiteVisitStats from "@/components/auth/SiteVisitStats";
+import UserInfoButton from "@/components/auth/UserInfoButton";
 import PreLoader from "@/components/effect/LogoFlicker";
 import { cn } from "@/core/helpers/cn";
 import Providers from "@/core/lib/providers";
+import { getUserPreloaderPreference } from "@/core/server/server-actions/get-user-preloader-preference.ts";
 import "@styles/app.scss";
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
@@ -27,13 +30,15 @@ const geistMono = localFont({
   variable: "--font-geist-mono",
 });
 
-export default function RootLayout({ children }: PageProps) {
+export default async function RootLayout({ children }: PageProps) {
+  const showPreloader = await getUserPreloaderPreference();
+
   return (
     <Providers>
       <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
         <body
           className={cn(
-            "bg-body-gradient min-h-screen font-sans transition-colors duration-500 antialiased",
+            " min-h-screen font-sans transition-colors duration-500 antialiased",
             fontSans.variable,
           )}
         >
@@ -43,9 +48,14 @@ export default function RootLayout({ children }: PageProps) {
             disableTransitionOnChange={true}
           >
             <SiteHeader />
-            <PreLoader duration={3000}>
-              <main className="mt-marketing-header">{children}</main>
-            </PreLoader>
+            {showPreloader ? (
+              <PreLoader duration={3000}>{children}</PreLoader>
+            ) : (
+              children
+            )}
+            <UserInfoButton />
+
+            <SiteVisitStats />
           </ThemeProvider>
         </body>
       </html>

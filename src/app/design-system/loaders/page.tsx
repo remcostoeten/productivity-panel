@@ -7,7 +7,9 @@ import { baseVariants, inputVariants } from "../design-system.types";
 
 function LoadingDotShowcase() {
   // Randomize the order of base variants
-  const shuffledBaseVariants = baseVariants.sort(() => Math.random() - 0.5);
+  const shuffledBaseVariants = [...baseVariants].sort(
+    () => Math.random() - 0.5,
+  );
 
   // Combine shuffled base variants with input variants
   const variants = [
@@ -30,21 +32,18 @@ function LoadingDotShowcase() {
   disabled
 />
 
-<style jsx>{
-  \`
-    @keyframes ellipsis {
-      0% { content: ''; }
-      25% { content: '.'; }
-      50% { content: '..'; }
-      75% { content: '...'; }
-      100% { content: ''; }
-    }
-    .placeholder-animated::placeholder {
-      animation: ellipsis 2s infinite steps(4, end);
-    }
-  \`
-}
-</style>
+<style jsx>{\`
+  @keyframes ellipsis {
+    0% { content: ''; }
+    25% { content: '.'; }
+    50% { content: '..'; }
+    75% { content: '...'; }
+    100% { content: ''; }
+  }
+  .placeholder-animated::placeholder {
+    animation: ellipsis 2s infinite steps(4, end);
+  }
+\`}</style>
 `;
     }
     const propsString = Object.entries(props)
@@ -72,8 +71,8 @@ function LoadingDotShowcase() {
       title="Loading Dot Component Showcase"
       description="A comprehensive display of LoadingDot variants, sizes, colors, speeds, and easing functions, including input field examples and animated placeholder."
     >
-      <div className="bg-body-gradient p-2 gap-2 flex">
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+      <div className="bg-body-gradient p-2 gap-2 flex w-full">
+        <div className="grid grid-cols-4 gap-6 w-full">
           {variants.map((variant) => (
             <div
               key={variant.name}
@@ -137,6 +136,7 @@ function LoadingDotShowcase() {
                 disableMinWidth={true}
                 allowCollapse={true}
                 defaultCollapsed={true}
+                showModal={true}
               >
                 {renderSyntax(
                   variant.props,

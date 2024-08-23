@@ -4,8 +4,10 @@ import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 export const users = sqliteTable("users", {
   id: text("id").primaryKey(),
   email: text("email").notNull().unique(),
+  username: text("username").unique(),
   firstName: text("first_name"),
   lastName: text("last_name"),
+  dateOfBirth: integer("date_of_birth"),
   isAdmin: integer("is_admin", { mode: "boolean" }).notNull().default(false),
   lastSignIn: integer("last_sign_in"),
   signInCount: integer("sign_in_count").notNull().default(0),
@@ -13,6 +15,9 @@ export const users = sqliteTable("users", {
   emailVerified: integer("email_verified", { mode: "boolean" })
     .notNull()
     .default(false),
+  showPreloader: integer("show_preloader", { mode: "boolean" })
+    .notNull()
+    .default(true),
   createdAt: integer("created_at")
     .notNull()
     .default(sql`(strftime('%s', 'now'))`),

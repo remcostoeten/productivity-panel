@@ -1,27 +1,27 @@
+import { getUniqueVisitorCount } from "@/core/server/server-actions/site-visits";
 
-import { sessionOptions, VisitorSession } from "@/core/lib/iron-session-config";
-import { db } from "@/core/server/db";
-import { siteVisits } from "@/core/server/db/schema";
-import { sql } from "drizzle-orm";
-import { getIronSession } from "iron-session";
-import { cookies } from "next/headers";
-import { NextRequest, NextResponse } from "next/server";
-
-export async function GET(request: NextRequest) {
-  const session = await getIronSession<VisitorSession>(
-    cookies(),
-    sessionOptions,
-  );
-
-  if (!session.hasVisited) {
-    await db.insert(siteVisits).values({
-      id: crypto.randomUUID(),
-      timestamp: sql`(strftime('%s', 'now'))`,
+export default async function handler(req: Request) {
+  if (req.method === "GET") {
+    try {
+      const count = await getUniqueVisitorCount(); // Call your server action
+      return new Response(JSON.stringify({ uniqueVisitors: count }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      });
+    } catch (error) {
+      console.error("Error fetching unique visitor count:", error);
+      return new Response(
+        JSON.stringify({ error: "Failed to fetch unique visitor count" }),
+        {
+          status: 500,
+          headers: { "Content-Type": "application/json" },
+        },
+      );
+    }
+  } else {
+    return new Response(null, {
+      status: 405,
+      headers: { Allow: "GET" },
     });
-
-    session.hasVisited = true;
-    await session.save();
   }
-
-  return NextResponse.json({ message: "Visit recorded" });
 }

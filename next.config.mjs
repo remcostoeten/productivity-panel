@@ -17,6 +17,9 @@ const nextConfig = {
       compilationMode: 'annotation',
     },
   },
+  images: {
+    domains: ['img.clerk.com', 'cdn.builder.io'],
+  },
 }
 
 export default nextConfig

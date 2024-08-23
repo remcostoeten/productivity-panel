@@ -6,7 +6,6 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { DesignSystemWrapper } from "../_components/DesignSystemWrapper";
 
-// Revised Emblor component
 const Emblor = ({
   initialTags = [],
   variant = "default",

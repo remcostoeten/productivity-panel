@@ -1,5 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
-/* eslint-disable react/jsx-no-comment-textnodes */
 "use client";
 
 import CodeHighlight from "@/components/ui/CodeHighlight/CodeHighlight";
@@ -14,7 +12,6 @@ import ColorFolder from "./_components/color-folder";
 import FileUploadUi from "./_components/FileUploadUi";
 import MoveColorDialog from "./_components/MoveColorDialog";
 import { ColorItem, Folder } from "./types.color-tool";
-
 export default function ColorToolPage() {
   const [folders, setFolders] = useState<Folder[]>([]);
   const [activeFolder, setActiveFolder] = useState<string>("");

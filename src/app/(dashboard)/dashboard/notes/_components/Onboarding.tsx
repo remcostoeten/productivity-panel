@@ -1,53 +1,52 @@
-'use client'
+"use client";
 
-import { Flex } from '@/components/atoms/Flex'
-import Paragraph from '@/components/atoms/Paragraph'
-import { createFolder } from '@/core/server/server-actions/folder-actions'
-import { motion } from 'framer-motion'
-import React from 'react'
-import { OnboardingProps } from '../../types.notes'
-import toast from 'react-hot-toast'
+import { Flex } from "@/components/atoms/Flex";
+import Paragraph from "@/components/atoms/Paragraph";
+import { createFolder } from "@/core/server/server-actions/folder-actions";
+import { motion } from "framer-motion";
+import toast from "react-hot-toast";
+import { OnboardingProps } from "../../types.notes";
 
 export default function Onboarding({ onComplete }: OnboardingProps) {
-  const [step, setStep] = useState(0)
+  const [step, setStep] = useState(0);
 
   const handleCreateFolder = async (name: string) => {
     try {
-      await createFolder(name)
-      toast.success('Folder created successfully')
-      onComplete()
+      await createFolder(name);
+      toast.success("Folder created successfully");
+      onComplete();
     } catch (error) {
-      toast.error('Failed to create folder')
+      toast.error("Failed to create folder");
     }
-  }
+  };
 
   const steps = [
     {
       title: "Let's create your first folder",
-      description: 'Start blank or choose one of our templates',
+      description: "Start blank or choose one of our templates",
       options: [
-        { name: 'Blank', action: () => handleCreateFolder('My First Folder') },
-        { name: 'Work', action: () => handleCreateFolder('Work') },
-        { name: 'Personal', action: () => handleCreateFolder('Personal') },
+        { name: "Blank", action: () => handleCreateFolder("My First Folder") },
+        { name: "Work", action: () => handleCreateFolder("Work") },
+        { name: "Personal", action: () => handleCreateFolder("Personal") },
       ],
     },
     {
-      title: 'Templates',
+      title: "Templates",
       options: [
-        { name: 'Blog', action: () => handleCreateFolder('Blog') },
+        { name: "Blog", action: () => handleCreateFolder("Blog") },
         {
-          name: 'Website',
-          action: () => handleCreateFolder('Website'),
+          name: "Website",
+          action: () => handleCreateFolder("Website"),
           disabled: true,
         },
         {
-          name: 'E-Commerce',
-          action: () => handleCreateFolder('E-Commerce'),
+          name: "E-Commerce",
+          action: () => handleCreateFolder("E-Commerce"),
           disabled: true,
         },
       ],
     },
-  ]
+  ];
 
   return (
     <Flex
@@ -65,7 +64,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
           key={index}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className={`w-full p-3 mb-2 rounded-lg text-left ${option.disabled ? 'bg-gray-800 text-gray-500' : 'bg-[#1E1E1E] hover:bg-[#2A2A2A]'}`}
+          className={`w-full p-3 mb-2 rounded-lg text-left ${option.disabled ? "bg-gray-800 text-gray-500" : "bg-[#1E1E1E] hover:bg-[#2A2A2A]"}`}
           onClick={option.action}
           disabled={option.disabled}
         >
@@ -87,5 +86,5 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
         </button>
       )}
     </Flex>
-  )
+  );
 }

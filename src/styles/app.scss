@@ -10,13 +10,12 @@
 @import "./components/_native-switch";
 @import "./components/_vercel-card";
 @import "./components/_radar-loader";
-
 /* Utillities */
 @import "./utils/_utillity-classes";
 @import "./utils/_animations";
 
 .cl-formButtonPrimary {
-  @apply inline-flex h-9 items-center justify-center whitespace-nowrap rounded-md bg-primary px-3  font-medium text-primary-foreground !shadow-none ring-offset-background transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
+  @apply inline-flex h-9 items-center justify-center whitespace-nowrap rounded-md bg-primary px-3 font-medium text-primary !shadow-none ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
 }
 
 .cl-card,
@@ -242,11 +241,11 @@ h1[data-localization-key="userProfile.navbar.title"] {
 }
 
 [data-theme="dark"] {
-  --fill-color: var(--theme-primary);
+  --fill-color: var(--primary);
 }
 
 [data-theme="light"] {
-  --fill-color: var(--theme-primary);
+  --fill-color: var(--primary);
 }
 
 @layer base {

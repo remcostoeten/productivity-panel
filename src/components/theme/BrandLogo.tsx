@@ -12,8 +12,8 @@ const ANIMATE_LOGO = true;
 const ICON_ANIMATION_DURATION = 1;
 const ICON_ANIMATION_DELAY = 0.5;
 const PATH_DELAY_DIFFERENCE = 0.2;
-const LEFT_FILL = "var(--theme-primary--darker)";
-const RIGHT_FILL = "var(--theme-primary)";
+const LEFT_FILL = "var(--primary--darker)";
+const RIGHT_FILL = "var(--primary)";
 const EASING: BezierCurve = BEZIER_CURVES.JUMP;
 
 type LogoProps = {

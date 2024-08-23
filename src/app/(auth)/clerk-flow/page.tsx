@@ -1,3 +1,5 @@
+import { Flex } from "@/components/atoms/Flex";
+import Paragraph from "@/components/atoms/Paragraph";
 import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
 import { CodeSwitcher } from "./_components/code-switcher";
 import { UserDetails } from "./_components/user-details";
@@ -5,7 +7,11 @@ import { UserDetails } from "./_components/user-details";
 export default async function DashboardPage() {
   return (
     <>
-      <UserButton />
+      <Flex dir="col" gap={2}>
+        <Paragraph>USer button</Paragraph>
+        <UserButton />
+      </Flex>
+
       <main className="max-w-[75rem] w-full mx-auto">
         <div className="grid grid-cols-[1fr_20.5rem] gap-10 pb-10">
           <div>

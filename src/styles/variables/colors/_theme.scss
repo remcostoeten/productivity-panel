@@ -1,11 +1,29 @@
 $theme-colors: (
-  "theme-primary": #ff6a00a2,
-  "theme-primary--darker": #ff5b00,
+  "primary": #ff6c00,
+  "brand": #ff6c00,
+  "primary--alt": #ff6c00,
+  "primary--darker": #ff5b00,
   "color-one": rgba(255, 106, 0, 0.8),
   "color-two": #fe8bbb,
   "color-three": #9e7aff,
   "error": #ff4949,
+  "success": #2cffd1,
+
+  // dark theme colors
+  "dark-bg": #040404,
+  // footer
+  "dark-section": #0c0c0c,
+  // cards, alt-sections
+  "dark-section--lighter": #131313,
+
+  // bg-card-alt, bg-section-alt
+  // bg for card for example
   "body-gradient": linear-gradient(256.59deg, #000 23.98%, #171616 100.35%),
+  // Border color
+  "seperator": #131313,
+
+  // text-colors
+  "muted": #909090,
 );
 
 @mixin apply-theme-colors {

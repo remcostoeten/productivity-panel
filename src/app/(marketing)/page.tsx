@@ -1,10 +1,35 @@
 import Particles from "@/components/ui/particles";
-import { SphereMask } from "@/components/ui/sphere-mask";
 import ClientSection from "./_components/landing/client-section";
-import CallToActionSection from "./_components/landing/cta-section";
 import HeroSection from "./_components/landing/hero-section";
+import { SphereMask } from "@/components/ui";
+import CallToActionSection from "./_components/landing/cta-section";
 
-export default async function Page() {
+const containerVariants = {
+  hidden: { opacity: 0, scale: 0.8 },
+  visible: {
+    opacity: 1,
+
+    scale: 1,
+    transition: {
+      staggerChildren: 1.3,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { scale: 0.8, opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: {
+      delay: 2,
+      duration: 0.5,
+    },
+  },
+};
+
+export default function Page() {
   return (
     <>
       <HeroSection />

@@ -69,7 +69,7 @@ To update the entire `src/app` and `src/components` directories, run the script 
 python cleanup-ui-imports.py
 ```
 
-This looks Recursively in the `src/app` and `src/components` directories for `.tsx` files and updates the imports of all files with a `.tsx` extension. It auto excludes `/ui` folder in `src/components` and `src/app` directories. 
+This looks Recursively in the `src/app` and `src/components` directories for `.tsx` files and updates the imports of all files with a `.tsx` extension. It auto excludes `/ui` folder in `src/components` and `src/app` directories.
 
 To update a specific file, pass the file path as an argument:
 
@@ -78,6 +78,3 @@ python cleanup-ui-imports.py src/components/MyComponent.tsx
 ```
 
 This updates the imports in the specified file only.
-
-
-

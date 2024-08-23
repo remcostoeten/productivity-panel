@@ -1,9 +1,14 @@
 "use client";
 
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import React, { useEffect, useState } from "react";
 import CodeContent from "./CodeContent";
 import FileHeader from "./FileHeader";
-import { CodeHighlightProps } from "./types.code-highlight";
 
 interface CodeHighlightProps {
   title?: string;
@@ -12,6 +17,7 @@ interface CodeHighlightProps {
   disableMinWidth?: boolean;
   defaultCollapsed?: boolean;
   allowCollapse?: boolean;
+  showModal?: boolean;
 }
 
 export default function CodeHighlight({
@@ -21,6 +27,7 @@ export default function CodeHighlight({
   disableMinWidth = false,
   defaultCollapsed = false,
   allowCollapse = false,
+  showModal = false,
 }: CodeHighlightProps) {
   const [codeString, setCodeString] = useState("");
   const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
@@ -42,19 +49,33 @@ export default function CodeHighlight({
 
   return (
     <section
-      className={`flex flex-col text-xs rounded-md border border-solid bg-blend-normal border-zinc-800 ${disableMinWidth ? "" : "max-w-[813px]"}`}
+      className={`relative flex flex-col text-xs rounded-md border border-solid bg-blend-normal border-zinc-800 ${
+        disableMinWidth ? "" : "max-w-[813px]"
+      }`}
     >
-      <FileHeader title={title} onCopy={copyToClipboard} />
-      {allowCollapse && (
-        <button
-          onClick={() => setIsCollapsed(!isCollapsed)} // Toggle collapse
-          className="text-blue-400 hover:text-blue-300 p-2"
-        >
-          {isCollapsed ? "Show Code" : "Hide Code"}
-        </button>
-      )}
+      <FileHeader
+        title={title}
+        onCopy={copyToClipboard}
+        disableMinWidth={disableMinWidth}
+        allowCollapse={allowCollapse}
+        isCollapsed={isCollapsed}
+        onToggleCollapse={() => setIsCollapsed(!isCollapsed)}
+        showModal={showModal}
+      />
       {!isCollapsed && (
-        <CodeContent language={language}>{codeString}</CodeContent>
+        <div className="w-full overflow-x-auto">
+          <CodeContent language={language}>{codeString}</CodeContent>
+        </div>
+      )}
+      {showModal && (
+        <Dialog>
+          <DialogContent className="max-w-3xl max-h-[80vh] overflow-auto">
+            <DialogHeader>
+              <DialogTitle>{title}</DialogTitle>
+            </DialogHeader>
+            <CodeContent language={language}>{codeString}</CodeContent>
+          </DialogContent>
+        </Dialog>
       )}
     </section>
   );

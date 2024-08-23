@@ -1,5 +1,5 @@
 "use client";
-import Link from "next/link";
+import { Link } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function NotFound() {

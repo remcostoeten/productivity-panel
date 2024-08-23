@@ -1,16 +1,33 @@
 "use client";
 
-import { Folder } from "@/core/server/db/schema/notes";
 import { Flex } from "@c/atoms/Flex";
 import Paragraph from "@c/atoms/Paragraph";
 import { getFolders } from "@server/server-actions/folder-actions";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown, ChevronRight, FolderIcon } from "lucide-react";
-import React, { useEffect, useState } from "react";
-import { FolderTreeProps } from "../types.notes";
+import { useEffect, useState } from "react";
 
-function FolderNode({ folder, level, onSelectFolder }) {
-  const [isOpen, setIsOpen] = useState(false);
+interface Folder {
+  id: string;
+  name: string;
+  userId: string;
+  parentId: string | null;
+  createdAt: number;
+  updatedAt: number;
+}
+
+interface FolderNodeProps {
+  folder: Folder;
+  level: number;
+  onSelectFolder: (folderId: string) => void;
+}
+
+interface FolderTreeProps {
+  onSelectFolder: (folderId: string) => void;
+}
+
+function FolderNode({ folder, level, onSelectFolder }: FolderNodeProps) {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [subFolders, setSubFolders] = useState<Folder[]>([]);
 
   useEffect(() => {
@@ -32,8 +49,7 @@ function FolderNode({ folder, level, onSelectFolder }) {
       <Flex
         as="div"
         items="center"
-        className="cursor-pointer hover:bg-[#2A2A2A] p-1 rounded"
-        css={{ paddingLeft: `${level * 16}px` }}
+        className={`cursor-pointer hover:bg-[#2A2A2A] p-1 rounded pl-${level * 4}`}
         onClick={() => {
           setIsOpen(!isOpen);
           onSelectFolder(folder.id);
@@ -73,9 +89,9 @@ function FolderNode({ folder, level, onSelectFolder }) {
 }
 
 export function FolderTree({ onSelectFolder }: FolderTreeProps) {
-  const [rootFolders, setRootFolders] = React.useState<Folder[]>([]);
+  const [rootFolders, setRootFolders] = useState<Folder[]>([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const loadRootFolders = async () => {
       const folders = await getFolders();
       setRootFolders(folders.filter((f) => !f.parentId));

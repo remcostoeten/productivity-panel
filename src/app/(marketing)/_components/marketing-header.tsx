@@ -1,22 +1,28 @@
 "use client";
 
+import { SettingsModal } from "@/components/auth/SettingsModal";
 import BrandLogo from "@/components/theme/BrandLogo";
-import { BorderMagicButtonAlt, Tooltip, TooltipTrigger } from "@/components/ui";
+import {
+  BorderMagicButtonAlt,
+  Button,
+  Tooltip,
+  TooltipTrigger,
+} from "@/components/ui";
 import { ModernKbd } from "@/components/ui/kbd";
 import UniqueBadge from "@/components/ui/UniqueBadge";
 import menuItems, {
   dashboardMenuItems,
-  designSystemMenuItems,
-} from "@/core/data/header-menu-items";
+  designSystemItems,
+} from "@/core/data/landing-menu-items";
 import {
   containerVariants,
   mobileLinkVar,
   mobilenavbarVariant,
 } from "@/core/helpers/animations/menu-animations";
 import { cn } from "@/core/helpers/cn";
+import { TooltipContent } from "@c/ui";
 import { SignedIn, SignedOut, UserButton, useClerk } from "@clerk/nextjs";
 import { HamburgerMenuIcon } from "@radix-ui/react-icons";
-import { TooltipContent } from "@radix-ui/react-tooltip";
 import { AnimatePresence, motion } from "framer-motion";
 import { AlignJustify, XIcon } from "lucide-react";
 import Link from "next/link";
@@ -63,12 +69,39 @@ const useKeyboardShortcut = () => {
 
 export default function SiteHeader() {
   const [isPending, startTransition] = useTransition();
-  const router = useRouter();
-
+  const [isLoading, setIsLoading] = useState(false); // Add loading state
+  const [isModalOpen, setModalOpen] = useState(false);
   const [hamburgerMenuIsOpen, setHamburgerMenuIsOpen] = useState(false);
   const [notification, setNotification] = useState("");
 
-  let { handleLogin, handleLogout } = useKeyboardShortcut();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    if (!router.events) return; // Check if router.events is available
+
+    const handleRouteChangeStart = () => {
+      setIsLoading(true); // Set loading to true on route change
+    };
+
+    const handleRouteChangeComplete = () => {
+      setIsLoading(false); // Set loading to false when route change is complete
+    };
+
+    router.events.on("routeChangeStart", handleRouteChangeStart);
+    router.events.on("routeChangeComplete", handleRouteChangeComplete);
+    router.events.on("routeChangeError", handleRouteChangeComplete);
+
+    return () => {
+      router.events.off("routeChangeStart", handleRouteChangeStart);
+      router.events.off("routeChangeComplete", handleRouteChangeComplete);
+      router.events.off("routeChangeError", handleRouteChangeComplete);
+    };
+  }, [router.events]);
+
+  if (pathname.includes("dash")) {
+    return null;
+  }
 
   const toggleHamburgerMenu = useCallback(() => {
     startTransition(() => {
@@ -95,32 +128,19 @@ export default function SiteHeader() {
     };
   }, [hamburgerMenuIsOpen, closeHamburgerNavigation]);
 
-  useEffect(() => {
-    const showNotification = (message) => {
-      setNotification(message);
-      setTimeout(() => setNotification(""), 3000);
-    };
-
-    const originalHandleLogin = handleLogin;
-    const originalHandleLogout = handleLogout;
-
-    handleLogin = () => {
-      originalHandleLogin();
-      showNotification("Logging in...");
-    };
-
-    handleLogout = () => {
-      originalHandleLogout();
-      showNotification("Logging out...");
-    };
-  }, [handleLogin, handleLogout]);
-
-  const pathname = usePathname();
+  const openModal = () => setModalOpen(true);
+  const closeModal = () => setModalOpen(false);
 
   return (
     <>
-      <header className="animate-fade-in fixed left-0 top-0 z-50 w-full -translate-y-4 border-white/20 border-b opacity-0 backdrop-blur-md [--animation-delay:600ms]">
-        <div className="px-2 lg:px-1 sm:container flex h-14 items-center justify-between z-20">
+      {isLoading && (
+        <div className="fixed inset-0 flex items-center justify-center bg-white opacity-75 z-50">
+          <div className="loader">Loading...</div>{" "}
+          {/* Add your loading indicator here */}
+        </div>
+      )}
+      <header className="px-8 sm:px-0 animate-fade-in fixed left-0 top-0 z-50 w-full border-seperator-translate-y-4 border-b opacity-0 backdrop-blur-md [--animation-delay:600ms]">
+        <div className="px-2 lg:px-1 container flex h-14 items-center justify-between z-20">
           <Link
             className="space-x-4 text-md flex items-center transition-all duration-500 origin-top"
             href="/"
@@ -131,32 +151,18 @@ export default function SiteHeader() {
               textColor="text-white/40"
               className="animate-pulse"
               size="sm"
-            />{" "}
+            />
           </Link>
           <nav className="hidden md:flex justify-center items-center content-center w-full">
-            {menuItems.map((item) => (
-              <Link
-                key={item.id}
-                className={cn(
-                  "mr-6 text-sm hover:scale-105 transition-all duration-500",
-                  pathname === item.href
-                    ? "text-primary font-semibold"
-                    : "text-muted-foreground hover:text-foreground",
-                )}
-                href={item.href}
-              >
-                {item.label}
-              </Link>
-            ))}
+            <ReusableDropdownMenu
+              label="Design System"
+              menuItems={designSystemItems}
+              animationVariant="dropdownMenu"
+            />
             <SignedIn>
               <ReusableDropdownMenu
                 label="Dashboard"
                 menuItems={dashboardMenuItems}
-                animationVariant="dropdownMenu"
-              />
-              <ReusableDropdownMenu
-                label="Design System"
-                menuItems={designSystemMenuItems}
                 animationVariant="dropdownMenu"
               />
             </SignedIn>
@@ -227,7 +233,7 @@ export default function SiteHeader() {
               <motion.li
                 variants={mobileLinkVar}
                 key={item.id}
-                className="border-grey-dark border-b py-0.5 pl-6 md:border-none"
+                className="border-b py-0.5 pl-6 md:border-none"
               >
                 <Link
                   className={cn(
@@ -243,6 +249,10 @@ export default function SiteHeader() {
                 </Link>
               </motion.li>
             ))}
+            <Button onClick={openModal} className="bg-blue-500 text-white">
+              Open Settings
+            </Button>
+            <SettingsModal isOpen={isModalOpen} onClose={closeModal} />
             <SignedOut>
               <motion.li
                 variants={mobileLinkVar}

@@ -1,5 +1,41 @@
 {
   "version": "7",
   "dialect": "sqlite",
-  "entries": []
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1723905379500,
+      "tag": "0000_steep_shadow_king",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1723905970196,
+      "tag": "0001_marvelous_rocket_racer",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1724270116915,
+      "tag": "0002_classy_firebird",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1724291478461,
+      "tag": "0003_productive_vindicator",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1724364820873,
+      "tag": "0004_ancient_smiling_tiger",
+      "breakpoints": true
+    }
+  ]
 }

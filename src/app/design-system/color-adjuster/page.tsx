@@ -136,7 +136,7 @@ export default function Component() {
       description="Adjust colors by percentage and get lighter or darker variants."
     >
       <div className="flex items-center justify-between">
-        <div className="mb-2 flex items-center gap-1">
+        <div className="mb-2 flex items-center gap-2">
           <Switch
             id="rgba-mode"
             checked={useRgba}
