@@ -27,8 +27,8 @@ const config = {
         'dark-section--lighter': 'var(--dark-section--lighter)', // used as sections (cards for example)
         'body-gradient': 'var(--body-gradient)', // used in footer
 
+        brand: 'var(--primary)', // primary  hover etc
         // Custom theme specific colors
-        primary: '#ff6c00', // orange (logo etc)
         'primary--darker': 'var(--primary--darker)', // primary  hover etc
 
         // Text colors

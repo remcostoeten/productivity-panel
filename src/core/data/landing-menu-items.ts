@@ -1,15 +1,5 @@
 const menuItems = [
   {
-    id: 1,
-    label: "Design System",
-    href: "/design-system",
-  },
-  {
-    id: 2,
-    label: "Color UI picker",
-    href: "/color-tool",
-  },
-  {
     id: 3,
     label: "Wishlist",
     href: "/dashboard/wishlist",
@@ -38,9 +28,8 @@ export const dashboardMenuItems = [
 
 export const footerLinks = [
   { href: "/", label: "Home" },
-  { href: "dashboard", label: "Dashboard" },
+  { href: "/dashboard", label: "Dashboard" },
   { href: "/color-tool", label: "Color tool" },
   { href: "/dashboard/settings", label: "Settings" },
   { href: "#", label: "Terms of service" },
-  { href: "#", label: "Privacy policy" },
 ];

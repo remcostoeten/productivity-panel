@@ -10,7 +10,10 @@ import {
 } from "@/components/ui";
 import { ModernKbd } from "@/components/ui/kbd";
 import UniqueBadge from "@/components/ui/UniqueBadge";
-import menuItems, { dashboardMenuItems } from "@/core/data/landing-menu-items";
+import menuItems, {
+  dashboardMenuItems,
+  designSystemItems,
+} from "@/core/data/landing-menu-items";
 import {
   containerVariants,
   mobileLinkVar,
@@ -25,8 +28,6 @@ import { AlignJustify, XIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState, useTransition } from "react";
-import DesignSystemNavigationMenu from "./design-dropdown";
-import { designSystemMenuItems } from "~/src/core/data/header-menu-items";
 import ReusableDropdownMenu from "./dash-header-dropdown";
 
 const useKeyboardShortcut = () => {
@@ -68,11 +69,35 @@ const useKeyboardShortcut = () => {
 
 export default function SiteHeader() {
   const [isPending, startTransition] = useTransition();
+  const [isLoading, setIsLoading] = useState(false); // Add loading state
   const [isModalOpen, setModalOpen] = useState(false);
   const [hamburgerMenuIsOpen, setHamburgerMenuIsOpen] = useState(false);
   const [notification, setNotification] = useState("");
 
+  const router = useRouter();
   const pathname = usePathname();
+
+  useEffect(() => {
+    if (!router.events) return; // Check if router.events is available
+
+    const handleRouteChangeStart = () => {
+      setIsLoading(true); // Set loading to true on route change
+    };
+
+    const handleRouteChangeComplete = () => {
+      setIsLoading(false); // Set loading to false when route change is complete
+    };
+
+    router.events.on("routeChangeStart", handleRouteChangeStart);
+    router.events.on("routeChangeComplete", handleRouteChangeComplete);
+    router.events.on("routeChangeError", handleRouteChangeComplete);
+
+    return () => {
+      router.events.off("routeChangeStart", handleRouteChangeStart);
+      router.events.off("routeChangeComplete", handleRouteChangeComplete);
+      router.events.off("routeChangeError", handleRouteChangeComplete);
+    };
+  }, [router.events]);
 
   if (pathname.includes("dash")) {
     return null;
@@ -108,7 +133,13 @@ export default function SiteHeader() {
 
   return (
     <>
-      <header className="px-8 sm:px-0 animate-fade-in fixed left-0 top-0 z-50 w-full -translate-y-4 border-white/20 border-b opacity-0 backdrop-blur-md [--animation-delay:600ms]">
+      {isLoading && (
+        <div className="fixed inset-0 flex items-center justify-center bg-white opacity-75 z-50">
+          <div className="loader">Loading...</div>{" "}
+          {/* Add your loading indicator here */}
+        </div>
+      )}
+      <header className="px-8 sm:px-0 animate-fade-in fixed left-0 top-0 z-50 w-full border-seperator-translate-y-4 border-b opacity-0 backdrop-blur-md [--animation-delay:600ms]">
         <div className="px-2 lg:px-1 container flex h-14 items-center justify-between z-20">
           <Link
             className="space-x-4 text-md flex items-center transition-all duration-500 origin-top"
@@ -123,30 +154,15 @@ export default function SiteHeader() {
             />
           </Link>
           <nav className="hidden md:flex justify-center items-center content-center w-full">
-            {menuItems.map((item) => (
-              <Link
-                key={item.id}
-                className={cn(
-                  "mr-6 text-sm hover:scale-105 transition-all duration-500",
-                  pathname === item.href
-                    ? "text-primary font-semibold"
-                    : "text-muted-foreground hover:text-foreground",
-                )}
-                href={item.href}
-              >
-                {item.label}
-              </Link>
-            ))}
-            <DesignSystemNavigationMenu />
+            <ReusableDropdownMenu
+              label="Design System"
+              menuItems={designSystemItems}
+              animationVariant="dropdownMenu"
+            />
             <SignedIn>
               <ReusableDropdownMenu
                 label="Dashboard"
                 menuItems={dashboardMenuItems}
-                animationVariant="dropdownMenu"
-              />
-              <ReusableDropdownMenu
-                label="Design System"
-                menuItems={designSystemMenuItems}
                 animationVariant="dropdownMenu"
               />
             </SignedIn>
@@ -217,7 +233,7 @@ export default function SiteHeader() {
               <motion.li
                 variants={mobileLinkVar}
                 key={item.id}
-                className="border-grey-dark border-b py-0.5 pl-6 md:border-none"
+                className="border-b py-0.5 pl-6 md:border-none"
               >
                 <Link
                   className={cn(

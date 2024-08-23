@@ -1,9 +1,10 @@
+"use client";
+
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import React, { useEffect, useState } from "react";
 import CodeContent from "./CodeContent";
@@ -60,15 +61,6 @@ export default function CodeHighlight({
         isCollapsed={isCollapsed}
         onToggleCollapse={() => setIsCollapsed(!isCollapsed)}
         showModal={showModal}
-        modalTrigger={
-          showModal && (
-            <DialogTrigger asChild>
-              <button className="text-xs text-gray-400 hover:text-white ml-2">
-                Full View
-              </button>
-            </DialogTrigger>
-          )
-        }
       />
       {!isCollapsed && (
         <div className="w-full overflow-x-auto">

@@ -9,7 +9,7 @@ import * as React from "react";
 import { forwardRef } from "react";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-col disabled:pointer-events-none disabled:opacity-50",
+  "bg-transparent inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-col disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
@@ -24,7 +24,7 @@ const buttonVariants = cva(
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
         shimmer:
-          "h-12 animate-shimmer-btn items-center justify-center rounded-md border border-primary/40   shimmer-btn   bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-slate-400 transition-colors  ",
+          "h-12 animate-shimmer-btn items-center justify-center rounded-md   border-primary/40   shimmer-btn   bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-slate-400 transition-colors  ",
         borderMagic:
           "relative inline-flex h-9 overflow-hidden rounded-full p-[1px]  ",
         borderMagicAlt:

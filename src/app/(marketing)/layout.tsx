@@ -1,14 +1,10 @@
-import Footer from "@/components/theme/layout/footer";
+import DesignSystemTabs from "../design-system/_components/DirectionAwareNav";
 
-export default async function MarketingLayout({ children }: PageProps) {
+export default function DesignSystemLayout({ children }) {
   return (
-    <>
-      {/* <div className="w-full max-w-4xl mx-auto p-6  text-foreground"> */}
-      <main className="flex flex-col justify-between mt-marketing-header">
-        {children}
-      </main>
-      {/* </div> */}
-      <Footer />
-    </>
+    <div className="min-h-screen bg-[#1a1a1a] text-white">
+      <DesignSystemTabs />
+      <main className="container mx-auto py-6">{children}</main>
+    </div>
   );
 }
