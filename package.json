@@ -12,7 +12,7 @@
     "db:migrate": "drizzle-kit migrate",
     "db:migrate:drop": "drizzle-kit migrate:drop",
     "db:pull": "drizzle-kit introspect",
-    "db:push": "drizzle-kit push",
+    "db:push": "./src/core/scripts/drizzle-push.sh",
     "db:studio": "drizzle-kit studio",
     "dev": "next dev --turbo",
     "f": "prettier --write \"**/*.{ts,tsx,mdx}\" --cache",
