@@ -74,30 +74,7 @@ export default function SiteHeader() {
   const [hamburgerMenuIsOpen, setHamburgerMenuIsOpen] = useState(false);
   const [notification, setNotification] = useState("");
 
-  const router = useRouter();
   const pathname = usePathname();
-
-  useEffect(() => {
-    if (!router.events) return; // Check if router.events is available
-
-    const handleRouteChangeStart = () => {
-      setIsLoading(true); // Set loading to true on route change
-    };
-
-    const handleRouteChangeComplete = () => {
-      setIsLoading(false); // Set loading to false when route change is complete
-    };
-
-    router.events.on("routeChangeStart", handleRouteChangeStart);
-    router.events.on("routeChangeComplete", handleRouteChangeComplete);
-    router.events.on("routeChangeError", handleRouteChangeComplete);
-
-    return () => {
-      router.events.off("routeChangeStart", handleRouteChangeStart);
-      router.events.off("routeChangeComplete", handleRouteChangeComplete);
-      router.events.off("routeChangeError", handleRouteChangeComplete);
-    };
-  }, [router.events]);
 
   if (pathname.includes("dash")) {
     return null;
