@@ -1,82 +1,142 @@
 "use client";
 
 import { Button, Input, Textarea } from "@/components/ui";
+import { useUser } from "@clerk/nextjs";
+import { EditIcon, SaveIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Suspense, useEffect, useState, useTransition } from "react";
+import toast from "react-hot-toast";
 import {
   checkUsernameAvailability,
+  getUserProfile,
   updateUserProfile,
-} from "@/core/server/server-actions/userActions";
-import { useUser } from "@clerk/nextjs";
-import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
+} from "~/src/core/server/server-actions/userActions";
+import DangerZone from "./_components/DangerZone";
 
-type FormData = {
-  firstName: string;
-  lastName: string;
-  username: string;
-  bio: string;
-  dateOfBirth: string;
-};
+const UserProfilePage = () => {
+  const { user, isLoaded } = useUser();
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
 
-export default function UserProfilePage() {
-  const { user } = useUser();
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     username: "",
     bio: "",
     dateOfBirth: "",
+    profileImageUrl: "",
   });
   const [usernameAvailable, setUsernameAvailable] = useState(true);
+  const [isEditingBio, setIsEditingBio] = useState(false);
 
   useEffect(() => {
-    if (user) {
-      setFormData({
-        firstName: user.firstName ?? "",
-        lastName: user.lastName ?? "",
-        username: user.username ?? "",
-        bio: (user.publicMetadata.bio as string) ?? "",
-        dateOfBirth: (user.publicMetadata.dateOfBirth as string) ?? "",
+    if (isLoaded && user) {
+      startTransition(async () => {
+        try {
+          const profile = await getUserProfile();
+          setFormData({
+            firstName: profile.firstName ?? "",
+            lastName: profile.lastName ?? "",
+            username: profile.username ?? "",
+            bio: profile.bio ?? "",
+            dateOfBirth: profile.dateOfBirth
+              ? new Date(profile.dateOfBirth * 1000).toISOString().split("T")[0]
+              : "",
+            profileImageUrl: profile.profileImageUrl ?? "",
+          });
+        } catch (error) {
+          console.error("Error fetching user profile:", error);
+          toast.error("Failed to load user profile");
+        }
       });
     }
-  }, [user]);
+  }, [isLoaded, user]);
 
-  useEffect(() => {
-    const checkUsername = async () => {
-      if (formData.username && formData.username !== user?.username) {
-        const available = await checkUsernameAvailability(formData.username);
-        setUsernameAvailable(available);
-      } else {
-        setUsernameAvailable(true);
-      }
-    };
-    checkUsername();
-  }, [formData.username, user?.username]);
-
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
+  const handleInputChange = async (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+
+    if (name === "username") {
+      startTransition(async () => {
+        try {
+          const available = await checkUsernameAvailability(value);
+          setUsernameAvailable(available);
+        } catch (error) {
+          console.error("Error checking username availability:", error);
+          toast.error("Failed to check username availability");
+        }
+      });
+    }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Prevent default form submission
     if (!usernameAvailable) {
       toast.error("Username is not available");
       return;
     }
+
     try {
-      await updateUserProfile(formData);
-      toast.success("Profile updated successfully");
+      console.log("Submitting form data:", formData); // Log form data
+      const response = await updateUserProfile(formData);
+      console.log("Update response:", response); // Log the response
+
+      if (response.success) {
+        // Update Clerk user profile
+        if (user) {
+          try {
+            await user.update({
+              firstName: formData.firstName,
+              lastName: formData.lastName,
+              username: formData.username,
+              // Add any other fields you want to update in Clerk
+            });
+            toast.success(
+              "Profile updated successfully in both database and Clerk",
+            );
+          } catch (error) {
+            console.error("Error updating Clerk user:", error);
+            toast.warning(
+              "Profile updated in database, but Clerk changes may not be reflected immediately.",
+            );
+          }
+        }
+      } else {
+        toast.error("Failed to update profile in database");
+      }
     } catch (error) {
+      console.error("Error updating profile:", error);
       toast.error("Failed to update profile");
     }
   };
+
+  const handleBioEdit = () => setIsEditingBio(true);
+
+  const handleBioSave = async () => {
+    try {
+      const response = await updateUserProfile({ bio: formData.bio });
+      if (response.success) {
+        setIsEditingBio(false);
+        toast.success("Bio updated successfully");
+      } else {
+        toast.error("Failed to update bio");
+      }
+    } catch (error) {
+      console.error("Error updating bio:", error);
+      toast.error("Failed to update bio");
+    }
+  };
+
+  if (!isLoaded) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="max-w-2xl mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">User Profile</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
+        {" "}
+        {/* Corrected form submission */}
         <div>
           <label
             htmlFor="firstName"
@@ -119,9 +179,12 @@ export default function UserProfilePage() {
             name="username"
             value={formData.username}
             onChange={handleInputChange}
-            className={`mt-1 ${!usernameAvailable ? "border-red-500" : ""}`}
+            className={`mt-1 ${!usernameAvailable ? "border-error" : ""}`}
           />
-          {!usernameAvailable && (
+          {isPending && (
+            <p className="text-gray-500 text-sm mt-1">Checking username...</p>
+          )}
+          {!isPending && !usernameAvailable && (
             <p className="text-red-500 text-sm mt-1">
               This username is already taken.
             </p>
@@ -150,19 +213,54 @@ export default function UserProfilePage() {
           >
             Bio
           </label>
-          <Textarea
-            id="bio"
-            name="bio"
-            value={formData.bio}
-            onChange={handleInputChange}
-            className="mt-1"
-            rows={4}
-          />
+          {isEditingBio ? (
+            <div className="mt-1 flex items-start">
+              <Textarea
+                id="bio"
+                name="bio"
+                value={formData.bio}
+                onChange={handleInputChange}
+                className="flex-grow"
+                rows={4}
+              />
+              <Button
+                type="button"
+                variant="outline"
+                size="icon"
+                onClick={handleBioSave}
+                className="ml-2 px-3 py-2"
+              >
+                <SaveIcon size={16} />
+              </Button>
+            </div>
+          ) : (
+            <div className="mt-1 flex items-start">
+              <p className="flex-grow text-muted">
+                {formData.bio || "No bio provided"}
+              </p>
+              <Button
+                variant="outline"
+                size="ghost"
+                type="button"
+                onClick={handleBioEdit}
+                className="ml-2 px-3 py-2"
+              >
+                <EditIcon size={16} />
+              </Button>
+            </div>
+          )}
         </div>
-        <Button type="submit" className="w-full">
-          Update Profile
+        <Button type="submit" className="w-full" disabled={isPending}>
+          {isPending ? "Updating..." : "Update Profile"}
         </Button>
       </form>
+
+      {/* Danger Zone */}
+      <Suspense fallback={<div>Loading delete account section...</div>}>
+        <DangerZone />
+      </Suspense>
     </div>
   );
-}
+};
+
+export default UserProfilePage;

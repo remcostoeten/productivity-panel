@@ -58,17 +58,20 @@ function MenuItem({
   label,
   href,
   disabled,
+  key,
 }: {
   icon: any;
   label: string;
   href: string;
   disabled?: boolean;
+  key: string;
 }) {
   const pathname = usePathname();
   const isActive = pathname === href;
   return (
     <Link
       href={disabled ? "#" : href}
+      key={key}
       className={cn(
         "flex items-center gap-3 px-4 py-2 rounded-lg text-sm",
         isActive
@@ -119,10 +122,8 @@ export default function SidebarWithAside() {
         <div className="flex items-center gap-3 mb-6">
           <UserButton />
           <div>
-            <p className="font-semibold text-sm text-white">
-              {user?.fullName || "Welsonia granz"}
-            </p>
-            <p className="text-xs text-[#646464]">@welsone43gran</p>
+            <p className="font-semibold text-sm text-white">{user?.fullName}</p>
+            <p className="text-xs text-[#646464]">{user?.username}</p>
           </div>
         </div>
 
@@ -162,12 +163,7 @@ export default function SidebarWithAside() {
 
         <nav className="space-y-1">
           {bottomItems.map((item) => (
-            <MenuItem
-              key={item.href}
-              icon={item.icon}
-              label={item.label}
-              href={item.href}
-            />
+            <MenuItem key={item.href} {...item} />
           ))}
         </nav>
       </aside>
