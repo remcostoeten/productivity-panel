@@ -1,4 +1,4 @@
-import UserInfoButton from "@/components/auth/UserInfoButton";
+import QuickActions from "@/components/auth/QuickActions";
 import PreLoader from "@/components/effect/LogoFlicker";
 import { cn } from "@/core/helpers/cn";
 import Providers from "@/core/lib/providers";
@@ -8,6 +8,7 @@ import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
 import { Inter as FontSans } from "next/font/google";
 import localFont from "next/font/local";
+import Footer from "../components/theme/layout/footer";
 import SiteHeader from "./(marketing)/_components/marketing-header";
 
 const fontSans = FontSans({
@@ -47,17 +48,20 @@ export default async function RootLayout({ children }: PageProps) {
             disableTransitionOnChange={true}
             children={undefined}
           >
-            <div className="mx-auto w-container px-6 text-center md:px-8">
-              <SiteHeader />
+            <div className="min-h-screen">
+              <div className="mx-auto w-container px-6 text-center md:px-8">
+                <SiteHeader />
+              </div>
+              {showPreloader ? (
+                <PreLoader duration={3000} children={undefined}>
+                  {children}
+                </PreLoader>
+              ) : (
+                children
+              )}
+              <QuickActions />
             </div>
-            {showPreloader ? (
-              <PreLoader duration={3000} children={undefined}>
-                {children}
-              </PreLoader>
-            ) : (
-              children
-            )}
-            <UserInfoButton />
+            <Footer />
           </ThemeProvider>
         </body>
       </html>

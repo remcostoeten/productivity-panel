@@ -20,11 +20,9 @@ export default function Aside() {
           <p className="font-semibold text-sm text-white">
             {user?.fullName || "Welsonia granz"}
           </p>
-          <p className="text-xs text-[#646464]">@welsone43gran</p>
+          <p className="text-xs text-[#646464]">{user?.username}</p>
         </div>
       </div>
-
-      <h2 className="text-xl font-semibold mb-4 text-white">Saas and Home</h2>
 
       <div className="mb-6">
         <div className="relative">

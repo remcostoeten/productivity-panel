@@ -17,6 +17,7 @@ export * from "./particles";
 export * from "./PopoutForm";
 export * from "./popover";
 export * from "./progress";
+export * from "./radio-group";
 export * from "./scroll-area";
 export * from "./select";
 export * from "./seperator";

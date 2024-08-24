@@ -1,12 +1,42 @@
 "use server";
 
-import { eq, sql } from "drizzle-orm";
+import { auth } from "@clerk/nextjs/server";
+import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { db } from "../db";
-import { users } from "../db/schema/users";
+import { users } from "../db/schema";
+
+export async function updateUserBio(bio: string) {
+  const { userId } = auth();
+  if (!userId) throw new Error("User not authenticated");
+
+  await db.update(users).set({ bio }).where(eq(users.id, userId));
+
+  revalidatePath("/dashboard");
+}
+
+export async function updateUserDateOfBirth(dateOfBirth: number) {
+  const { userId } = auth();
+  if (!userId) throw new Error("User not authenticated");
+
+  await db.update(users).set({ dateOfBirth }).where(eq(users.id, userId));
+
+  revalidatePath("/dashboard");
+}
+
+export async function updateUserPreloader(showPreloader: boolean) {
+  const { userId } = auth();
+  if (!userId) throw new Error("User not authenticated");
+
+  await db.update(users).set({ showPreloader }).where(eq(users.id, userId));
+
+  revalidatePath("/dashboard");
+}
 
 export async function updateUserInfo(formData: FormData) {
-  const id = formData.get("id") as string;
+  const { userId } = auth();
+  if (!userId) throw new Error("User not authenticated");
+
   const firstName = formData.get("firstName") as string;
   const lastName = formData.get("lastName") as string;
   const profileImageUrl = formData.get("profileImageUrl") as string;
@@ -20,9 +50,9 @@ export async function updateUserInfo(formData: FormData) {
         lastName,
         profileImageUrl,
         showPreloader,
-        updatedAt: sql`strftime('%s', 'now')`,
+        updatedAt: new Date(),
       })
-      .where(eq(users.id, id));
+      .where(eq(users.id, userId));
 
     revalidatePath("/dashboard");
     return { success: true };

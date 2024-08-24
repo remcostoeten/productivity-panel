@@ -120,7 +120,7 @@ export async function updateUserProfile(updateData: {
   username?: string;
   dateOfBirth?: string;
   bio?: string;
-  profileImageUrl?: string;
+  profileImageUrl?: string; // Ensure this is included
 }) {
   const { userId } = auth();
   if (!userId) {
@@ -138,7 +138,7 @@ export async function updateUserProfile(updateData: {
         updatedAt: sql`(strftime('%s', 'now'))`,
       })
       .where(eq(users.id, userId));
-    return { success: true };
+    return { success: true }; // Consider returning updated data if needed
   } catch (error) {
     console.error("Error updating user profile:", error);
     throw new Error("Failed to update user profile");
@@ -157,4 +157,51 @@ export async function checkUsernameAvailability(username: string) {
     console.error("Error checking username availability:", error);
     throw new Error("Failed to check username availability");
   }
+}
+
+export async function deleteUserAccount() {
+  const { userId } = auth();
+  if (!userId) {
+    throw new Error("Not authenticated");
+  }
+
+  try {
+    await db.delete(users).where(eq(users.id, userId));
+    return { success: true };
+  } catch (error) {
+    console.error("Error deleting user account:", error);
+    throw new Error("Failed to delete user account");
+  }
+}
+
+export async function updateNotificationPreference(
+  allowNotifications: boolean,
+) {
+  const { userId } = auth();
+
+  if (!userId) {
+    throw new Error("User not authenticated");
+  }
+
+  await db
+    .update(users)
+    .set({ allowNotifications })
+    .where(eq(users.id, userId));
+
+  return allowNotifications;
+}
+
+export async function getUserNotificationPreference() {
+  const { userId } = auth();
+
+  if (!userId) {
+    throw new Error("User not authenticated");
+  }
+
+  const user = await db.query.users.findFirst({
+    where: eq(users.id, userId),
+    columns: { allowNotifications: true },
+  });
+
+  return user?.allowNotifications ?? true;
 }
