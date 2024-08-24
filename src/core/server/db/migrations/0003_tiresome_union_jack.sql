@@ -1,0 +1,1 @@
+ALTER TABLE `users` ADD `allow_notifications` integer DEFAULT true NOT NULL;

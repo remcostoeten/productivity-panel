@@ -24,8 +24,6 @@ export default function Aside() {
         </div>
       </div>
 
-      <h2 className="text-xl font-semibold mb-4 text-white">Saas and Home</h2>
-
       <div className="mb-6">
         <div className="relative">
           <SearchIcon

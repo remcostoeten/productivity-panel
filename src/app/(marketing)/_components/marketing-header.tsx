@@ -1,6 +1,5 @@
 "use client";
 
-import { SettingsModal } from "@/components/auth/SettingsModal";
 import BrandLogo from "@/components/theme/BrandLogo";
 import {
   BorderMagicButtonAlt,
@@ -29,6 +28,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState, useTransition } from "react";
 import ReusableDropdownMenu from "./dash-header-dropdown";
+import SettingsModal from "../../(dashboard)/dashboard/settings/_components/modal/SettingsModal";
 
 const useKeyboardShortcut = () => {
   const router = useRouter();

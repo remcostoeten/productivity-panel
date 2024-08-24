@@ -1,5 +1,6 @@
 import { MenuItemType } from "@/types/menu";
 import {
+  BellDotIcon,
   BellIcon,
   BookOpenIcon,
   CalendarIcon,
@@ -29,6 +30,7 @@ export const sidebarItems: MenuItemType[] = [
 
 export const menuItems: MenuItemType[] = [
   { icon: HomeIcon, label: "Dashboard", href: "/dashboard" },
+  { icon: BellDotIcon, label: "Inbox", href: "/dashboard/inbox" },
   { icon: HeartIcon, label: "Wishlist", href: "/dashboard/wishlist" },
   { icon: BookOpenIcon, label: "Notes", href: "/dashboard/notes" },
   { icon: LockIcon, label: "Vault", href: "/vault", disabled: true },
@@ -37,12 +39,12 @@ export const menuItems: MenuItemType[] = [
 ];
 
 export const accountItems: MenuItemType[] = [
-  { icon: UserIcon, label: "My account", href: "/account" },
-  { icon: CreditCardIcon, label: "Billing", href: "/billing" },
-  { icon: SettingsIcon, label: "Settings", href: "/settings" },
+  { icon: UserIcon, label: "My account", href: "/dashboard/account" },
+  { icon: CreditCardIcon, label: "Billing", href: "/dashboard/billing" },
+  { icon: SettingsIcon, label: "Settings", href: "/dashboard/settings" },
 ];
 
 export const bottomItems: MenuItemType[] = [
-  { icon: MoonIcon, label: "Appearance", href: "/appearance" },
-  { icon: HelpCircleIcon, label: "Help", href: "/help" },
+  { icon: MoonIcon, label: "Appearance", href: "/dashboard/appearance" },
+  { icon: HelpCircleIcon, label: "Help", href: "/help", disabled: true },
 ];

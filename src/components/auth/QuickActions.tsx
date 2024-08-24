@@ -9,13 +9,15 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { getUserProfile } from "@/core/server/server-actions/userActions";
-import { UserIcon } from "lucide-react";
+import { SettingsIcon, UserIcon } from "lucide-react";
 import { useState } from "react";
+import SettingsModal from "~/src/app/(dashboard)/dashboard/settings/_components/modal/SettingsModal";
 import type { UserProfile } from "~/src/core/types/user-profile.types";
 
-export default function UserInfoButton() {
+export default function QuickActions() {
   const [isOpen, setIsOpen] = useState(false);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   const fetchUserProfile = async () => {
     try {
@@ -37,6 +39,16 @@ export default function UserInfoButton() {
 
   return (
     <>
+      <Button
+        className="fixed bottom-16 size-[40px] bg-input right-4  border border-orange-700/20 rounded-full hover:bg-muted/70 p-3"
+        onClick={() => setIsSettingsOpen(true)}
+      >
+        <SettingsIcon className="h-6 w-6 text-white" />
+      </Button>
+      <SettingsModal
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+      />
       <Button
         className="fixed bottom-4 size-[40px] bg-input right-4  border border-orange-700/20 rounded-full hover:bg-muted/70 p-3"
         onClick={handleOpenModal}

@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { useUser } from "@clerk/nextjs";
-import { Link, Settings, User } from "lucide-react";
+import { Link, Settings } from "lucide-react";
 
 export default function ProfileSettings() {
   const { user } = useUser(); // Retrieve user info from Clerk
@@ -16,12 +16,12 @@ export default function ProfileSettings() {
         <h3 className="text-sm font-medium mb-2 text-muted-foreground">
           YOUR PROFILE
         </h3>
-        <div className="bg-muted p-4 rounded-lg flex items-center justify-between">
+        <div className="bg-dark-section--lighter border border-seperator p-4 rounded-lg flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <img
               src={user?.imageUrl || "/placeholder.svg?height=60&width=60"}
               alt="User avatar"
-              className="w-15 h-15 rounded-full"
+              className="w-4 h-4 rounded-full"
             />
             <div>
               <h4 className="font-semibold">
@@ -33,9 +33,6 @@ export default function ProfileSettings() {
             </div>
           </div>
           <div className="space-x-2">
-            <Button variant="ghost" size="icon">
-              <User className="h-4 w-4" />
-            </Button>
             <Button variant="ghost" size="icon">
               <Settings className="h-4 w-4" />
             </Button>
@@ -66,7 +63,7 @@ export default function ProfileSettings() {
         </h3>
         <div className="flex items-center space-x-2">
           <Input
-            defaultValue={`clay.earth/profile/${user?.username || "your-username"}`}
+            defaultValue={`/profile/${user?.username || "your-username"}`}
             className="flex-1"
           />
           <Button variant="ghost" size="icon">
@@ -79,34 +76,6 @@ export default function ProfileSettings() {
             Learn more.
           </a>
         </p>
-      </div>
-      <div>
-        <h3 className="text-sm font-medium mb-2 text-muted-foreground">
-          SUBSCRIPTION PLAN
-        </h3>
-        <div className="bg-muted p-4 rounded-lg flex items-center justify-between">
-          <div>
-            <div className="flex items-center space-x-2">
-              <div className="bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded">
-                PERS
-              </div>
-              <h4 className="font-semibold">Clay Personal</h4>
-            </div>
-            <p className="text-sm text-muted-foreground">
-              127 of 1,000 contacts used
-            </p>
-          </div>
-          <Button variant="secondary">Manage Plan</Button>
-        </div>
-      </div>
-      <div>
-        <h3 className="text-sm font-medium mb-2 text-muted-foreground">
-          SWITCH PLAN
-        </h3>
-        <div className="grid grid-cols-2 gap-4">
-          <Button variant="outline">Teams</Button>
-          <Button variant="outline">Pro</Button>
-        </div>
       </div>
     </div>
   );

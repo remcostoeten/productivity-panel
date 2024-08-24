@@ -16,7 +16,7 @@ interface SettingsModalProps {
   onClose: () => void;
 }
 
-export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
+export function OldSettingsModal({ isOpen, onClose }: SettingsModalProps) {
   const {
     user,
     isLoaded,

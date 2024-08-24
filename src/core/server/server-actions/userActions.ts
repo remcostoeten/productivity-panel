@@ -173,3 +173,35 @@ export async function deleteUserAccount() {
     throw new Error("Failed to delete user account");
   }
 }
+
+export async function updateNotificationPreference(
+  allowNotifications: boolean,
+) {
+  const { userId } = auth();
+
+  if (!userId) {
+    throw new Error("User not authenticated");
+  }
+
+  await db
+    .update(users)
+    .set({ allowNotifications })
+    .where(eq(users.id, userId));
+
+  return allowNotifications;
+}
+
+export async function getUserNotificationPreference() {
+  const { userId } = auth();
+
+  if (!userId) {
+    throw new Error("User not authenticated");
+  }
+
+  const user = await db.query.users.findFirst({
+    where: eq(users.id, userId),
+    columns: { allowNotifications: true },
+  });
+
+  return user?.allowNotifications ?? true;
+}
