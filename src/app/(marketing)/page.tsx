@@ -1,8 +1,9 @@
-import Particles from "@/components/ui/particles";
-import ClientSection from "./_components/landing/client-section";
-import HeroSection from "./_components/landing/hero-section";
 import { SphereMask } from "@/components/ui";
+import Particles from "@/components/ui/particles";
+import Blur from "~/src/components/ui/Blur";
+import ClientSection from "./_components/landing/client-section";
 import CallToActionSection from "./_components/landing/cta-section";
+import HeroSection from "./_components/landing/hero-section";
 
 const containerVariants = {
   hidden: { opacity: 0, scale: 0.8 },
@@ -32,17 +33,18 @@ const itemVariants = {
 export default function Page() {
   return (
     <>
+      <Blur />
       <HeroSection />
       <ClientSection />
       <SphereMask />
       <CallToActionSection />
-      {/* <Particles
-                className="absolute inset-0 -z-10"
-                quantity={25}
-                ease={702}
-                size={0.5}
-                staticity={22}
-            /> */}
+      <Particles
+        className="absolute inset-0 -z-10"
+        quantity={25}
+        ease={702}
+        size={0.5}
+        staticity={22}
+      />
       <Particles
         className="absolute inset-0  opacity-50 -z-10"
         quantity={50}

@@ -1,4 +1,3 @@
-import SiteVisitStats from "@/components/auth/SiteVisitStats";
 import UserInfoButton from "@/components/auth/UserInfoButton";
 import PreLoader from "@/components/effect/LogoFlicker";
 import { cn } from "@/core/helpers/cn";
@@ -46,16 +45,19 @@ export default async function RootLayout({ children }: PageProps) {
             attribute="class"
             defaultTheme="dark"
             disableTransitionOnChange={true}
+            children={undefined}
           >
-            <SiteHeader />
+            <div className="mx-auto w-container px-6 text-center md:px-8">
+              <SiteHeader />
+            </div>
             {showPreloader ? (
-              <PreLoader duration={3000}>{children}</PreLoader>
+              <PreLoader duration={3000} children={undefined}>
+                {children}
+              </PreLoader>
             ) : (
               children
             )}
             <UserInfoButton />
-
-            <SiteVisitStats />
           </ThemeProvider>
         </body>
       </html>

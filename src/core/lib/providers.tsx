@@ -28,7 +28,6 @@ export default function Providers({ children }: PageProps) {
 
   return (
     <ClerkProvider
-      children={children}
       appearance={{
         variables: { colorPrimary: "#000000" },
         elements: {
@@ -44,10 +43,6 @@ export default function Providers({ children }: PageProps) {
           card: "bg-[#fafafa]",
         },
       }}
-      routerPush={() => {}}
-      routerReplace={() => {}}
-      isSatellite={false}
-      proxyUrl=""
     >
       <TooltipProvider>
         {children}

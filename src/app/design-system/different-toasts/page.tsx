@@ -2,96 +2,177 @@
 
 import {
   Button,
+  Form,
+  Input,
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
+  Separator,
+  Textarea,
 } from "@/components/ui";
 import { AnimatePresence, motion } from "framer-motion";
-import { Trash2Icon } from "lucide-react";
+import { Loader2, Trash2Icon, UndoIcon } from "lucide-react";
 import { useState } from "react";
-import { Toaster } from "react-hot-toast";
+import { Toaster, toast } from "react-hot-toast";
 import { Flex } from "~/src/components/atoms/Flex";
 import CodeHighlight from "~/src/components/ui/CodeHighlight/CodeHighlight";
-import { useToast } from "~/src/core/hooks/useToast";
 import { DesignSystemWrapper } from "../_components/DesignSystemWrapper";
-import { ShowcaseCubicBeziers } from "~/src/core/helpers/animations/bezier-curves";
+
+interface Item {
+  id: number;
+  name: string;
+}
+
+interface ToastDemo {
+  label: string;
+  action: () => void;
+  code: string;
+}
 
 export default function ToastDemoPage() {
-  const [position, setPosition] = useState("top-right");
-  const [duration, setDuration] = useState(4000);
-  const [selectedToastCode, setSelectedToastCode] = useState("");
-  const [items, setItems] = useState([
+  const [position, setPosition] = useState<string>("top-right");
+  const [duration, setDuration] = useState<number>(4000);
+  const [selectedToastCode, setSelectedToastCode] = useState<string>("");
+  const [items, setItems] = useState<Item[]>([
     { id: 1, name: "Item 1" },
     { id: 2, name: "Item 2" },
     { id: 3, name: "Item 3" },
     { id: 4, name: "Item 4" },
     { id: 5, name: "Item 5" },
   ]);
-  const [currentBezierIndex, setCurrentBezierIndex] = useState(0);
-  const toast = useToast();
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const deleteItem = (id) => {
+  const deleteItem = (id: number) => {
     const deletedItem = items.find((item) => item.id === id);
+    if (!deletedItem) return;
+
     setItems(items.filter((item) => item.id !== id));
 
-    toast.undo({
-      message: `Deleted "${deletedItem.name}"`,
-      onUndo: () => {
-        setItems((prevItems) => [...prevItems, deletedItem]);
-        toast.success({ message: `Restored "${deletedItem.name}"` });
+    toast(
+      (t) => (
+        <Flex gap="2" className="items-center">
+          Deleted "{deletedItem.name}"
+          <Button
+            variant="outline"
+            size="sm"
+            className="space-x-2"
+            onClick={() => {
+              setItems((prevItems) => [...prevItems, deletedItem]);
+              toast.success(`Restored "${deletedItem.name}"`);
+              toast.dismiss(t.id);
+            }}
+          >
+            <UndoIcon size={14} />
+            <span>Undo</span>
+          </Button>
+        </Flex>
+      ),
+      {
+        duration: 5000,
       },
-    });
-  };
-
-  const demoToasts = [
-    {
-      label: "Normal",
-      action: () => toast.showToast({ message: "Normal toast" }),
-      code: `toast.showToast({ message: "Normal toast" })`,
-    },
-    {
-      label: "Success",
-      action: () => toast.success({ message: "Success toast" }),
-      code: `toast.success({ message: "Success toast" })`,
-    },
-    {
-      label: "Error",
-      action: () => toast.error({ message: "Error toast" }),
-      code: `toast.error({ message: "Error toast" })`,
-    },
-    {
-      label: "Loading",
-      action: () => toast.loading({ message: "Loading..." }),
-      code: `toast.loading({ message: "Loading..." })`,
-    },
-    {
-      label: "Undo",
-      action: () =>
-        toast.undo({
-          message: "Action performed",
-          onUndo: () => toast.success({ message: "Action undone" }),
-        }),
-      code: `toast.undo({ 
-  message: "Action performed", 
-  onUndo: () => toast.success({ message: "Action undone" })
-})`,
-    },
-  ];
-
-  const handleNextBezier = () => {
-    setCurrentBezierIndex(
-      (prevIndex) => (prevIndex + 1) % ShowcaseCubicBeziers.length,
     );
   };
 
-  const currentBezier = ShowcaseCubicBeziers[currentBezierIndex].bezier;
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    const pendingToast = toast.loading("Submitting form...");
+
+    try {
+      await new Promise((resolve, reject) => {
+        setTimeout(() => {
+          if (Math.random() > 0.7) {
+            reject(new Error("Random submission error"));
+          } else {
+            resolve(true);
+          }
+        }, 2000);
+      });
+
+      toast.success("Form submitted successfully!", {
+        id: pendingToast,
+      });
+      setFormData({ name: "", email: "", message: "" }); // Reset form
+    } catch (error) {
+      toast.error("Failed to submit form. Please try again.", {
+        id: pendingToast,
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const demoToasts: ToastDemo[] = [
+    {
+      label: "Normal",
+      action: () => toast("Normal toast"),
+      code: `toast("Normal toast")`,
+    },
+    {
+      label: "Success",
+      action: () => toast.success("Success toast"),
+      code: `toast.success("Success toast")`,
+    },
+    {
+      label: "Error",
+      action: () => toast.error("Error toast"),
+      code: `toast.error("Error toast")`,
+    },
+    {
+      label: "Loading",
+      action: () => toast.loading("Loading..."),
+      code: `toast.loading("Loading...")`,
+    },
+    {
+      label: "Undo",
+      action: () => {
+        toast((t) => (
+          <Flex gap="2" className="items-center">
+            Action performed
+            <Button
+              variant="outline"
+              size="sm"
+              className="space-x-2"
+              onClick={() => {
+                toast.success("Action undone");
+                toast.dismiss(t.id);
+              }}
+            >
+              <UndoIcon size={14} />
+              <span>Undo</span>
+            </Button>
+          </Flex>
+        ));
+      },
+      code: `toast((t) => (
+  <span>
+    Action performed
+    <Button
+      variant="ghost"
+      size="sm"
+      onClick={() => {
+        toast.success("Action undone");
+        toast.dismiss(t.id);
+      }}
+    >
+      Undo
+    </Button>
+  </span>
+))`,
+    },
+  ];
 
   return (
     <DesignSystemWrapper
-      title="Vercel-style Toast Notifications with Bezier Curve Animation"
-      description="Demonstration of Vercel-style toast notifications with various Bezier curve animations."
+      title="Vercel-style Toast Notifications with Deletable List and Bezier Curves"
+      description="Demonstration of Vercel-style toast notifications with various variants, including a deletable list with undo functionality and Bezier curve animations."
     >
       <div className="flex flex-col gap-4 items-start">
         <Flex gap="2" className="flex-wrap">
@@ -110,7 +191,7 @@ export default function ToastDemoPage() {
           </Select>
           <Select
             value={duration.toString()}
-            onValueChange={(value) => setDuration(parseInt(value))}
+            onValueChange={(value) => setDuration(parseInt(value, 10))}
           >
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Select duration" />
@@ -123,7 +204,6 @@ export default function ToastDemoPage() {
             </SelectContent>
           </Select>
         </Flex>
-
         <Flex gap="2" className="flex-wrap">
           {demoToasts.map((toastDemo, index) => (
             <Button
@@ -137,15 +217,56 @@ export default function ToastDemoPage() {
             </Button>
           ))}
         </Flex>
-
-        <Button onClick={handleNextBezier}>
-          Next Bezier Curve ({ShowcaseCubicBeziers[currentBezierIndex].name})
-        </Button>
-
+        <Separator />
+        <h3>Test pending toasts via this form</h3>
+        <Form
+          onSubmit={handleSubmit}
+          className="flex flex-col gap-2 mt-4 w-full max-w-[400px]"
+        >
+          <Input
+            type="text"
+            value={formData.name}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            placeholder="Enter your name"
+            required
+          />
+          <Input
+            type="email"
+            value={formData.email}
+            onChange={(e) =>
+              setFormData({ ...formData, email: e.target.value })
+            }
+            placeholder="Enter your email"
+            required
+          />
+          <Textarea
+            value={formData.message}
+            onChange={(e) =>
+              setFormData({ ...formData, message: e.target.value })
+            }
+            placeholder="Enter your message"
+            rows={4}
+            required
+          />
+          <Button type="submit" variant="primary" disabled={isSubmitting}>
+            {isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Submitting...
+              </>
+            ) : (
+              "Submit"
+            )}
+          </Button>
+        </Form>
         <div className="mt-4 w-full">
-          <h3 className="text-lg font-semibold mb-2">
-            Deletable List with Undo
-          </h3>
+          <h2 className="text-lg mb-2 font-semibold mb-2">
+            Undo action example
+          </h2>
+          <p className="text-muted-foreground mb-4">
+            This example demonstrates how a undo action can be implemented for a
+            toast notification.
+          </p>
           <ul className="space-y-2">
             <AnimatePresence>
               {items.map((item) => (
@@ -169,14 +290,27 @@ deleteItem(${item.id});
 // deleteItem function:
 const deleteItem = (id) => {
   const deletedItem = items.find(item => item.id === id);
+  if (!deletedItem) return;
+
   setItems(items.filter(item => item.id !== id));
   
-  toast.undo({
-    message: \`Deleted "\${deletedItem.name}"\`,
-    onUndo: () => {
-      setItems(prevItems => [...prevItems, deletedItem]);
-      toast.success({ message: \`Restored "\${deletedItem.name}"\` });
-    },
+  toast((t) => (
+    <span>
+      Deleted "{deletedItem.name}"
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={() => {
+          setItems(prevItems => [...prevItems, deletedItem]);
+          toast.success(\`Restored "\${deletedItem.name}"\`);
+          toast.dismiss(t.id);
+        }}
+      >
+        Undo
+      </Button>
+    </span>
+  ), {
+    duration: 5000,
   });
 };`);
                     }}
@@ -188,7 +322,6 @@ const deleteItem = (id) => {
             </AnimatePresence>
           </ul>
         </div>
-
         <CodeHighlight title="Toast Code" language="typescript">
           {selectedToastCode ||
             "// Click on a toast button or delete an item to see its code"}
@@ -196,70 +329,16 @@ const deleteItem = (id) => {
       </div>
 
       <Toaster
-        position={position}
+        position={position as any}
         toastOptions={{
+          duration: duration,
           style: {
-            transition: "all 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
-            backdropFilter: "blur(10px)",
-            display: "flex",
-            alignItems: "center",
-            gap: "8px",
-          },
-          duration: 4000,
-          success: {
-            iconTheme: {
-              primary: "#4caf50",
-              secondary: "#fff",
-            },
-            style: {
-              background: "#4caf50",
-              color: "#fff",
-            },
-          },
-          error: {
-            iconTheme: {
-              primary: "#f44336",
-              secondary: "#fff",
-            },
-            style: {
-              background: "#f44336",
-              color: "#fff",
-            },
-          },
-          loading: {
-            iconTheme: {
-              primary: "#ff9800",
-              secondary: "#fff",
-            },
-            style: {
-              background: "#ff9800",
-              color: "#fff",
-            },
-          },
-          custom: {
-            iconTheme: {
-              primary: "#2196f3",
-              secondary: "#fff",
-            },
-            style: {
-              background: "#2196f3",
-              color: "#fff",
-            },
+            background: "#040404",
+            color: "#909090",
+            border: "1px solid #131313  ",
           },
         }}
-      >
-        {(t) => (
-          <motion.div
-            initial={{ scale: 0.5 }}
-            animate={{ scale: [0.5, 1.1, 1] }}
-            transition={{ duration: 0.5, ease: currentBezier }}
-            className="flex items-center gap-2 p-3 bg-dark-bg border border-input rounded shadow-lg backdrop-blur-sm"
-          >
-            {t.icon}
-            <div>{t.message}</div>
-          </motion.div>
-        )}
-      </Toaster>
+      />
     </DesignSystemWrapper>
   );
 }

@@ -90,7 +90,7 @@ export default function DesignSystemTabs() {
             <Tab
               key={item.href}
               href={item.href}
-              label={item.label}
+              label={item.alias}
               isActive={pathname === item.href}
             />
           ))}

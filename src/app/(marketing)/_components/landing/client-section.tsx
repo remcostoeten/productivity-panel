@@ -4,7 +4,7 @@ export default function ClientSection() {
   return (
     <section
       id="clients"
-      className="mx-auto max-w-7xl px-6 text-center md:px-8"
+      className="mx-auto px-6 text-center md:px-8 backdrop-blur-md backdrop-opacity-50"
     >
       <div className="py-14">
         <div className="mx-auto max-w-screen-xl px-4 md:px-8">

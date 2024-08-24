@@ -135,12 +135,11 @@ export default function SiteHeader() {
     <>
       {isLoading && (
         <div className="fixed inset-0 flex items-center justify-center bg-white opacity-75 z-50">
-          <div className="loader">Loading...</div>{" "}
-          {/* Add your loading indicator here */}
+          <div className="loader">Loading...</div>
         </div>
       )}
       <header className="px-8 sm:px-0 animate-fade-in fixed left-0 top-0 z-50 w-full border-seperator-translate-y-4 border-b opacity-0 backdrop-blur-md [--animation-delay:600ms]">
-        <div className="px-2 lg:px-1 container flex h-14 items-center justify-between z-20">
+        <div className="px-2 lg:px-1 container flex h-14 items-center justify-between z-20  max-w-contain   er mx-auto">
           <Link
             className="space-x-4 text-md flex items-center transition-all duration-500 origin-top"
             href="/"

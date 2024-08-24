@@ -1,17 +1,30 @@
 "use client";
 
 import CodeHighlight from "@/components/ui/CodeHighlight/CodeHighlight";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@c/ui";
+import {
+  Button,
+  Input,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@c/ui";
+import { CheckIcon, ExclamationTriangleIcon } from "lucide-react";
 import { Suspense, useEffect, useRef, useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 import { DesignSystemWrapper } from "../_components/DesignSystemWrapper";
 import { useColorPicker } from "./ _hooks/use-color-picker";
 import useFileUpload from "./ _hooks/use-file-upload";
 import AddFolderDialog from "./_components/AddFolderDialog";
 import ButtonBar from "./_components/ButtonBar";
-import ColorFolder from "./_components/color-folder";
+import ColorFolder from "./_components/ColorFolder";
 import FileUploadUi from "./_components/FileUploadUi";
 import MoveColorDialog from "./_components/MoveColorDialog";
 import { ColorItem, Folder } from "./types.color-tool";
+
 export default function ColorToolPage() {
   const [folders, setFolders] = useState<Folder[]>([]);
   const [activeFolder, setActiveFolder] = useState<string>("");
@@ -23,6 +36,11 @@ export default function ColorToolPage() {
   const [generatedCode, setGeneratedCode] = useState<string>("");
   const [tailwindCode, setTailwindCode] = useState<string>("");
   const [useCssVariables, setUseCssVariables] = useState(true);
+  const [isNewFolderPopoverOpen, setIsNewFolderPopoverOpen] = useState(false);
+  const [newFolderName, setNewFolderName] = useState("");
+  const [tempPickedColor, setTempPickedColor] = useState<ColorItem | null>(
+    null,
+  );
 
   const imgRef = useRef<HTMLImageElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -45,10 +63,6 @@ export default function ColorToolPage() {
       const parsedFolders = JSON.parse(savedFolders);
       setFolders(parsedFolders);
       setActiveFolder(parsedFolders[0]?.name || "");
-    } else {
-      const defaultFolder = { name: "Default", colors: [] };
-      setFolders([defaultFolder]);
-      setActiveFolder("Default");
     }
   }, []);
 
@@ -57,9 +71,10 @@ export default function ColorToolPage() {
   }, [folders]);
 
   const handleClearLocalStorage = () => {
-    localStorage.clear();
+    localStorage.removeItem("colorFolders");
     setFolders([]);
     setActiveFolder("");
+    toast.success("Local storage cleared");
   };
 
   const handleColorPickEvent = (event: React.MouseEvent<HTMLImageElement>) => {
@@ -75,16 +90,18 @@ export default function ColorToolPage() {
         const pixelData = ctx.getImageData(x, y, 1, 1).data;
         const pickedColor = `#${pixelData[0].toString(16).padStart(2, "0")}${pixelData[1].toString(16).padStart(2, "0")}${pixelData[2].toString(16).padStart(2, "0")}`;
         const newColorItem = handleColorPick(pickedColor);
-        setFolders((prevFolders) =>
-          prevFolders.map((folder) =>
-            folder.name === activeFolder
-              ? { ...folder, colors: [...folder.colors, newColorItem] }
-              : folder,
-          ),
-        );
+
+        if (folders.length === 0) {
+          setTempPickedColor(newColorItem);
+          setIsNewFolderPopoverOpen(true);
+        } else {
+          addColorToFolder(activeFolder, newColorItem);
+          toast.success("Color added to folder");
+        }
       }
     }
   };
+
   const handleMouseMoveEvent = (event: React.MouseEvent<HTMLImageElement>) => {
     if (pickingColor && imgRef.current && canvasRef.current) {
       const rect = imgRef.current.getBoundingClientRect();
@@ -107,19 +124,54 @@ export default function ColorToolPage() {
       handleScroll(delta);
     }
   };
+
   const addFolder = (name: string, description: string) => {
     if (name && !folders.some((folder) => folder.name === name)) {
-      setFolders([...folders, { name, description, colors: [] }]);
+      setFolders((prevFolders) => [
+        ...prevFolders,
+        { name, description, colors: [] },
+      ]);
       setActiveFolder(name);
       setIsAddFolderDialogOpen(false);
+      toast.success("Folder added");
+    }
+  };
+
+  const createNewFolderWithColor = () => {
+    if (newFolderName && tempPickedColor) {
+      const newFolder: Folder = {
+        name: newFolderName,
+        description: "",
+        colors: [tempPickedColor],
+      };
+      setFolders((prevFolders) => [...prevFolders, newFolder]);
+      setActiveFolder(newFolderName);
+      setIsNewFolderPopoverOpen(false);
+      setNewFolderName("");
+      setTempPickedColor(null);
+      toast.success("Folder created with picked color");
     }
   };
 
   const deleteFolder = (folderName: string) => {
-    setFolders(folders.filter((folder) => folder.name !== folderName));
+    setFolders((prevFolders) =>
+      prevFolders.filter((folder) => folder.name !== folderName),
+    );
     if (activeFolder === folderName) {
       setActiveFolder(folders[0]?.name || "");
     }
+    toast.success("Folder deleted");
+  };
+
+  const addColorToFolder = (folderName: string, colorItem: ColorItem) => {
+    setFolders((prevFolders) =>
+      prevFolders.map((folder) =>
+        folder.name === folderName
+          ? { ...folder, colors: [...folder.colors, colorItem] }
+          : folder,
+      ),
+    );
+    toast.success("Color added to folder");
   };
 
   const deleteColor = (folderName: string, colorToDelete: ColorItem) => {
@@ -133,6 +185,7 @@ export default function ColorToolPage() {
           : folder,
       ),
     );
+    toast.success("Color deleted");
   };
 
   const startEditingColor = (colorItem: ColorItem) => {
@@ -155,11 +208,13 @@ export default function ColorToolPage() {
         ),
       );
       setEditingColor(null);
+      toast.success("Color edited");
     }
   };
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
+    toast.success("Copied to clipboard");
   };
 
   const openMoveColorDialog = (colorItem: ColorItem) => {
@@ -191,6 +246,7 @@ export default function ColorToolPage() {
       );
       setIsMoveColorDialogOpen(false);
       setColorToMove(null);
+      toast.success("Color moved");
     }
   };
 
@@ -219,16 +275,18 @@ export default function ColorToolPage() {
 
     setGeneratedCode(`${rootCode}\n`);
     setTailwindCode(`${tailwindConfigCode}`);
+    toast.success("Code generated");
   };
+
   return (
     <div>
       <DesignSystemWrapper
         title="Color Picker"
         description="The Color Picker feature streamlines color management with an intuitive
-      interface for uploading images, picking colors, and generating CSS
-      variables. Users can organize colors into folders, manipulate them, and
-      get code snippets for easy integration. All data is saved locally for
-      easy access."
+          interface for uploading images, picking colors, and generating CSS
+          variables. Users can organize colors into folders, manipulate them, and
+          get code snippets for easy integration. All data is saved locally for
+          easy access."
       />
       <ButtonBar
         pickingColor={pickingColor}
@@ -359,6 +417,52 @@ export default function ColorToolPage() {
           />
         )}
       </Suspense>
+
+      <Popover
+        open={isNewFolderPopoverOpen}
+        onOpenChange={setIsNewFolderPopoverOpen}
+      >
+        <PopoverTrigger asChild>
+          <div className="hidden">Trigger</div>
+        </PopoverTrigger>
+        <PopoverContent className="w-80">
+          <div className="grid gap-4">
+            <h3 className="font-medium leading-none">Create New Folder</h3>
+            <p className="text-sm text-muted-foreground">
+              You've picked your first color! Let's create a folder to store it.
+            </p>
+            <div className="grid gap-2">
+              <Input
+                id="new-folder-name"
+                placeholder="Enter folder name"
+                value={newFolderName}
+                onChange={(e) => setNewFolderName(e.target.value)}
+              />
+            </div>
+            <Button onClick={createNewFolderWithColor}>Create Folder</Button>
+          </div>
+        </PopoverContent>
+      </Popover>
+
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 4000,
+          style: {
+            background: "#040404",
+            color: "#ffffff",
+            border: "1px solid white",
+            borderRadius: "8px",
+            boxShadow: "0 5px 15px rgba(0, 0, 0, 0.1)",
+          },
+          success: {
+            icon: <CheckIcon className="w-5 h-5 text-success" />,
+          },
+          error: {
+            icon: <ExclamationTriangleIcon className="w-5 h-5 text-error" />,
+          },
+        }}
+      />
     </div>
   );
 }

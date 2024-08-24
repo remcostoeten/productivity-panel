@@ -12,7 +12,7 @@ import FileHeader from "./FileHeader";
 
 interface CodeHighlightProps {
   title?: string;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   language?: string;
   disableMinWidth?: boolean;
   defaultCollapsed?: boolean;

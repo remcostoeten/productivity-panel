@@ -12,6 +12,7 @@ import {
 } from "@/components/ui";
 import { useState } from "react";
 import { AddFolderDialogProps } from "../types.color-tool";
+import toast from "react-hot-toast";
 
 export default function AddFolderDialog({
   isOpen,
@@ -22,6 +23,10 @@ export default function AddFolderDialog({
   const [newFolderDescription, setNewFolderDescription] = useState("");
 
   const handleAddFolder = () => {
+    if (newFolderName.toLowerCase() === "default") {
+      toast.error("Cannot create a folder named 'Default'");
+      return;
+    }
     onAddFolder(newFolderName, newFolderDescription);
     setNewFolderName("Folder name");
     setNewFolderDescription("");

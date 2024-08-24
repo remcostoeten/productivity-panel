@@ -11,12 +11,22 @@ export default menuItems;
 const prefix = "/design-system";
 
 export const designSystemItems = [
-  { href: "/color-tool", label: "Color UI picker" },
-  { href: "/easing", label: "(Bezier) ease showcase" },
-  { href: "/color-adjuster", label: "Color Tweaker" },
-  { href: "/tag-input", label: "Tag input showcase" },
-  { href: "/loaders", label: "All loaders" },
-  { href: "/tailwind-colors", label: "Theme tailwind colors" },
+  { href: "/color-tool", label: "Color UI picker", alias: "Cfg creator" },
+  { href: "/easing", label: "(Bezier) ease showcase", alias: "Cubic Ease" },
+  { href: "/color-adjuster", label: "Color Tweaker", alias: "Color adjuster" },
+  { href: "/tag-input", label: "Tag input showcase", alias: "Tag input" },
+  { href: "/loaders", label: "All loaders", alias: "Loaders" },
+  { href: "/different-toasts", label: "Toast variants", alias: "Toasts" },
+  {
+    href: "/vercel-geist-system",
+    label: "Vercel/geist design system",
+    alias: "Vercel/geist",
+  },
+  {
+    href: "/tailwind-colors",
+    label: "Theme tailwind colors",
+    alias: "TW Colors",
+  },
 ].map((item) => ({ ...item, href: `${prefix}${item.href}` }));
 
 export const dashboardMenuItems = [

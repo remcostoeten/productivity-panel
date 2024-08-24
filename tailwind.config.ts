@@ -94,6 +94,7 @@ const config = {
         'marketing-header': 'var(--marketing-header-height)',
       },
       padding: {
+        'marketing-plus-spacing': 'calc(var(--marketing-header-height) + 24px)',
         'marketing-header': 'var(--marketing-header-height)',
       },
       keyframes: {
