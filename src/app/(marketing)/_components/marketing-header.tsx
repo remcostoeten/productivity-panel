@@ -1,12 +1,7 @@
 "use client";
 
 import BrandLogo from "@/components/theme/BrandLogo";
-import {
-  BorderMagicButtonAlt,
-  Button,
-  Tooltip,
-  TooltipTrigger,
-} from "@/components/ui";
+import { Button, Tooltip, TooltipTrigger } from "@/components/ui";
 import { ModernKbd } from "@/components/ui/kbd";
 import UniqueBadge from "@/components/ui/UniqueBadge";
 import menuItems, {
@@ -27,8 +22,10 @@ import { AlignJustify, XIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState, useTransition } from "react";
-import ReusableDropdownMenu from "./dash-header-dropdown";
+import { Flex } from "~/src/components/atoms/Flex";
+import ShinyCircularButton from "~/src/components/effect/button/circular-btn";
 import SettingsModal from "../../(dashboard)/dashboard/settings/_components/modal/SettingsModal";
+import ReusableDropdownMenu from "./dash-header-dropdown";
 
 const useKeyboardShortcut = () => {
   const router = useRouter();
@@ -110,11 +107,6 @@ export default function SiteHeader() {
 
   return (
     <>
-      {isLoading && (
-        <div className="fixed inset-0 flex items-center justify-center bg-white opacity-75 z-50">
-          <div className="loader">Loading...</div>
-        </div>
-      )}
       <header className="px-8 sm:px-0 animate-fade-in fixed left-0 top-0 z-50 w-full border-seperator-translate-y-4 border-b opacity-0 backdrop-blur-md [--animation-delay:600ms]">
         <div className="px-2 lg:px-1 container flex h-14 items-center justify-between z-20  max-w-contain   er mx-auto">
           <Link
@@ -148,9 +140,11 @@ export default function SiteHeader() {
             <SignedOut>
               <Tooltip>
                 <TooltipTrigger>
-                  <BorderMagicButtonAlt href="/sign-in">
-                    Sign in
-                  </BorderMagicButtonAlt>
+                  <Flex gap="4">
+                    <ShinyCircularButton href="/sign-in">
+                      Sign in
+                    </ShinyCircularButton>
+                  </Flex>
                 </TooltipTrigger>
                 <TooltipContent>
                   <ModernKbd variant="login" />

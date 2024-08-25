@@ -5,8 +5,12 @@ import { motion, useAnimation } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Center } from "../atoms/Center";
 import BrandLogo from "../theme/BrandLogo";
+import { PreLoaderProps } from "./loaders/loaders.types";
 
-export default function PreLoader({ children, duration = 3000 }) {
+export default function PreLoader({
+  children,
+  duration = 3000,
+}: PreLoaderProps) {
   const [isLoading, setIsLoading] = useState(true);
   const backgroundControls = useAnimation();
   const logoControls = useAnimation();

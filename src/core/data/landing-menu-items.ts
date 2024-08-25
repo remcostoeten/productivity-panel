@@ -27,6 +27,7 @@ export const designSystemItems = [
     label: "Theme tailwind colors",
     alias: "TW Colors",
   },
+  { href: "/theme-buttons", label: "Theme buttons", alias: "Buttons" },
 ].map((item) => ({ ...item, href: `${prefix}${item.href}` }));
 
 export const dashboardMenuItems = [
