@@ -1,4 +1,7 @@
+export * from "./accordion";
+export * from "./alert-dialog";
 export * from "./avatar";
+export * from "./badge";
 export * from "./border-beam";
 export * from "./button";
 export * from "./card";

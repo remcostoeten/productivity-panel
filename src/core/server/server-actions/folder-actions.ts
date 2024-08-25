@@ -1,50 +1,40 @@
 "use server";
 
+import { db } from "@/core/server/db";
 import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
-import { db } from "../db";
 import { folders } from "../db/schema";
 
-export async function createFolder(name: string, parentId?: string) {
-  const { userId } = auth();
-  if (!userId) throw new Error("Unauthorized");
+export async function createFolder(name: string) {
+  const session = await auth();
+  if (!session?.user?.id) throw new Error("Unauthorized");
 
-  const newFolder = await db
+  return db
     .insert(folders)
     .values({
-      id: crypto.randomUUID(),
       name,
-      userId,
-      parentId: parentId || null,
+      userId: session.user.id,
     })
     .returning();
-
-  return newFolder[0];
 }
 
-export async function updateFolder(id: string, name: string) {
-  const { userId } = auth();
-  if (!userId) throw new Error("Unauthorized");
+export async function updateFolder(id: number, name: string) {
+  const session = await auth();
+  if (!session?.user?.id) throw new Error("Unauthorized");
 
-  const updatedFolder = await db
-    .update(folders)
-    .set({ name, updatedAt: Math.floor(Date.now() / 1000) })
-    .where(eq(folders.id, id))
-    .returning();
-
-  return updatedFolder[0];
+  return db.update(folders).set({ name }).where(eq(folders.id, id)).returning();
 }
 
-export async function deleteFolder(id: string) {
-  const { userId } = auth();
-  if (!userId) throw new Error("Unauthorized");
+export async function deleteFolder(id: number) {
+  const session = await auth();
+  if (!session?.user?.id) throw new Error("Unauthorized");
 
-  await db.delete(folders).where(eq(folders.id, id));
+  return db.delete(folders).where(eq(folders.id, id));
 }
 
 export async function getFolders() {
-  const { userId } = auth();
-  if (!userId) throw new Error("Unauthorized");
+  const session = await auth();
+  if (!session?.user?.id) throw new Error("Unauthorized");
 
-  return db.select().from(folders).where(eq(folders.userId, userId));
+  return db.select().from(folders).where(eq(folders.userId, session.user.id));
 }

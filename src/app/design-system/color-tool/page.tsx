@@ -12,7 +12,8 @@ import {
   TabsList,
   TabsTrigger,
 } from "@c/ui";
-import { CheckIcon, ExclamationTriangleIcon } from "lucide-react";
+import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
+import { CheckIcon } from "lucide-react";
 import { Suspense, useEffect, useRef, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { DesignSystemWrapper } from "../_components/DesignSystemWrapper";

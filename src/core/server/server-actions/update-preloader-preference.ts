@@ -1,9 +1,7 @@
-// In src/core/server/server-actions/update-preloader-preference.ts
-
 "use server";
 
 import { db } from "@/core/server/db";
-import { users } from "@/core/server/db/schema";
+import { userSettings } from "@/core/server/db/schema/relation-remodel";
 import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 
@@ -12,12 +10,12 @@ export async function updatePreloaderPreference(showPreloader: boolean) {
   if (!userId) throw new Error("Unauthorized");
 
   await db
-    .update(users)
+    .update(userSettings)
     .set({
       showPreloader: showPreloader,
       updatedAt: Math.floor(Date.now() / 1000),
     })
-    .where(eq(users.id, userId));
+    .where(eq(userSettings.userId, userId));
 
   return { success: true };
 }

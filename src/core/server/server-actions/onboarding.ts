@@ -4,7 +4,7 @@ import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { db } from "../db";
-import { users } from "../db/schema";
+import { users, userSettings } from "../db/schema/relation-remodel";
 
 export async function updateUserBio(bio: string) {
   const { userId } = auth();
@@ -28,7 +28,10 @@ export async function updateUserPreloader(showPreloader: boolean) {
   const { userId } = auth();
   if (!userId) throw new Error("User not authenticated");
 
-  await db.update(users).set({ showPreloader }).where(eq(users.id, userId));
+  await db
+    .update(userSettings)
+    .set({ showPreloader })
+    .where(eq(userSettings.userId, userId));
 
   revalidatePath("/dashboard");
 }
@@ -43,16 +46,25 @@ export async function updateUserInfo(formData: FormData) {
   const showPreloader = formData.get("showPreloader") === "on";
 
   try {
-    await db
-      .update(users)
-      .set({
-        firstName,
-        lastName,
-        profileImageUrl,
-        showPreloader,
-        updatedAt: new Date(),
-      })
-      .where(eq(users.id, userId));
+    await db.transaction(async (tx) => {
+      await tx
+        .update(users)
+        .set({
+          firstName,
+          lastName,
+          profileImageUrl,
+          updatedAt: new Date(),
+        })
+        .where(eq(users.id, userId));
+
+      await tx
+        .update(userSettings)
+        .set({
+          showPreloader,
+          updatedAt: new Date(),
+        })
+        .where(eq(userSettings.userId, userId));
+    });
 
     revalidatePath("/dashboard");
     return { success: true };

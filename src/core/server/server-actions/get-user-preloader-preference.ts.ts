@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/core/server/db";
-import { users } from "@/core/server/db/schema";
+import { userSettings } from "@/core/server/db/schema/relation-remodel";
 import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 
@@ -9,11 +9,11 @@ export async function getUserPreloaderPreference(): Promise<boolean> {
   const { userId } = auth();
   if (!userId) return true;
 
-  const user = await db
-    .select({ showPreloader: users.showPreloader })
-    .from(users)
-    .where(eq(users.id, userId))
+  const settings = await db
+    .select({ showPreloader: userSettings.showPreloader })
+    .from(userSettings)
+    .where(eq(userSettings.userId, userId))
     .limit(1);
 
-  return user[0]?.showPreloader ?? true;
+  return settings[0]?.showPreloader ?? true;
 }
