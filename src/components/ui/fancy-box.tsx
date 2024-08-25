@@ -1,15 +1,10 @@
 "use client";
 
-import { Check, ChevronsUpDown, Edit2 } from "lucide-react";
-import * as React from "react";
-
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
-import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -19,34 +14,30 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
+  Badge,
+  Button,
   Command,
   CommandGroup,
   CommandInput,
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "@/components/ui/command";
-import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
+  Input,
+  Label,
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
+} from "@/components/ui";
 import { cn } from "@/core/helpers/cn";
 import { DialogClose } from "@radix-ui/react-dialog";
+import { Check, ChevronsUpDown, Edit2 } from "lucide-react";
+import * as React from "react";
 
 // FIXME: https://twitter.com/lemcii/status/1659649371162419202?s=46&t=gqNnMIjMWXiG2Rbrr5gT6g
 // Removing states would help maybe?

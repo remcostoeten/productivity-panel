@@ -1,3 +1,5 @@
+"use server";
+
 import { db } from "@/core/server/db";
 import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
