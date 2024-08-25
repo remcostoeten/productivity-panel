@@ -1,5 +1,5 @@
 import { db } from "@/core/server/db";
-import { auth } from "@clerk/nextjs/dist/types/server";
+import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { folders } from "../db/schema";
 
