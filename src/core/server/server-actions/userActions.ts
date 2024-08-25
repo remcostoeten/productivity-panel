@@ -1,11 +1,15 @@
 "use server";
 
 import { db } from "@/core/server/db";
-import { users } from "@/core/server/db/schema";
+import {
+  userPreferences,
+  users,
+  userSettings,
+} from "@/core/server/db/schema/relation-remodel";
 import { auth } from "@clerk/nextjs/server";
+import crypto from "crypto";
 import { eq, sql } from "drizzle-orm";
 
-// Update the last sign-in time for the authenticated user
 export async function updateLastSignIn() {
   const { userId } = auth();
 
@@ -15,9 +19,9 @@ export async function updateLastSignIn() {
 
   try {
     await db
-      .update(users)
+      .update(userSettings)
       .set({ lastSignIn: sql`(strftime('%s', 'now'))` })
-      .where(eq(users.id, userId));
+      .where(eq(userSettings.userId, userId));
     return { success: true };
   } catch (error) {
     console.error("Error updating last sign-in:", error);
@@ -44,41 +48,64 @@ export async function createOrUpdateUser(userData: {
       .limit(1);
 
     if (existingUser.length > 0) {
-      await db
-        .update(users)
-        .set({
+      await db.transaction(async (tx) => {
+        await tx
+          .update(users)
+          .set({
+            email,
+            firstName,
+            lastName,
+            profileImageUrl,
+            emailVerified: emailVerified ? 1 : 0,
+            updatedAt: sql`(strftime('%s', 'now'))`,
+          })
+          .where(eq(users.id, id));
+
+        await tx
+          .update(userSettings)
+          .set({
+            lastSignIn: sql`(strftime('%s', 'now'))`,
+            signInCount: sql`${userSettings.signInCount} + 1`,
+            updatedAt: sql`(strftime('%s', 'now'))`,
+          })
+          .where(eq(userSettings.userId, id));
+      });
+
+      console.log(`User ${id} updated and sign-in count incremented`);
+    } else {
+      await db.transaction(async (tx) => {
+        await tx.insert(users).values({
+          id,
           email,
           firstName,
           lastName,
           profileImageUrl,
           emailVerified: emailVerified ? 1 : 0,
-          lastSignIn: sql`(strftime('%s', 'now'))`,
-          signInCount: sql`${users.signInCount} + 1`, // Increment sign-in count
+          createdAt: sql`(strftime('%s', 'now'))`,
           updatedAt: sql`(strftime('%s', 'now'))`,
-        })
-        .where(eq(users.id, id));
+        });
 
-      console.log(`User ${id} updated and sign-in count incremented`);
-    } else {
-      await db.insert(users).values({
-        id,
-        email,
-        firstName,
-        lastName,
-        profileImageUrl,
-        emailVerified: emailVerified ? 1 : 0,
-        isAdmin:
-          email === process.env.ADMIN_EMAIL_MAIN ||
-          email === process.env.ADMIN_EMAIL_SECONDARY
-            ? 1
-            : 0,
-        lastSignIn: sql`(strftime('%s', 'now'))`,
-        signInCount: 1, // Set initial sign-in count for new users
-        createdAt: sql`(strftime('%s', 'now'))`,
-        updatedAt: sql`(strftime('%s', 'now'))`,
+        await tx.insert(userSettings).values({
+          id: crypto.randomUUID(),
+          userId: id,
+          lastSignIn: sql`(strftime('%s', 'now'))`,
+          signInCount: 1,
+          isAdmin:
+            email === process.env.ADMIN_EMAIL_MAIN ||
+            email === process.env.ADMIN_EMAIL_SECONDARY,
+          createdAt: sql`(strftime('%s', 'now'))`,
+          updatedAt: sql`(strftime('%s', 'now'))`,
+        });
+
+        await tx.insert(userPreferences).values({
+          id: crypto.randomUUID(),
+          userId: id,
+          createdAt: sql`(strftime('%s', 'now'))`,
+          updatedAt: sql`(strftime('%s', 'now'))`,
+        });
       });
 
-      console.log(`User ${id} created with initial sign-in count`);
+      console.log(`User ${id} created with initial settings and preferences`);
     }
 
     return { success: true, id };
@@ -88,7 +115,6 @@ export async function createOrUpdateUser(userData: {
   }
 }
 
-// Retrieve the profile of the authenticated user
 export async function getUserProfile() {
   const { userId } = auth();
 
@@ -97,17 +123,19 @@ export async function getUserProfile() {
   }
 
   try {
-    const userProfile = await db
-      .select()
-      .from(users)
-      .where(eq(users.id, userId))
-      .limit(1);
+    const userProfile = await db.query.users.findFirst({
+      where: eq(users.id, userId),
+      with: {
+        settings: true,
+        preferences: true,
+      },
+    });
 
-    if (userProfile.length === 0) {
+    if (!userProfile) {
       throw new Error("User not found");
     }
 
-    return userProfile[0];
+    return userProfile;
   } catch (error) {
     console.error("Error retrieving user profile:", error);
     throw new Error("Failed to retrieve user profile");
@@ -120,25 +148,41 @@ export async function updateUserProfile(updateData: {
   username?: string;
   dateOfBirth?: string;
   bio?: string;
-  profileImageUrl?: string; // Ensure this is included
+  profileImageUrl?: string;
+  showPreloader?: boolean;
+  allowNotifications?: boolean;
 }) {
   const { userId } = auth();
   if (!userId) {
     throw new Error("Not authenticated");
   }
   try {
-    const { dateOfBirth, ...otherData } = updateData;
-    await db
-      .update(users)
-      .set({
-        ...otherData,
-        dateOfBirth: dateOfBirth
-          ? new Date(dateOfBirth).getTime() / 1000
-          : undefined,
-        updatedAt: sql`(strftime('%s', 'now'))`,
-      })
-      .where(eq(users.id, userId));
-    return { success: true }; // Consider returning updated data if needed
+    const { dateOfBirth, showPreloader, allowNotifications, ...userData } =
+      updateData;
+    await db.transaction(async (tx) => {
+      await tx
+        .update(users)
+        .set({
+          ...userData,
+          dateOfBirth: dateOfBirth
+            ? new Date(dateOfBirth).getTime() / 1000
+            : undefined,
+          updatedAt: sql`(strftime('%s', 'now'))`,
+        })
+        .where(eq(users.id, userId));
+
+      if (showPreloader !== undefined || allowNotifications !== undefined) {
+        await tx
+          .update(userSettings)
+          .set({
+            showPreloader,
+            allowNotifications,
+            updatedAt: sql`(strftime('%s', 'now'))`,
+          })
+          .where(eq(userSettings.userId, userId));
+      }
+    });
+    return { success: true };
   } catch (error) {
     console.error("Error updating user profile:", error);
     throw new Error("Failed to update user profile");
@@ -166,7 +210,13 @@ export async function deleteUserAccount() {
   }
 
   try {
-    await db.delete(users).where(eq(users.id, userId));
+    await db.transaction(async (tx) => {
+      await tx
+        .delete(userPreferences)
+        .where(eq(userPreferences.userId, userId));
+      await tx.delete(userSettings).where(eq(userSettings.userId, userId));
+      await tx.delete(users).where(eq(users.id, userId));
+    });
     return { success: true };
   } catch (error) {
     console.error("Error deleting user account:", error);
@@ -184,9 +234,9 @@ export async function updateNotificationPreference(
   }
 
   await db
-    .update(users)
+    .update(userSettings)
     .set({ allowNotifications })
-    .where(eq(users.id, userId));
+    .where(eq(userSettings.userId, userId));
 
   return allowNotifications;
 }
@@ -198,10 +248,10 @@ export async function getUserNotificationPreference() {
     throw new Error("User not authenticated");
   }
 
-  const user = await db.query.users.findFirst({
-    where: eq(users.id, userId),
+  const settings = await db.query.userSettings.findFirst({
+    where: eq(userSettings.userId, userId),
     columns: { allowNotifications: true },
   });
 
-  return user?.allowNotifications ?? true;
+  return settings?.allowNotifications ?? true;
 }

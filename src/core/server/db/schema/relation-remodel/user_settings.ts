@@ -3,7 +3,10 @@ import { users } from "./users";
 
 export const userSettings = sqliteTable("user_settings", {
   id: text("id").primaryKey(),
-  userId: text("user_id").notNull().unique().references(() => users.id),
+  userId: text("user_id")
+    .notNull()
+    .unique()
+    .references(() => users.id),
   showPreloader: integer("show_preloader", { mode: "boolean" })
     .notNull()
     .default(true),

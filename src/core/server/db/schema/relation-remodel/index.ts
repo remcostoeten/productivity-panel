@@ -1,11 +1,11 @@
-export * from "./users";
-export * from "./user_settings";
 export * from "./user_preferences";
+export * from "./user_settings";
+export * from "./users";
 
 import { relations } from "drizzle-orm";
+import { userPreferences } from "./user_preferences";
 import { users } from "./users";
 import { userSettings } from "./user_settings";
-import { userPreferences } from "./user_preferences";
 
 export const usersRelations = relations(users, ({ one }) => ({
   settings: one(userSettings, {
@@ -25,9 +25,12 @@ export const userSettingsRelations = relations(userSettings, ({ one }) => ({
   }),
 }));
 
-export const userPreferencesRelations = relations(userPreferences, ({ one }) => ({
-  user: one(users, {
-    fields: [userPreferences.userId],
-    references: [users.id],
+export const userPreferencesRelations = relations(
+  userPreferences,
+  ({ one }) => ({
+    user: one(users, {
+      fields: [userPreferences.userId],
+      references: [users.id],
+    }),
   }),
-}));
+);

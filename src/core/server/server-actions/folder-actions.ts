@@ -1,7 +1,7 @@
-import { auth } from "@/core/server/auth";
 import { db } from "@/core/server/db";
-import { folders } from "@/core/server/db/schema/remodel";
+import { auth } from "@clerk/nextjs/dist/types/server";
 import { eq } from "drizzle-orm";
+import { folders } from "../db/schema";
 
 export async function createFolder(name: string) {
   const session = await auth();
