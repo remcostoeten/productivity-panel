@@ -2,6 +2,7 @@
 
 import { db } from "@/core/server/db";
 import {
+  messages,
   userPreferences,
   users,
   userSettings,
@@ -9,6 +10,10 @@ import {
 import { auth } from "@clerk/nextjs/server";
 import crypto from "crypto";
 import { eq, sql } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
+
+// Fallback admin emails for testing
+const FALLBACK_ADMIN_EMAILS = ["admin1@example.com", "admin2@example.com"];
 
 export async function updateLastSignIn() {
   const { userId } = auth();
@@ -20,7 +25,8 @@ export async function updateLastSignIn() {
   try {
     await db
       .update(userSettings)
-      .set({ lastSignIn: sql`(strftime('%s', 'now'))` })
+
+      .set({ lastSignIn: sql`CAST(strftime('%s', 'now') AS INTEGER)` })
       .where(eq(userSettings.userId, userId));
     return { success: true };
   } catch (error) {
@@ -28,7 +34,6 @@ export async function updateLastSignIn() {
     throw new Error("Failed to update last sign-in");
   }
 }
-
 export async function createOrUpdateUser(userData: {
   id: string;
   email: string;
@@ -39,6 +44,14 @@ export async function createOrUpdateUser(userData: {
 }) {
   const { id, email, firstName, lastName, profileImageUrl, emailVerified } =
     userData;
+
+  // Debug logs
+  console.log("Creating/Updating user:", { id, email, firstName, lastName });
+  console.log("ADMIN_EMAIL_MAIN:", process.env.NEXT_PUBLIC_ADMIN_EMAIL_MAIN);
+  console.log(
+    "ADMIN_EMAIL_SECONDARY:",
+    process.env.NEXT_PUBLIC_ADMIN_EMAIL_SECONDARY,
+  );
 
   try {
     const existingUser = await db
@@ -85,14 +98,19 @@ export async function createOrUpdateUser(userData: {
           updatedAt: sql`(strftime('%s', 'now'))`,
         });
 
+        const isAdmin =
+          FALLBACK_ADMIN_EMAILS.includes(email) ||
+          email === process.env.NEXT_PUBLIC_ADMIN_EMAIL_MAIN ||
+          email === process.env.NEXT_PUBLIC_ADMIN_EMAIL_SECONDARY;
+
+        console.log("Is admin:", isAdmin, "for email:", email);
+
         await tx.insert(userSettings).values({
           id: crypto.randomUUID(),
           userId: id,
           lastSignIn: sql`(strftime('%s', 'now'))`,
           signInCount: 1,
-          isAdmin:
-            email === process.env.ADMIN_EMAIL_MAIN ||
-            email === process.env.ADMIN_EMAIL_SECONDARY,
+          isAdmin,
           createdAt: sql`(strftime('%s', 'now'))`,
           updatedAt: sql`(strftime('%s', 'now'))`,
         });
@@ -103,9 +121,26 @@ export async function createOrUpdateUser(userData: {
           createdAt: sql`(strftime('%s', 'now'))`,
           updatedAt: sql`(strftime('%s', 'now'))`,
         });
+
+        await tx.insert(messages).values({
+          id: crypto.randomUUID(),
+          userId: id,
+          content: "Welcome to our platform! We're excited to have you here.",
+          createdAt: sql`(strftime('%s', 'now'))`,
+        });
+
+        await tx.insert(messages).values({
+          id: crypto.randomUUID(),
+          userId: id,
+          content:
+            "Don't forget to complete your profile and explore all our features.",
+          createdAt: sql`(strftime('%s', 'now'))`,
+        });
       });
 
-      console.log(`User ${id} created with initial settings and preferences`);
+      console.log(
+        `User ${id} created with initial settings, preferences, and welcome messages`,
+      );
     }
 
     return { success: true, id };
@@ -121,7 +156,6 @@ export async function getUserProfile() {
   if (!userId) {
     throw new Error("Not authenticated");
   }
-
   try {
     const userProfile = await db.query.users.findFirst({
       where: eq(users.id, userId),
@@ -182,6 +216,10 @@ export async function updateUserProfile(updateData: {
           .where(eq(userSettings.userId, userId));
       }
     });
+
+    // Add this line to revalidate the dashboard page
+    revalidatePath("/dashboard");
+
     return { success: true };
   } catch (error) {
     console.error("Error updating user profile:", error);

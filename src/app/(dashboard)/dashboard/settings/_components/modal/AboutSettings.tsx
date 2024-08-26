@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Flex } from "~/src/components/atoms/Flex";
+import Flex from "~/src/components/atoms/Flex";
 import BrandLogo from "~/src/components/theme/BrandLogo";
 import UniqueBadge from "~/src/components/ui/UniqueBadge";
 

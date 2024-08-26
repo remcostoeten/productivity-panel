@@ -24,20 +24,25 @@ export default function GeneralSettings() {
   const { user } = useUser();
   const [showPreloader, setShowPreloader] = useState(false);
   const [allowNotifications, setAllowNotifications] = useState(false);
+  const [loadingPreferences, setLoadingPreferences] = useState(true);
 
   useEffect(() => {
     const fetchUserPreferences = async () => {
       try {
-        const preloaderPreference = await getUserPreloaderPreference();
-        setShowPreloader(preloaderPreference);
+        const [preloaderPreference, notificationPreference] = await Promise.all(
+          [getUserPreloaderPreference(), getUserNotificationPreference()],
+        );
 
-        const notificationPreference = await getUserNotificationPreference();
+        setShowPreloader(preloaderPreference);
         setAllowNotifications(notificationPreference);
       } catch (error) {
         console.error("Error fetching user preferences:", error);
-        toast.error("Failed to load user preferences");
+        toast.error("Failed to load user preferences. Please try again later.");
+      } finally {
+        setLoadingPreferences(false);
       }
     };
+
     fetchUserPreferences();
   }, []);
 
@@ -61,21 +66,27 @@ export default function GeneralSettings() {
     }
   };
 
+  if (loadingPreferences) {
+    return <div>Loading preferences...</div>;
+  }
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div>
-        <h3 className="text-sm font-medium mb-2 text-muted-foreground">
-          PREFERRED EMAIL
-        </h3>
+        <h2 className="text-xl font-semibold mb-2">Preferred Email</h2>
         <Input defaultValue={user?.primaryEmailAddress?.emailAddress || ""} />
       </div>
+
       <div>
-        <h3 className="text-sm font-medium mb-2">
-          Disable the page brand loader animation which shows when you navigate
-          to a new page.
-        </h3>
-        <div className="flex items-center justify-between text-muted">
-          <Label htmlFor="show-preloader">Show page loader</Label>
+        <h2 className="text-xl font-semibold mb-2">Animated Logo</h2>
+        <p className="text-sm text-muted mb-4">
+          The animated logo is displayed when navigating to a new page. You can
+          choose to enable or disable this animation.
+        </p>
+        <div className="flex items-center justify-between">
+          <Label htmlFor="show-preloader" className="text-sm font-medium">
+            Show animated logo on page load
+          </Label>
           <Switch
             id="show-preloader"
             checked={showPreloader}
@@ -83,10 +94,9 @@ export default function GeneralSettings() {
           />
         </div>
       </div>
+
       <div>
-        <h3 className="text-sm font-medium mb-2 text-muted-foreground">
-          MOMENTS
-        </h3>
+        <h2 className="text-xl font-semibold mb-2">Moments</h2>
         <Select defaultValue="default">
           <SelectTrigger className="w-full">
             <SelectValue placeholder="View Moments in" />
@@ -97,7 +107,7 @@ export default function GeneralSettings() {
             <SelectItem value="firefox">Firefox</SelectItem>
           </SelectContent>
         </Select>
-        <p className="text-sm text-muted-foreground mt-2">
+        <p className="text-sm text-muted mt-2">
           Not all mail apps support deep linking to a specific message, so Clay
           will open emails and events from Moments in your browser by default.{" "}
           <a href="#" className="text-primary">
@@ -105,17 +115,16 @@ export default function GeneralSettings() {
           </a>
         </p>
       </div>
+
       <div>
-        <h3 className="text-sm font-medium mb-2 text-muted-foreground">
-          NOTIFICATIONS
-        </h3>
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm text-muted-foreground pr-3">
-              Allow us to send you notifications when there are important
-              updates or changes to your account. Also personal schedule
-              updates.
-            </p>
+        <h2 className="text-xl font-semibold mb-2">Notifications</h2>
+        <div className="flex items-start justify-between">
+          <div className="text-sm text-muted pr-4">
+            <p className="mb-2">Allow us to send you notifications for:</p>
+            <ul className="list-disc list-inside">
+              <li>Important updates or changes to your account</li>
+              <li>Personal schedule updates</li>
+            </ul>
           </div>
           <Switch
             id="allow-notifications"

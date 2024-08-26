@@ -1,14 +1,62 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
+import { updateUserProfile } from "@/core/server/server-actions/userActions";
 import { useUser } from "@clerk/nextjs";
 import { Link, Settings } from "lucide-react";
+import Image from "next/image";
+import { useState } from "react";
+import toast from "react-hot-toast";
 
 export default function ProfileSettings() {
-  const { user } = useUser(); // Retrieve user info from Clerk
+  const { user } = useUser();
+  const [isEditing, setIsEditing] = useState(false);
+  const [formData, setFormData] = useState({
+    firstName: user?.firstName || "",
+    lastName: user?.lastName || "",
+    username: user?.username || "",
+    bio: "", // Add this field to your user schema if not already present
+  });
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      // Update the database
+      await updateUserProfile(formData);
+
+      // Update the Clerk user
+      if (user) {
+        await user.update({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          username: formData.username,
+        });
+      }
+
+      setIsEditing(false);
+      toast.success("Profile updated successfully");
+    } catch (error) {
+      console.error("Failed to update profile:", error);
+      toast.error("Failed to update profile");
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -18,10 +66,12 @@ export default function ProfileSettings() {
         </h3>
         <div className="bg-dark-section--lighter border border-seperator p-4 rounded-lg flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <img
+            <Image
+              width={44}
+              height={44}
               src={user?.imageUrl || "/placeholder.svg?height=60&width=60"}
               alt="User avatar"
-              className="w-4 h-4 rounded-full"
+              className="rounded-full"
             />
             <div>
               <h4 className="font-semibold">
@@ -33,12 +83,62 @@ export default function ProfileSettings() {
             </div>
           </div>
           <div className="space-x-2">
-            <Button variant="ghost" size="icon">
-              <Settings className="h-4 w-4" />
-            </Button>
+            <Dialog open={isEditing} onOpenChange={setIsEditing}>
+              <DialogTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  <Settings className="h-4 w-4" />
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>Edit Profile</DialogTitle>
+                </DialogHeader>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="firstName">First Name</Label>
+                    <Input
+                      id="firstName"
+                      name="firstName"
+                      value={formData.firstName}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="lastName">Last Name</Label>
+                    <Input
+                      id="lastName"
+                      name="lastName"
+                      value={formData.lastName}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="username">Username</Label>
+                    <Input
+                      id="username"
+                      name="username"
+                      value={formData.username}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="bio">Bio</Label>
+                    <Textarea
+                      id="bio"
+                      name="bio"
+                      value={formData.bio}
+                      onChange={handleInputChange}
+                      rows={3}
+                    />
+                  </div>
+                  <Button type="submit">Save Changes</Button>
+                </form>
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
       </div>
+      {/* Rest of your component remains the same */}
       <div>
         <h3 className="text-sm font-medium mb-2 text-muted-foreground">
           PUBLIC PROFILE
