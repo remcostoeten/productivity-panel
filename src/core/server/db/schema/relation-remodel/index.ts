@@ -3,14 +3,16 @@ export * from "./messages/messages";
 export * from "./users/user_preferences";
 export * from "./users/user_settings";
 export * from "./users/users";
+export * from "../notes";
 
 import { relations } from "drizzle-orm";
 import { messages } from "./messages/messages";
 import { userPreferences } from "./users/user_preferences";
 import { userSettings } from "./users/user_settings";
 import { users } from "./users/users";
+import { notes, folders, tags, sharedNotes } from "../notes";
 
-export const usersRelations = relations(users, ({ one }) => ({
+export const usersRelations = relations(users, ({ one, many }) => ({
   settings: one(userSettings, {
     fields: [users.id],
     references: [userSettings.userId],
@@ -19,6 +21,10 @@ export const usersRelations = relations(users, ({ one }) => ({
     fields: [users.id],
     references: [userPreferences.userId],
   }),
+  notes: many(notes),
+  folders: many(folders),
+  tags: many(tags),
+  sharedNotes: many(sharedNotes),
 }));
 
 export const userSettingsRelations = relations(userSettings, ({ one }) => ({
@@ -44,3 +50,5 @@ export const messagesRelations = relations(messages, ({ one }) => ({
     references: [users.id],
   }),
 }));
+
+export * from "../notes";
