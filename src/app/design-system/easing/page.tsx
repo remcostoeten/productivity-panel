@@ -1,6 +1,6 @@
 "use client";
 
-import { Flex } from "@/components/atoms/Flex";
+import Flex from "@/components/atoms/Flex";
 import {
   Button,
   Select,

@@ -1,4 +1,4 @@
-interface FileHeaderProps {
+type FileHeaderProps = {
   title?: string;
   onCopy: () => void;
   disableMinWidth: boolean;
@@ -7,7 +7,7 @@ interface FileHeaderProps {
   onToggleCollapse: () => void;
   showModal: boolean;
   modalTrigger: React.ReactNode;
-}
+};
 
 const FileHeader: React.FC<FileHeaderProps> = ({
   title,

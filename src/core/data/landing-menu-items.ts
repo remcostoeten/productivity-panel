@@ -27,6 +27,7 @@ export const designSystemItems = [
     label: "Theme tailwind colors",
     alias: "TW Colors",
   },
+  { href: "/kbd-variants", label: "KBD variants", alias: "KBD's" },
   { href: "/theme-buttons", label: "Theme buttons", alias: "Buttons" },
 ].map((item) => ({ ...item, href: `${prefix}${item.href}` }));
 

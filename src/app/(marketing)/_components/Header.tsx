@@ -22,7 +22,7 @@ import { AlignJustify, XIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState, useTransition } from "react";
-import { Flex } from "~/src/components/atoms/Flex";
+import Flex from "~/src/components/atoms/Flex";
 import ShinyCircularButton from "~/src/components/effect/button/circular-btn";
 import SettingsModal from "../../(dashboard)/dashboard/settings/_components/modal/SettingsModal";
 import ReusableDropdownMenu from "./dash-header-dropdown";
@@ -64,7 +64,7 @@ const useKeyboardShortcut = () => {
   return { handleLogin, handleLogout };
 };
 
-export default function SiteHeader() {
+export default function Header() {
   const [isPending, startTransition] = useTransition();
   const [isLoading, setIsLoading] = useState(false); // Add loading state
   const [isModalOpen, setModalOpen] = useState(false);
@@ -142,7 +142,7 @@ export default function SiteHeader() {
                 <TooltipTrigger>
                   <Flex gap="4">
                     <ShinyCircularButton href="/sign-in">
-                      Sign in
+                      Login
                     </ShinyCircularButton>
                   </Flex>
                 </TooltipTrigger>

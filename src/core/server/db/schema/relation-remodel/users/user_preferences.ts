@@ -3,7 +3,10 @@ import { users } from "./users";
 
 export const userPreferences = sqliteTable("user_preferences", {
   id: text("id").primaryKey(),
-  userId: text("user_id").notNull().unique().references(() => users.id),
+  userId: text("user_id")
+    .notNull()
+    .unique()
+    .references(() => users.id),
   darkMode: integer("dark_mode", { mode: "boolean" }).notNull().default(false),
   emailNotifications: integer("email_notifications", { mode: "boolean" })
     .notNull()

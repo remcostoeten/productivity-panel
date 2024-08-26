@@ -116,7 +116,7 @@ button[data-localization-key="userProfile.start.dangerSection.deleteAccountButto
 .cl-profileSectionPrimaryButton,
 .cl-accordionTriggerButton,
 .cl-navbarButton {
-  @apply hover:bg-accent hover:text-accent-foreground;
+  @apply hover:bg-dark-section--lighter hover:text-accent-foreground;
 }
 
 .cl-card {

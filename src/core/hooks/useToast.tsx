@@ -1,6 +1,8 @@
+"use client";
+
 import { CheckIcon, LoaderIcon, UndoIcon, XIcon } from "lucide-react";
 import toast, { ToastOptions } from "react-hot-toast";
-import { Flex } from "~/src/components/atoms/Flex";
+import Flex from "~/src/components/atoms/Flex";
 import { Button } from "~/src/components/ui";
 
 const baseStyle = {
@@ -19,7 +21,7 @@ type ToastProps = {
   duration?: number;
 };
 
-export const useToast = () => {
+export default function useToast() {
   const showToast = (options: ToastOptions & ToastProps) => {
     const { message, emoji, duration = 4000, ...rest } = options;
 
@@ -50,17 +52,20 @@ export const useToast = () => {
 
   const pending = (options: ToastProps & { onSuccess: () => void }) => {
     const { onSuccess, ...rest } = options;
+
     const toastId = showToast({
       icon: <LoaderIcon size={14} className="animate-spin" />,
       ...rest,
       duration: 0,
     });
+
     return {
       success: () => {
         toast.success(options.message, {
           id: toastId,
-          icon: <CheckIcon size={10} />,
+          icon: <CheckIcon size={10 />,
         });
+
         onSuccess?.();
       },
     };

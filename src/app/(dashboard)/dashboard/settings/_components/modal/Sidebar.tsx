@@ -1,5 +1,6 @@
 "use client";
 
+import Flex from "@/components/atoms/Flex";
 import { useClerk, useUser } from "@clerk/nextjs";
 import {
   Bell,
@@ -12,7 +13,6 @@ import {
   Users2,
   X,
 } from "lucide-react";
-import { Flex } from "~/src/components/atoms/Flex";
 import { useSettings } from "./SettingsModal";
 
 const menuItems = [
@@ -38,8 +38,8 @@ export default function Sidebar() {
 
   return (
     <div className="w-64 bg-dark-section p-4 flex flex-col border-r border-input">
-      <Flex direction="col" gap={4}>
-        <Flex gap={3} alignItems="center">
+      <Flex dir="col" gap={4}>
+        <Flex gap={3} items="center">
           <img
             src={user?.imageUrl || "/placeholder.svg?height=40&width=40"}
             alt="User avatar"

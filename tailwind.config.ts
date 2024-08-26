@@ -37,10 +37,11 @@ const config = {
           DEFAULT: 'var(--muted)',
           foreground: 'var(--muted)',
         },
+        white: 'var(--white)',
 
         // Borders
         seperator: 'var(--seperator)',
-
+        border: 'var(--border)',
         // seperator: 'var(--border)', // used in input fields
 
         // Vibrant colors
@@ -48,7 +49,6 @@ const config = {
         success: 'var(--success)', // lime--green
 
         // Shadcn colors
-        border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
         background: 'hsl(var(--background))',
@@ -140,6 +140,7 @@ const config = {
             'background-position': 'calc(100% + var(--shimmer-width)) 0',
           },
         },
+
         marquee: {
           from: { transform: 'translateX(0)' },
           to: { transform: 'translateX(calc(-100% - var(--gap)))' },

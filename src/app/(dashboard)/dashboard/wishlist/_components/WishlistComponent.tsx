@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePulse } from "@/components/atoms/AnimatePulse";
-import { Flex } from "@/components/atoms/Flex";
+import Flex from "@/components/atoms/Flex";
 import Truncate from "@/components/atoms/Truncate";
 import { WishlistSkeleton } from "@/components/effect/skeletons";
 import {

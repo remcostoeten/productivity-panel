@@ -1,11 +1,11 @@
 "use client";
 
 import { Folder } from "@/core/server/db/schema/notes";
-import { getFolders } from "@server/server-actions/folder-actions";
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import IconButton from "./IconButton";
 import SidebarItem from "./SidebarItem";
+import { getFolders } from "@/core/server/server-actions/folder-actions";
 
 const Sidebar: React.FC = () => {
   const [folders, setFolders] = useState<Folder[]>([]);

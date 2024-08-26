@@ -10,7 +10,6 @@ import {
 import { auth } from "@clerk/nextjs/server";
 import crypto from "crypto";
 import { eq, sql } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
 
 // Fallback admin emails for testing
 const FALLBACK_ADMIN_EMAILS = ["admin1@example.com", "admin2@example.com"];
@@ -25,7 +24,6 @@ export async function updateLastSignIn() {
   try {
     await db
       .update(userSettings)
-
       .set({ lastSignIn: sql`CAST(strftime('%s', 'now') AS INTEGER)` })
       .where(eq(userSettings.userId, userId));
     return { success: true };
@@ -216,10 +214,6 @@ export async function updateUserProfile(updateData: {
           .where(eq(userSettings.userId, userId));
       }
     });
-
-    // Add this line to revalidate the dashboard page
-    revalidatePath("/dashboard");
-
     return { success: true };
   } catch (error) {
     console.error("Error updating user profile:", error);

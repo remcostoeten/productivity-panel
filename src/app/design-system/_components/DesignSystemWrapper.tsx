@@ -29,7 +29,9 @@ export function DesignSystemWrapper({
           </div>
         </Card>
       )}
-      <div className="bg-dark-section rounded-lg ">{children}</div>
+      <div className="bg-dark-section py-4 px-8 rounded-lg border-seperator">
+        {children}
+      </div>
     </div>
   );
 }

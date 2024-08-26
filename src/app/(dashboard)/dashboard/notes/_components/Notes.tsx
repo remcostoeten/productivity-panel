@@ -1,6 +1,6 @@
 'use client'
 
-import { Flex } from "@/components/atoms/Flex";
+import Flex from "@/components/atoms/Flex";
 import Paragraph from "@/components/atoms/Paragraph";
 import { Note } from "@/core/server/db/schema";
 import { createNote, deleteNote, getNotes, updateNote } from "@/core/server/server-actions/note-actions";

@@ -32,15 +32,15 @@
     "incremental": false,
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./*"],
       "@/*": ["./src/*"],
       "@c/*": ["./src/components/*"],
       "@ui/*": ["./src/components/ui/*"],
+      "@actions/*": ["./src/core/server/server-actions/*"],
+      "@core/*": ["./src/core/*"],
       "@dash/*": ["./src/app/(dashboard)/dashboard/*"],
       "@pages/*": ["./src/app/(marketing)/*"],
-      "@core/*": ["./src/core/*"],
-      "@server/*": ["./src/core/server/*"],
-      "@styles/*": ["./src/styles/*"]
+      "@styles/*": ["./src/styles/*"],
+      "~/*": ["./*"]
     },
     "plugins": [
       {

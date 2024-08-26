@@ -1,17 +1,14 @@
-"use client";
-
 import { motion } from "framer-motion";
-import { ReactNode } from "react";
+import { CSSProperties, ReactNode } from "react";
 
+// Constants for easy customization
 const GRADIENT_COLORS = [
-  "rgba(255,106,0,0.1)", // "var(--color-two)",
-  "var(--brand)", // "var(--color-two)",
-  "#ff6c00", // "var(--color-two)",
-  "var(--brand)", // "var(--color-two)",
-  "#ff5b00", // "var(--color-two)",
-  "rgba(255,106,0,0.1)", // "var(--color-two)",
+  "#fff", // Hex color
+  "var(--primary)", // CSS variable
+  "rgba(123, 104, 238, 0.8)", // RGBA color
+  "#F5833F",
 ];
-const BUTTON_BG_COLOR = "bg-dark-bg border border-seperator";
+const BUTTON_BG_COLOR = "!bg-dark-section--lighter";
 const BORDER_COLOR = "p-px";
 const BORDER_RADIUS = "rounded-full";
 const BUTTON_TEXT_COLOR = "text-muted";
@@ -21,18 +18,28 @@ type ShinyCircularButtonProps = {
   href?: string;
   isClickable?: boolean;
   children?: ReactNode;
+  className?: string;
+  style?: CSSProperties;
+  onClick?: () => void;
 };
 
 export default function ShinyCircularButton({
   href,
   isClickable = true,
   children,
+  className = "",
+  style = {},
+  onClick,
+  ...props
 }: ShinyCircularButtonProps) {
   const ButtonWrapper = isClickable ? (href ? "a" : "button") : "div";
   const buttonProps = {
     ...(isClickable && !href && { type: "button" }),
     ...(href && { href }),
-    className: `$ ${BUTTON_BG_COLOR} min-w-fit ${BORDER_COLOR} relative ${BORDER_RADIUS} overflow-hidden group ${isClickable ? `${ACTIVE_SCALE} w-max transition-transform cursor-pointer` : "cursor-default"}`,
+    ...(onClick && { onClick }),
+    className: `${BUTTON_BG_COLOR} min-w-fit ${BORDER_COLOR} relative ${BORDER_RADIUS} overflow-hidden group ${isClickable ? `${ACTIVE_SCALE} transition-transform cursor-pointer` : "cursor-default"} ${className}`,
+    style,
+    ...props,
   };
 
   const gradientStyle = {
@@ -76,18 +83,18 @@ export default function ShinyCircularButton({
         />
       </motion.span>
       <span
-        className={`relative z-10 ${BORDER_RADIUS} px-4 py-1  ${BUTTON_BG_COLOR} block`}
+        className={`relative z-10 ${BORDER_RADIUS} px-3 py-1 ${BUTTON_BG_COLOR} block`}
       >
         <motion.span
           animate={{
             backgroundImage: animatedGradients,
           }}
           transition={{
-            duration: 2,
+            duration: 1,
             ease: "linear",
             repeat: Number.POSITIVE_INFINITY,
           }}
-          className={`bg-clip-text $ ${BUTTON_TEXT_COLOR} text-sm tracking-tighter transition-colors transform-gpu duration-500`}
+          className={`bg-clip-text group-hover:text-transparent ${BUTTON_TEXT_COLOR} text-sm tracking-tighter transition-colors transform-gpu duration-500`}
         >
           {children}
         </motion.span>

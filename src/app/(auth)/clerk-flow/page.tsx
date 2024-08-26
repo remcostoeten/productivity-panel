@@ -1,4 +1,4 @@
-import { Flex } from "@/components/atoms/Flex";
+import Flex from "@/components/atoms/Flex";
 import Paragraph from "@/components/atoms/Paragraph";
 import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
 import { CodeSwitcher } from "./_components/code-switcher";

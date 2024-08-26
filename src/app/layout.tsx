@@ -9,7 +9,7 @@ import { ThemeProvider } from "next-themes";
 import { Inter as FontSans } from "next/font/google";
 import localFont from "next/font/local";
 import Footer from "../components/theme/layout/footer";
-import SiteHeader from "./(marketing)/_components/marketing-header";
+import Header from "./(marketing)/_components/Header";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -50,7 +50,7 @@ export default async function RootLayout({ children }: PageProps) {
           >
             <div className="min-h-screen">
               <div className="mx-auto w-container px-6 text-center md:px-8">
-                <SiteHeader />
+                <Header />
               </div>
               {showPreloader ? (
                 <PreLoader duration={3000} children={undefined}>

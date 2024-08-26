@@ -1,4 +1,3 @@
-import React from "react";
 import { twMerge } from "tailwind-merge";
 
 type FlexDirection = "row" | "row-reverse" | "col" | "col-reverse";
@@ -27,8 +26,7 @@ type FlexVariant =
   | `space-x-${SpaceSize}`
   | `space-y-${SpaceSize}`;
 
-interface FlexProps<T extends React.ElementType = "div">
-  extends React.HTMLAttributes<HTMLElement> {
+type FlexProps<T extends React.ElementType = "div"> = {
   as?: T;
   dir?: FlexDirection;
   wrap?: FlexWrap;
@@ -43,8 +41,9 @@ interface FlexProps<T extends React.ElementType = "div">
   "aria-labelledby"?: string;
   "data-testid"?: string;
   margin?: string;
+  marginTop?: string;
   key?: React.Key;
-}
+} & React.HTMLAttributes<HTMLElement>;
 
 const spaceToGap: Record<SpaceSize, string> = {
   xs: "2",
@@ -69,7 +68,7 @@ const variantClasses: Record<FlexVariant, string> = {
   "space-y-xl": `flex-col items-center space-y-${spaceToGap.xl}`,
 };
 
-export const Flex = <T extends React.ElementType = "div">({
+export default function Flex<T extends React.ElementType = "div">({
   as,
   dir,
   wrap,
@@ -85,8 +84,10 @@ export const Flex = <T extends React.ElementType = "div">({
   "data-testid": dataTestId,
   className,
   key,
+  margin,
+  marginTop,
   ...props
-}: FlexProps<T>) => {
+}: FlexProps<T>) {
   const Component = as || "div";
   const baseClasses = "flex";
   const variantClass = variantClasses[variant];
@@ -99,6 +100,8 @@ export const Flex = <T extends React.ElementType = "div">({
     items && `items-${items}`,
     content && `content-${content}`,
     gap !== undefined && `gap-${gap}`,
+    margin && `m-[${margin}]`,
+    marginTop && `mt-[${marginTop}]`,
     className,
   );
 
@@ -115,4 +118,4 @@ export const Flex = <T extends React.ElementType = "div">({
       {children}
     </Component>
   );
-};
+}

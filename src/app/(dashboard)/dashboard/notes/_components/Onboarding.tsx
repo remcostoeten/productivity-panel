@@ -1,6 +1,6 @@
 "use client";
 
-import { Flex } from "@/components/atoms/Flex";
+import Flex from "@/components/atoms/Flex";
 import Paragraph from "@/components/atoms/Paragraph";
 import { createFolder } from "@/core/server/server-actions/folder-actions";
 import { motion } from "framer-motion";

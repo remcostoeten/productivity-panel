@@ -1,4 +1,3 @@
-import { Flex } from "@/components/atoms/Flex";
 import { Button } from "@/components/ui/button";
 import { footerLinks } from "@/core/data/landing-menu-items";
 import { siteConfig } from "@/core/data/site-config";
@@ -6,6 +5,7 @@ import { getLatestDeploymentInfo } from "@/core/server/server-actions/latest-dep
 import { GitHubLogoIcon, LinkedInLogoIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 import React from "react";
+import Flex from "../../atoms/Flex";
 
 export default async function Footer() {
   const { commitDate } = await getLatestDeploymentInfo();

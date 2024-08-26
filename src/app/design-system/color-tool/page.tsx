@@ -16,6 +16,7 @@ import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import { CheckIcon } from "lucide-react";
 import { Suspense, useEffect, useRef, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
+import Flex from "~/src/components/atoms/Flex";
 import { DesignSystemWrapper } from "../_components/DesignSystemWrapper";
 import { useColorPicker } from "./ _hooks/use-color-picker";
 import useFileUpload from "./ _hooks/use-file-upload";
@@ -298,7 +299,7 @@ export default function ColorToolPage() {
         useCssVariables={useCssVariables}
         setUseCssVariables={setUseCssVariables}
       />
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <Flex gap={4} dir="col">
         <div className="bg-card p-4 rounded-lg shadow-md">
           <h2 className="text-lg font-bold mb-4">Upload Image</h2>
           {imageSrc ? (
@@ -368,7 +369,7 @@ export default function ColorToolPage() {
             />
           ))}
         </div>
-      </div>
+      </Flex>
 
       {generatedCode && (
         <Tabs defaultValue="tailwind">
