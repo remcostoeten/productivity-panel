@@ -1,116 +1,121 @@
 "use client";
 
-import Flex from "@c/atoms/Flex";
-import Paragraph from "@c/atoms/Paragraph";
-import { getFolders } from "@server/server-actions/folder-actions";
-import { AnimatePresence, motion } from "framer-motion";
-import { ChevronDown, ChevronRight, FolderIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useNotesStore } from "@/core/stores/useNotesStore";
+import { useState } from "react";
 
-interface Folder {
+interface FolderNode {
   id: string;
   name: string;
-  userId: string;
-  parentId: string | null;
-  createdAt: number;
-  updatedAt: number;
+  children: FolderNode[];
 }
 
-interface FolderNodeProps {
-  folder: Folder;
-  level: number;
-  onSelectFolder: (folderId: string) => void;
-}
-
-interface FolderTreeProps {
-  onSelectFolder: (folderId: string) => void;
-}
-
-function FolderNode({ folder, level, onSelectFolder }: FolderNodeProps) {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [subFolders, setSubFolders] = useState<Folder[]>([]);
-
-  useEffect(() => {
-    const loadSubFolders = async () => {
-      const folders = await getFolders();
-      setSubFolders(folders.filter((f) => f.parentId === folder.id));
-    };
-    if (isOpen) {
-      loadSubFolders();
-    }
-  }, [isOpen, folder.id]);
-
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-    >
-      <Flex
-        as="div"
-        items="center"
-        className={`cursor-pointer hover:bg-[#2A2A2A] p-1 rounded pl-${level * 4}`}
-        onClick={() => {
-          setIsOpen(!isOpen);
-          onSelectFolder(folder.id);
-        }}
-      >
-        {isOpen ? (
-          <ChevronDown size={16} className="text-gray-400" />
-        ) : (
-          <ChevronRight size={16} className="text-gray-400" />
-        )}
-        <FolderIcon size={16} className="mr-2 text-gray-400" />
-        <Paragraph size="sm" className="text-gray-300">
-          {folder.name}
-        </Paragraph>
-      </Flex>
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ height: 0 }}
-            animate={{ height: "auto" }}
-            exit={{ height: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            {subFolders.map((subFolder) => (
-              <FolderNode
-                key={subFolder.id}
-                folder={subFolder}
-                level={level + 1}
-                onSelectFolder={onSelectFolder}
-              />
-            ))}
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.div>
+export default function FolderTree() {
+  const { folders, createFolder, deleteFolder, setCurrentFolder } =
+    useNotesStore();
+  const [newFolderName, setNewFolderName] = useState("");
+  const [expandedFolders, setExpandedFolders] = useState<Set<string>>(
+    new Set(),
   );
-}
 
-export function FolderTree({ onSelectFolder }: FolderTreeProps) {
-  const [rootFolders, setRootFolders] = useState<Folder[]>([]);
+  // Convert flat folder structure to tree
+  const buildFolderTree = (folders: any[]): FolderNode[] => {
+    const folderMap = new Map<string, FolderNode>();
+    folders.forEach((folder) => {
+      folderMap.set(folder.id, { ...folder, children: [] });
+    });
 
-  useEffect(() => {
-    const loadRootFolders = async () => {
-      const folders = await getFolders();
-      setRootFolders(folders.filter((f) => !f.parentId));
-    };
-    loadRootFolders();
-  }, []);
+    const rootFolders: FolderNode[] = [];
+    folders.forEach((folder) => {
+      if (folder.parentId) {
+        const parent = folderMap.get(folder.parentId);
+        if (parent) {
+          parent.children.push(folderMap.get(folder.id)!);
+        }
+      } else {
+        rootFolders.push(folderMap.get(folder.id)!);
+      }
+    });
+
+    return rootFolders;
+  };
+
+  const folderTree = buildFolderTree(folders);
+
+  const toggleFolder = (folderId: string) => {
+    setExpandedFolders((prev) => {
+      const next = new Set(prev);
+      if (next.has(folderId)) {
+        next.delete(folderId);
+      } else {
+        next.add(folderId);
+      }
+      return next;
+    });
+  };
+
+  const handleCreateFolder = () => {
+    if (newFolderName.trim()) {
+      createFolder(newFolderName.trim());
+      setNewFolderName("");
+    }
+  };
+
+  const handleDeleteFolder = (folderId: string) => {
+    if (confirm("Are you sure you want to delete this folder?")) {
+      deleteFolder(folderId);
+    }
+  };
+
+  const renderFolder = (folder: FolderNode, depth: number = 0) => {
+    const isExpanded = expandedFolders.has(folder.id);
+
+    return (
+      <div key={folder.id} style={{ marginLeft: `${depth * 20}px` }}>
+        <div className="flex items-center py-2">
+          {folder.children.length > 0 && (
+            <button onClick={() => toggleFolder(folder.id)} className="mr-2">
+              {isExpanded ? "▼" : "►"}
+            </button>
+          )}
+          <span
+            onClick={() => setCurrentFolder(folder.id)}
+            className="cursor-pointer hover:text-blue-500"
+          >
+            {folder.name}
+          </span>
+          <button
+            onClick={() => handleDeleteFolder(folder.id)}
+            className="ml-2 text-red-500 hover:text-red-700"
+          >
+            Delete
+          </button>
+        </div>
+        {isExpanded &&
+          folder.children.map((child) => renderFolder(child, depth + 1))}
+      </div>
+    );
+  };
 
   return (
-    <Flex dir="col" className="bg-[#121212] rounded p-2">
-      <AnimatePresence>
-        {rootFolders.map((folder) => (
-          <FolderNode
-            key={folder.id}
-            folder={folder}
-            level={0}
-            onSelectFolder={onSelectFolder}
-          />
-        ))}
-      </AnimatePresence>
-    </Flex>
+    <div className="mt-4">
+      <div className="mb-4">
+        <input
+          type="text"
+          value={newFolderName}
+          onChange={(e) => setNewFolderName(e.target.value)}
+          placeholder="New folder name"
+          className="border p-2 mr-2"
+        />
+        <button
+          onClick={handleCreateFolder}
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+        >
+          Create Folder
+        </button>
+      </div>
+      <div className="border rounded p-4">
+        {folderTree.map((folder) => renderFolder(folder))}
+      </div>
+    </div>
   );
 }
