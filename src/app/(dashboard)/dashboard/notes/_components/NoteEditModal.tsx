@@ -12,14 +12,14 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useNotesStore } from "@/core/stores/useNotesStore";
 import { useEffect, useState } from "react";
+import { NoteEditModalProps } from "../notes.types";
 
-interface NoteEditModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  note: { id: string; title: string; content: string } | null;
-}
-
-export function NoteEditModal({ isOpen, onClose, note }: NoteEditModalProps) {
+export function NoteEditModal({
+  isOpen,
+  onEdit,
+  onClose,
+  note,
+}: NoteEditModalProps) {
   const [title, setTitle] = useState(note?.title || "");
   const [content, setContent] = useState(note?.content || "");
   const { editNote } = useNotesStore();
@@ -33,7 +33,7 @@ export function NoteEditModal({ isOpen, onClose, note }: NoteEditModalProps) {
 
   const handleSave = async () => {
     if (note) {
-      await editNote(note.id, title, content);
+      await editNote(note.id, { title, content });
       onClose();
     }
   };

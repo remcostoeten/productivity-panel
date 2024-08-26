@@ -19,11 +19,13 @@ type Folder = {
 };
 
 type NotesPageClientProps = {
-  folders: Folder[];
-  notes: Note[];
+  initialFolders: Folder[];
+  initialNotes: Note[];
   userId: string;
   isLoadingFolders: boolean;
   isLoadingNotes: boolean;
+  folders: Folder[];
+  notes: Note[];
 };
 
 type FolderTreeProps = {
@@ -31,4 +33,24 @@ type FolderTreeProps = {
   onFolderSelect: (folderId: string) => void;
 };
 
-export type { Folder, FolderTreeProps, Note, NotesPageClientProps };
+type NoteCardProps = {
+  note: Note;
+  key: string;
+};
+
+type NoteEditModalProps = {
+  isOpen: boolean;
+  onEdit: (note: { title: string; content: string }) => void;
+  onClose: () => void;
+  note: Note;
+};
+
+export type {
+    Folder,
+    FolderTreeProps,
+    Note,
+    NoteCardProps,
+    NoteEditModalProps,
+    NotesPageClientProps
+};
+

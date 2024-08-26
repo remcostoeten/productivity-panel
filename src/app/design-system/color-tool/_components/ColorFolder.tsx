@@ -1,19 +1,18 @@
 import {
-  Button,
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-  Input,
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
+    Button,
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+    Input,
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
 } from "@/components/ui";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import { CopyIcon, EditIcon, MoveIcon, TrashIcon } from "lucide-react";
-import React from "react";
 import { ColorFolderProps } from "../types.color-tool";
 
 export default function ColorFolder({
@@ -76,7 +75,7 @@ export default function ColorFolder({
                           saveEditedColor();
                         }
                       }}
-                      className="w-24 text-xs px-2 py-1 rounded-md bg-muted text-muted-foreground"
+                      className="w-24 text-xs px-2 py-1 rounded-md bg-dark-section--lighter text-muted-foreground"
                       autoFocus
                     />
                   ) : (
