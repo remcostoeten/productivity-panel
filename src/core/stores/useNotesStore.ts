@@ -1,4 +1,5 @@
 "use client";
+import { Folder, Note } from "@/app/(dashboard)/dashboard/notes/notes.types";
 
 import {
   createFolder,
@@ -12,25 +13,6 @@ import {
 } from "@/core/server/server-actions/notes";
 import { create } from "zustand";
 
-interface Note {
-  id: string;
-  userId: string;
-  title: string;
-  content: string;
-  folderId: string | null;
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface Folder {
-  id: string;
-  userId: string;
-  name: string;
-  parentId: string | null;
-  createdAt: string;
-  updatedAt: string;
-}
-
 interface NotesStore {
   notes: Note[];
   folders: Folder[];
@@ -39,31 +21,27 @@ interface NotesStore {
   isLoading: boolean;
   error: string | null;
 
-  // Note operations
   fetchNotes: (userId: string) => Promise<void>;
   fetchNote: (noteId: string) => Promise<void>;
   addNote: (
     userId: string,
     title: string,
     content: string,
-    folderId?: string,
+    folderId?: string | null,
   ) => Promise<void>;
-  editNote: (noteId: string, title: string, content: string) => Promise<void>;
+  editNote: (noteId: string, data: Partial<Note>) => Promise<void>;
   removeNote: (noteId: string) => Promise<void>;
   moveNote: (noteId: string, newFolderId: string | null) => Promise<void>;
 
-  // Folder operations
   fetchFolders: () => Promise<void>;
   createFolder: (name: string, parentId?: string) => Promise<void>;
   deleteFolder: (folderId: string) => Promise<void>;
   setCurrentFolder: (folderId: string | null) => void;
 
-  // Utility functions
   clearError: () => void;
   setLoading: (isLoading: boolean) => void;
 }
 
-// Zustand store creation
 export const useNotesStore = create<NotesStore>((set, get) => ({
   notes: [],
   folders: [],
@@ -98,7 +76,7 @@ export const useNotesStore = create<NotesStore>((set, get) => ({
     userId: string,
     title: string,
     content: string,
-    folderId?: string,
+    folderId: string | null = null,
   ) => {
     set({ isLoading: true, error: null });
     try {
@@ -110,15 +88,16 @@ export const useNotesStore = create<NotesStore>((set, get) => ({
     }
   },
 
-  editNote: async (noteId: string, title: string, content: string) => {
+  editNote: async (noteId: string, data: Partial<Note>) => {
     set({ isLoading: true, error: null });
     try {
-      const updatedNote = await updateNote(noteId, title, content);
+      const updatedNote = await updateNote(noteId, data);
       set((state) => ({
         notes: state.notes.map((note) =>
           note.id === noteId ? updatedNote : note,
         ),
-        currentNote: updatedNote,
+        currentNote:
+          state.currentNote?.id === noteId ? updatedNote : state.currentNote,
         isLoading: false,
       }));
     } catch (error) {
@@ -146,11 +125,13 @@ export const useNotesStore = create<NotesStore>((set, get) => ({
   moveNote: async (noteId: string, newFolderId: string | null) => {
     set({ isLoading: true, error: null });
     try {
-      const movedNote = await updateNote(noteId, { folderId: newFolderId });
+      const updatedNote = await updateNote(noteId, { folderId: newFolderId });
       set((state) => ({
         notes: state.notes.map((note) =>
-          note.id === noteId ? movedNote : note,
+          note.id === noteId ? updatedNote : note,
         ),
+        currentNote:
+          state.currentNote?.id === noteId ? updatedNote : state.currentNote,
         isLoading: false,
       }));
     } catch (error) {
@@ -192,6 +173,9 @@ export const useNotesStore = create<NotesStore>((set, get) => ({
         folders: state.folders.filter((folder) => folder.id !== folderId),
         currentFolder:
           state.currentFolder?.id === folderId ? null : state.currentFolder,
+        notes: state.notes.map((note) =>
+          note.folderId === folderId ? { ...note, folderId: null } : note,
+        ),
         isLoading: false,
       }));
     } catch (error) {

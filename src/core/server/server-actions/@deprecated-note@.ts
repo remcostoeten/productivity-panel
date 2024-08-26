@@ -5,6 +5,9 @@ import { eq } from "drizzle-orm";
 import { db } from "../db";
 import { notes } from "../db/schema/notes";
 
+/**
+ * @deprecated This function is deprecated and should not be used.
+ */
 export async function createNote(
   title: string,
   content: string,
@@ -27,6 +30,9 @@ export async function createNote(
   return newNote[0];
 }
 
+/**
+ * @deprecated This function is deprecated and should not be used.
+ */
 export async function updateNote(
   id: string,
   title: string,
@@ -45,6 +51,9 @@ export async function updateNote(
   return updatedNote[0];
 }
 
+/**
+ * @deprecated This function is deprecated and should not be used.
+ */
 export async function deleteNote(id: string) {
   const { userId } = auth();
   if (!userId) throw new Error("Unauthorized");
@@ -52,6 +61,9 @@ export async function deleteNote(id: string) {
   await db.delete(notes).where(eq(notes.id, id));
 }
 
+/**
+ * @deprecated This function is deprecated and should not be used.
+ */
 export async function getNotes(folderId?: string) {
   const { userId } = auth();
   if (!userId) throw new Error("Unauthorized");

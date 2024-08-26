@@ -4,7 +4,11 @@ import { users } from "../relation-remodel/users/users";
 
 export const tags = sqliteTable("tags", {
   id: text("id").primaryKey(),
-  userId: text("user_id").notNull().references(() => users.id),
+  userId: text("user_id")
+    .notNull()
+    .references(() => users.id),
   name: text("name").notNull(),
-  createdAt: integer("created_at").notNull().default(sql`(strftime('%s', 'now'))`),
+  createdAt: integer("created_at")
+    .notNull()
+    .default(sql`(strftime('%s', 'now'))`),
 });

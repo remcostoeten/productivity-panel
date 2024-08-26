@@ -1,4 +1,5 @@
 "use server";
+import { Note } from "@/app/(dashboard)/dashboard/notes/notes.types";
 import { generateId } from "@/core/helpers/generate-id";
 import { db } from "@/core/server/db";
 import { notes } from "@/core/server/db/schema/notes/notes";
@@ -8,23 +9,23 @@ export async function createNote(
   userId: string,
   title: string,
   content: string,
+  folderId: string | null,
 ) {
-  try {
-    const newNote = await db
-      .insert(notes)
-      .values({
-        id: generateId("note"),
-        userId,
-        title,
-        content,
-      })
-      .returning();
-
-    revalidatePath("/dashboard/notes");
-    return newNote[0];
-  } catch (error) {
-    console.error("Error creating note:", error);
-    console.error("Attempted to create note with:", { userId, title, content });
-    throw error;
+  if (!folderId) {
+    throw new Error("A folder must be selected to create a note.");
   }
+
+  const newNote = await db
+    .insert(notes)
+    .values({
+      id: generateId("note"),
+      userId,
+      title,
+      content,
+      folderId,
+    })
+    .returning();
+
+  revalidatePath("/dashboard/notes");
+  return newNote[0] as Note;
 }

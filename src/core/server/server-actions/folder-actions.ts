@@ -3,7 +3,7 @@
 import { db } from "@/core/server/db";
 import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
-import { folders } from "../db/schema/notes";
+import { folders } from "../db/schema/pannenkoeks";
 
 export async function createFolder(name: string) {
   const session = await auth();

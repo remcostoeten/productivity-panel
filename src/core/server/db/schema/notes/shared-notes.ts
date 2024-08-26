@@ -5,8 +5,14 @@ import { users } from "../relation-remodel/users/users";
 
 export const sharedNotes = sqliteTable("shared_notes", {
   id: text("id").primaryKey(),
-  noteId: text("note_id").notNull().references(() => notes.id),
-  sharedWithUserId: text("shared_with_user_id").notNull().references(() => users.id),
+  noteId: text("note_id")
+    .notNull()
+    .references(() => notes.id),
+  sharedWithUserId: text("shared_with_user_id")
+    .notNull()
+    .references(() => users.id),
   permissions: text("permissions").notNull(),
-  createdAt: integer("created_at").notNull().default(sql`(strftime('%s', 'now'))`),
+  createdAt: integer("created_at")
+    .notNull()
+    .default(sql`(strftime('%s', 'now'))`),
 });

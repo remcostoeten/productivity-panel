@@ -2,9 +2,9 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { useNotesStore } from "@/core/stores/useNotesStore";
 import { useState } from "react";
 import { NoteEditModal } from "./NoteEditModal";
+import { useNotesStore } from "@/core/stores/useNotesStore";
 
 interface NoteCardProps {
   note: {
@@ -12,15 +12,16 @@ interface NoteCardProps {
     title: string;
     content: string;
   };
+  key: string | number;
 }
 
-export default function NoteCard({ note }: NoteCardProps) {
+export default function NoteCard({ note, key }: NoteCardProps) {
   const { removeNote } = useNotesStore();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   return (
     <>
-      <Card>
+      <Card key={key}>
         <CardContent>
           <h2 className="text-xl font-semibold mb-2">{note.title}</h2>
           <p className="text-gray-600">{note.content.substring(0, 100)}...</p>

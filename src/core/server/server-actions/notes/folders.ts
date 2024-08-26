@@ -2,10 +2,10 @@
 
 import { generateId } from "@/core/helpers/generate-id";
 import { db } from "@/core/server/db";
-import { folders } from "@/core/server/db/schema/notes/folders";
 import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { folders } from "../../db/schema/notes";
 
 export async function getFolders() {
   const { userId } = auth();
@@ -37,7 +37,7 @@ export async function createFolder(
     })
     .returning();
 
-  revalidatePath("/dashboard/notes");
+  revalidatePath("/dashboard/pannenkoeks");
   return newFolder[0];
 }
 
@@ -49,5 +49,5 @@ export async function deleteFolder(folderId: string) {
   }
 
   await db.delete(folders).where(eq(folders.id, folderId));
-  revalidatePath("/dashboard/notes");
+  revalidatePath("/dashboard/pannenkoeks");
 }
