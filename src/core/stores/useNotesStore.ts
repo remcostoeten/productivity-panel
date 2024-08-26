@@ -1,19 +1,20 @@
 "use client";
-import { Folder, Note } from "@/app/(dashboard)/dashboard/notes/notes.types";
 
+import { Folder, Note } from "@/app/(dashboard)/dashboard/notes/notes.types";
 import {
-  createFolder,
-  createNote,
-  deleteFolder,
-  deleteNote,
-  getFolders,
-  getNote,
-  getNotes,
-  updateNote,
+    createFolder,
+    createNote,
+    deleteFolder,
+    deleteNote,
+    getFolders,
+    getNotes,
+    updateFolder,
+    updateNote
 } from "@/core/server/server-actions/notes";
+import toast from "react-hot-toast";
 import { create } from "zustand";
 
-interface NotesStore {
+type NotesStore = {
   notes: Note[];
   folders: Folder[];
   currentNote: Note | null;
@@ -21,7 +22,7 @@ interface NotesStore {
   isLoading: boolean;
   error: string | null;
 
-  fetchNotes: (userId: string) => Promise<void>;
+  fetchNotes: (userId: string, folderId: string | null) => Promise<void>;
   fetchNote: (noteId: string) => Promise<void>;
   addNote: (
     userId: string,
@@ -35,12 +36,13 @@ interface NotesStore {
 
   fetchFolders: () => Promise<void>;
   createFolder: (name: string, parentId?: string) => Promise<void>;
+  editFolder: (folderId: string, name: string) => Promise<void>;
   deleteFolder: (folderId: string) => Promise<void>;
   setCurrentFolder: (folderId: string | null) => void;
 
   clearError: () => void;
   setLoading: (isLoading: boolean) => void;
-}
+};
 
 export const useNotesStore = create<NotesStore>((set, get) => ({
   notes: [],
@@ -50,14 +52,15 @@ export const useNotesStore = create<NotesStore>((set, get) => ({
   isLoading: false,
   error: null,
 
-  fetchNotes: async (userId: string) => {
+  fetchNotes: async (userId: string, folderId: string | null) => {
     set({ isLoading: true, error: null });
     try {
-      const fetchedNotes = await getNotes(userId);
+      const fetchedNotes = await getNotes(userId, folderId); // Updated to include folderId
       set({ notes: fetchedNotes, isLoading: false });
     } catch (error) {
       set({ error: "Failed to fetch notes", isLoading: false });
       console.error("Error fetching notes:", error);
+      toast.error("Failed to fetch notes");
     }
   },
 
@@ -66,9 +69,11 @@ export const useNotesStore = create<NotesStore>((set, get) => ({
     try {
       const fetchedNote = await getNote(noteId);
       set({ currentNote: fetchedNote, isLoading: false });
+      toast.success("Note fetched successfully");
     } catch (error) {
       set({ error: "Failed to fetch note", isLoading: false });
       console.error("Error fetching note:", error);
+      toast.error("Failed to fetch note");
     }
   },
 
@@ -82,9 +87,11 @@ export const useNotesStore = create<NotesStore>((set, get) => ({
     try {
       const newNote = await createNote(userId, title, content, folderId);
       set((state) => ({ notes: [...state.notes, newNote], isLoading: false }));
+      toast.success("Note added successfully");
     } catch (error) {
       set({ error: "Failed to add note", isLoading: false });
       console.error("Error adding note:", error);
+      toast.error("Failed to add note");
     }
   },
 
@@ -94,15 +101,19 @@ export const useNotesStore = create<NotesStore>((set, get) => ({
       const updatedNote = await updateNote(noteId, data);
       set((state) => ({
         notes: state.notes.map((note) =>
-          note.id === noteId ? updatedNote : note,
+          note.id === noteId ? { ...note, ...updatedNote } : note,
         ),
         currentNote:
-          state.currentNote?.id === noteId ? updatedNote : state.currentNote,
+          state.currentNote?.id === noteId
+            ? { ...state.currentNote, ...updatedNote }
+            : state.currentNote,
         isLoading: false,
       }));
+      toast.success("Note updated successfully");
     } catch (error) {
       set({ error: "Failed to update note", isLoading: false });
       console.error("Error updating note:", error);
+      toast.error("Failed to update note");
     }
   },
 
@@ -116,9 +127,11 @@ export const useNotesStore = create<NotesStore>((set, get) => ({
           state.currentNote?.id === noteId ? null : state.currentNote,
         isLoading: false,
       }));
+      toast.success("Note deleted successfully");
     } catch (error) {
       set({ error: "Failed to delete note", isLoading: false });
       console.error("Error deleting note:", error);
+      toast.error("Failed to delete note");
     }
   },
 
@@ -128,15 +141,19 @@ export const useNotesStore = create<NotesStore>((set, get) => ({
       const updatedNote = await updateNote(noteId, { folderId: newFolderId });
       set((state) => ({
         notes: state.notes.map((note) =>
-          note.id === noteId ? updatedNote : note,
+          note.id === noteId ? { ...note, ...updatedNote } : note,
         ),
         currentNote:
-          state.currentNote?.id === noteId ? updatedNote : state.currentNote,
+          state.currentNote?.id === noteId
+            ? { ...state.currentNote, ...updatedNote }
+            : state.currentNote,
         isLoading: false,
       }));
+      toast.success("Note moved successfully");
     } catch (error) {
       set({ error: "Failed to move note", isLoading: false });
       console.error("Error moving note:", error);
+      toast.error("Failed to move note");
     }
   },
 
@@ -148,6 +165,7 @@ export const useNotesStore = create<NotesStore>((set, get) => ({
     } catch (error) {
       set({ error: "Failed to fetch folders", isLoading: false });
       console.error("Error fetching folders:", error);
+      toast.error("Failed to fetch folders");
     }
   },
 
@@ -159,9 +177,29 @@ export const useNotesStore = create<NotesStore>((set, get) => ({
         folders: [...state.folders, newFolder],
         isLoading: false,
       }));
+      toast.success("Folder created successfully");
     } catch (error) {
       set({ error: "Failed to create folder", isLoading: false });
       console.error("Error creating folder:", error);
+      toast.error("Failed to create folder");
+    }
+  },
+
+  editFolder: async (folderId: string, name: string) => {
+    set({ isLoading: true, error: null });
+    try {
+      await updateFolder(folderId, name);
+      set((state) => ({
+        folders: state.folders.map((folder) =>
+          folder.id === folderId ? { ...folder, name } : folder,
+        ),
+        isLoading: false,
+      }));
+      toast.success("Folder updated successfully");
+    } catch (error) {
+      set({ error: "Failed to update folder", isLoading: false });
+      console.error("Error updating folder:", error);
+      toast.error("Failed to update folder");
     }
   },
 
@@ -171,27 +209,20 @@ export const useNotesStore = create<NotesStore>((set, get) => ({
       await deleteFolder(folderId);
       set((state) => ({
         folders: state.folders.filter((folder) => folder.id !== folderId),
-        currentFolder:
-          state.currentFolder?.id === folderId ? null : state.currentFolder,
-        notes: state.notes.map((note) =>
-          note.folderId === folderId ? { ...note, folderId: null } : note,
-        ),
         isLoading: false,
       }));
+      toast.success("Folder deleted successfully");
     } catch (error) {
       set({ error: "Failed to delete folder", isLoading: false });
       console.error("Error deleting folder:", error);
+      toast.error("Failed to delete folder");
     }
   },
 
   setCurrentFolder: (folderId: string | null) => {
-    const folder = folderId
-      ? get().folders.find((f) => f.id === folderId) || null
-      : null;
-    set({ currentFolder: folder });
+    set({ currentFolder: folderId ? get().folders.find(folder => folder.id === folderId) : null });
   },
 
   clearError: () => set({ error: null }),
-
   setLoading: (isLoading: boolean) => set({ isLoading }),
 }));
