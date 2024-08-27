@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/select";
 import { useNotesStore } from "@/core/stores/useNotesStore";
 import { useState } from "react";
-import { NoteCardProps } from "../notes.types";
+import { NoteCardProps } from "../../notes.types";
 import { NoteEditModal } from "./NoteEditModal";
 
 export default function NoteCard({ note, key }: NoteCardProps) {

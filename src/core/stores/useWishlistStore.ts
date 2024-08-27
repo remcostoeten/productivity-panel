@@ -1,220 +1,147 @@
-import { create } from "zustand";
+import { Folder, Note } from '@/app/(dashboard)/dashboard/notes/notes.types';
 import {
-  createWishlist,
-  createWishlistItem,
-  deleteWishlistItem,
-  getWishlistsByUser,
-  updateWishlist,
-  updateWishlistItem,
-} from "../server/server-actions/wishlist";
-import { Wishlist } from "../types/types.wishlist";
+    createFolder,
+    createNote,
+    deleteNote,
+    getFolders,
+    getNotes,
+    updateFolder,
+    updateNote
+} from '@/core/server/server-actions/notes';
+import toast from 'react-hot-toast';
+import { create } from 'zustand';
 
-type WishlistStore = {
-  wishlists: Wishlist[];
+type NotesStore = {
+  folders: Folder[];
+  notes: Note[];
+  currentFolder: Folder | null;
   isLoading: boolean;
   error: string | null;
-  fetchWishlists: (userId: string) => Promise<void>;
-  addWishlist: (userId: string, name: string, budget: number) => Promise<void>;
-  addWishlistItem: (
-    wishlistId: string,
-    name: string,
-    price: number,
-    description: string,
-    url?: string,
-    category?: string,
-  ) => Promise<Wishlist>;
-  removeWishlistItem: (itemId: string) => Promise<void>;
-  updateWishlistBudget: (
-    wishlistId: string,
-    newBudget: number,
-  ) => Promise<void>;
-  updateWishlistName: (wishlistId: string, newName: string) => Promise<void>;
-  updateWishlistItem: (
-    itemId: string,
-    name: string,
-    price: number,
-    description: string,
-    url?: string,
-    category?: string,
-  ) => Promise<void>;
+  fetchFolders: () => Promise<void>;
+  fetchNotes: (userId: string, folderId?: string | null) => Promise<void>;
+  addNote: (userId: string, title: string, content: string, folderId: string) => Promise<void>;
+  editNote: (noteId: string, updates: Partial<Note>) => Promise<void>;
+  removeNote: (noteId: string) => Promise<void>;
+  moveNote: (noteId: string, newFolderId: string | null) => Promise<void>;
+  createFolder: (name: string) => Promise<void>;
+  editFolder: (folderId: string, name: string) => Promise<void>;
+  setCurrentFolder: (folderId: string | null) => void;
 };
 
-export const useWishlistStore = create<WishlistStore>((set, get) => ({
-  wishlists: [],
+export const useNotesStore = create<NotesStore>((set, get) => ({
+  folders: [],
+  notes: [],
+  currentFolder: null,
   isLoading: false,
   error: null,
 
-  fetchWishlists: async (userId: string): Promise<void> => {
-    console.log("Fetching wishlists for user:", userId);
+  fetchFolders: async () => {
     set({ isLoading: true, error: null });
     try {
-      const wishlists = await getWishlistsByUser(userId);
-      console.log("Fetched wishlists:", wishlists);
-      set({ wishlists, isLoading: false, error: null });
+      const folders = await getFolders();
+      set({ folders, isLoading: false });
     } catch (error) {
-      console.error("Error fetching wishlists:", error);
-      set({ error: "Failed to fetch wishlists", isLoading: false });
+      set({ error: 'Failed to fetch folders', isLoading: false });
+      toast.error('Failed to fetch folders');
     }
   },
 
-  updateWishlistItem: async (
-    itemId: string,
-    name: string,
-    price: number,
-    description: string,
-    url?: string,
-    category?: string,
-  ): Promise<void> => {
+  fetchNotes: async (userId, folderId) => {
+    set({ isLoading: true, error: null });
     try {
-      console.log("Updating wishlist item:", {
-        itemId,
-        name,
-        price,
-        description,
-        url,
-        category,
-      });
-      await updateWishlistItem(itemId, { name, price, description, url });
-      console.log("Wishlist item updated successfully");
-
-      const updatedWishlists = get().wishlists.map((wishlist) => ({
-        ...wishlist,
-        items: (wishlist.items || []).map((item) =>
-          item.id === itemId
-            ? { ...item, name, price, description, url }
-            : item,
-        ),
-      }));
-
-      set({ wishlists: updatedWishlists, error: null });
+      const notes = await getNotes(userId, folderId);
+      set({ notes, isLoading: false });
     } catch (error) {
-      console.error("Error updating wishlist item:", error);
-      set({ error: "Failed to update wishlist item" });
+      set({ error: 'Failed to fetch notes', isLoading: false });
+      toast.error('Failed to fetch notes');
     }
   },
 
-  addWishlist: async (
-    userId: string,
-    name: string,
-    budget: number,
-  ): Promise<void> => {
+  addNote: async (userId, title, content, folderId) => {
+    set({ isLoading: true, error: null });
     try {
-      console.log("Adding new wishlist:", { userId, name, budget });
-      const newWishlist = await createWishlist(userId, name, budget);
-      console.log("New wishlist created:", newWishlist);
+      const newNote = await createNote(userId, title, content, folderId);
+      set((state) => ({ notes: [...state.notes, newNote], isLoading: false }));
+      toast.success('Note added successfully');
+    } catch (error) {
+      set({ error: 'Failed to add note', isLoading: false });
+      toast.error('Failed to add note');
+    }
+  },
 
-      // Fetch updated wishlists after adding
-      const updatedWishlists = await getWishlistsByUser(userId);
-
+  editNote: async (noteId, updates) => {
+    set({ isLoading: true, error: null });
+    try {
+      const updatedNote = await updateNote(noteId, updates);
       set((state) => ({
-        wishlists: updatedWishlists,
-        error: null,
+        notes: state.notes.map((note) => (note.id === noteId ? updatedNote : note)),
+        isLoading: false,
       }));
+      toast.success('Note updated successfully');
     } catch (error) {
-      console.error("Error adding wishlist:", error);
-      set({ error: "Failed to add wishlist" });
+      set({ error: 'Failed to update note', isLoading: false });
+      toast.error('Failed to update note');
     }
   },
 
-  addWishlistItem: async (
-    wishlistId: string,
-    name: string,
-    price: number,
-    description: string,
-    url?: string,
-    category?: string,
-  ): Promise<Wishlist> => {
+  removeNote: async (noteId) => {
+    set({ isLoading: true, error: null });
     try {
-      console.log("Adding new wishlist item:", {
-        wishlistId,
-        name,
-        price,
-        description,
-        url,
-        category,
-      });
-      const newItem = await createWishlistItem(
-        wishlistId,
-        name,
-        price,
-        description,
-        url,
-      );
-      console.log("New item created:", newItem);
-
-      const updatedWishlists = get().wishlists.map((wishlist) =>
-        wishlist.id === wishlistId
-          ? { ...wishlist, items: [...(wishlist.items || []), newItem] }
-          : wishlist,
-      );
-
-      set({ wishlists: updatedWishlists, error: null });
-
-      return updatedWishlists.find((w) => w.id === wishlistId) as Wishlist;
-    } catch (error) {
-      console.error("Error adding wishlist item:", error);
-      set({ error: "Failed to add wishlist item" });
-      throw error;
-    }
-  },
-
-  removeWishlistItem: async (itemId: string): Promise<void> => {
-    try {
-      console.log("Removing wishlist item:", itemId);
-      await deleteWishlistItem(itemId);
-      console.log("Wishlist item removed successfully");
-
-      const updatedWishlists = get().wishlists.map((wishlist) => ({
-        ...wishlist,
-        items: (wishlist.items || []).filter((item) => item.id !== itemId),
+      await deleteNote(noteId);
+      set((state) => ({
+        notes: state.notes.filter((note) => note.id !== noteId),
+        isLoading: false,
       }));
-
-      set({ wishlists: updatedWishlists, error: null });
+      toast.success('Note removed successfully');
     } catch (error) {
-      console.error("Error removing wishlist item:", error);
-      set({ error: "Failed to remove wishlist item" });
+      set({ error: 'Failed to remove note', isLoading: false });
+      toast.error('Failed to remove note');
     }
   },
 
-  updateWishlistName: async (
-    wishlistId: string,
-    newName: string,
-  ): Promise<void> => {
+  moveNote: async (noteId, newFolderId) => {
+    set({ isLoading: true, error: null });
     try {
-      console.log("Updating wishlist name:", { wishlistId, newName });
-      await updateWishlist(wishlistId, { name: newName });
-      console.log("Wishlist name updated successfully");
-
-      const updatedWishlists = get().wishlists.map((wishlist) =>
-        wishlist.id === wishlistId ? { ...wishlist, name: newName } : wishlist,
-      );
-
-      set({ wishlists: updatedWishlists, error: null });
+      const updatedNote = await updateNote(noteId, { folderId: newFolderId });
+      set((state) => ({
+        notes: state.notes.map((note) => (note.id === noteId ? updatedNote : note)),
+        isLoading: false,
+      }));
+      toast.success('Note moved successfully');
     } catch (error) {
-      console.error("Error updating wishlist name:", error);
-      set({ error: "Failed to update wishlist name" });
+      set({ error: 'Failed to move note', isLoading: false });
+      toast.error('Failed to move note');
     }
   },
 
-  updateWishlistBudget: async (
-    wishlistId: string,
-    newBudget: number,
-  ): Promise<void> => {
+  createFolder: async (name) => {
+    set({ isLoading: true, error: null });
     try {
-      console.log("Updating wishlist budget:", { wishlistId, newBudget });
-      await updateWishlist(wishlistId, { budget: newBudget });
-      console.log("Wishlist budget updated successfully");
-
-      const updatedWishlists = get().wishlists.map((wishlist) =>
-        wishlist.id === wishlistId
-          ? { ...wishlist, budget: newBudget }
-          : wishlist,
-      );
-
-      set({ wishlists: updatedWishlists, error: null });
+      const newFolder = await createFolder(name);
+      set((state) => ({ folders: [...state.folders, newFolder], isLoading: false }));
+      toast.success('Folder created successfully');
     } catch (error) {
-      console.error("Error updating wishlist budget:", error);
-      set({ error: "Failed to update wishlist budget" });
+      set({ error: 'Failed to create folder', isLoading: false });
+      toast.error('Failed to create folder');
     }
+  },
+
+  editFolder: async (folderId, name) => {
+    set({ isLoading: true, error: null });
+    try {
+      const updatedFolder = await updateFolder(folderId, { name });
+      set((state) => ({
+        folders: state.folders.map((folder) => (folder.id === folderId ? updatedFolder : folder)),
+        isLoading: false,
+      }));
+      toast.success('Folder updated successfully');
+    } catch (error) {
+      set({ error: 'Failed to update folder', isLoading: false });
+      toast.error('Failed to update folder');
+    }
+  },
+
+  setCurrentFolder: (folderId) => {
+    set({ currentFolder: get().folders.find(f => f.id === folderId) || null });
   },
 }));

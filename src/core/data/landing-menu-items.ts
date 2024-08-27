@@ -25,10 +25,11 @@ export const designSystemItems = [
   {
     href: "/tailwind-colors",
     label: "Theme tailwind colors",
-    alias: "TW Colors",
-  },
+    alias: "Config Colors",
+  },      {href:'/section-seperator', label: "Section seperator", alias :"Divider"},
   { href: "/kbd-variants", label: "KBD variants", alias: "KBD's" },
   { href: "/theme-buttons", label: "Theme buttons", alias: "Buttons" },
+  { href: "/pattern-cards", label: "Pattern cards", alias: "Cards" },
 ].map((item) => ({ ...item, href: `${prefix}${item.href}` }));
 
 export const dashboardMenuItems = [

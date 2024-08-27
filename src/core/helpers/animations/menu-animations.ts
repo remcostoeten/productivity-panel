@@ -100,4 +100,5 @@ const containerVariants = {
   },
 };
 
-export { mobilenavbarVariant, mobileLinkVar, containerVariants };
+export { containerVariants, mobileLinkVar, mobilenavbarVariant };
+

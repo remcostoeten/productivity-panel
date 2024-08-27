@@ -1,4 +1,4 @@
-import { Folder, FolderTreeProps } from "../notes.types";
+import { Folder, FolderTreeProps } from "../../notes.types";
 
 export default function FolderTree({
   folders,

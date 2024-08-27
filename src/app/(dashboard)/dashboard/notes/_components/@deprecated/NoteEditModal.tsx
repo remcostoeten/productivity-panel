@@ -2,17 +2,17 @@
 
 import { Button } from "@/components/ui/button";
 import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useNotesStore } from "@/core/stores/useNotesStore";
 import { useEffect, useState } from "react";
-import { NoteEditModalProps } from "../notes.types";
+import { NoteEditModalProps } from "../../notes.types";
 
 export function NoteEditModal({
   isOpen,

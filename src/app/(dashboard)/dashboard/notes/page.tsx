@@ -1,67 +1,38 @@
-import { Folder, Note } from "@/app/(dashboard)/dashboard/notes/notes.types";
-import { getFolders, getNotes } from "@/core/server/server-actions/notes";
-import { auth } from "@clerk/nextjs/server";
-import NotesPageClient from "./page.client";
+import { getNotes } from '@/core/server/server-actions/@deprecated-note@'
+import { getFolders } from '@/core/server/server-actions/notes'
+import { auth } from '@clerk/nextjs/server'
+import { Suspense } from 'react'
+import Loading from '../loading'
+import NotesPageClient from './page.client'
 
 export default async function NotesPage() {
-    const { userId } = auth();
+    const { userId } = auth()
 
     if (!userId) {
-        return <div>Please log in to view your notes.</div>;
+        return <div>Please log in to view your notes.</div>
     }
 
-    // Fetch data on the server
-    const folders: Folder[] = await getFolders();
-    const notes: Note[] = await getNotes(userId);
+    async function loadData() {
+        const folders = await getFolders()
+        const notes = await getNotes(userId)
+        return { folders, notes }
+    }
 
-    return <NotesPageClient folders={folders} notes={notes} userId={userId} initialFolders={[]} initialNotes={[]} isLoadingFolders={false} isLoadingNotes={false} />;
+    return (
+        <Suspense fallback={<Loading />}>
+            <NotesPageClientWrapper userId={userId} loadData={loadData} />
+        </Suspense>
+    )
 }
 
-// "use client";
+async function NotesPageClientWrapper({ userId, loadData }: { userId: string; loadData: () => Promise<{ folders: any[]; notes: any[] }> }) {
+    const { folders, notes } = await loadData()
 
-// import { useNotesStore } from "@/core/stores/useNotesStore";
-// import { useUser } from "@clerk/nextjs";
-// import { useEffect } from "react";
-// import FolderTree from "./_components/FolderTree";
-// import NoteCard from "./_components/NoteCard";
-
-// export default function NotesPage() {
-//   const { user } = useUser();
-//   const { notes, isLoading, error, fetchNotes, addNote, fetchFolders } =
-//     useNotesStore();
-
-//   useEffect(() => {
-//     if (user) {
-//       fetchNotes(user.id);
-//       fetchFolders();
-//     }
-//   }, [user, fetchNotes, fetchFolders]);
-
-//   if (isLoading) return <div>Loading...</div>;
-//   if (error) return <div>Error: {error}</div>;
-
-//   return (
-//     <div className="p-4 flex">
-//       <div className="w-1/4 pr-4">
-//         <h2 className="text-xl font-bold mb-4">Folders</h2>
-//         <FolderTree />
-//       </div>
-//       <div className="w-3/4">
-//         <h1 className="text-2xl font-bold mb-4">My Notes</h1>
-//         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-//           {notes.map((note) => (
-//             <NoteCard key={note.id} note={note} />
-//           ))}
-//         </div>
-//         <button
-//           className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-//           onClick={() =>
-//             user && addNote(user.id, "New Note", "Start writing...")
-//           }
-//         >
-//           Add Note
-//         </button>
-//       </div>
-//     </div>
-//   );
-// }
+    return (
+        <NotesPageClient
+            initialFolders={folders}
+            initialNotes={notes}
+            userId={userId}
+        />
+    )
+}

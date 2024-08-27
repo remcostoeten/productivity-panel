@@ -1,15 +1,15 @@
 "use client";
 
 import {
-  Button,
-  Input,
-  Label,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-  Separator,
+    Button,
+    Input,
+    Label,
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+    Separator,
 } from "@/components/ui";
 import { AnimatePresence, motion } from "framer-motion";
 import { Loader2, Trash2Icon, UndoIcon } from "lucide-react";
