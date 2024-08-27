@@ -4,17 +4,17 @@ import { auth } from "@clerk/nextjs/server";
 import NotesPageClient from "./page.client";
 
 export default async function NotesPage() {
-  const { userId } = auth();
+    const { userId } = auth();
 
-  if (!userId) {
-    return <div>Please log in to view your notes.</div>;
-  }
+    if (!userId) {
+        return <div>Please log in to view your notes.</div>;
+    }
 
-  // Fetch data on the server
-  const folders: Folder[] = await getFolders();
-  const notes: Note[] = await getNotes(userId);
+    // Fetch data on the server
+    const folders: Folder[] = await getFolders();
+    const notes: Note[] = await getNotes(userId);
 
-  return <NotesPageClient folders={folders} notes={notes} userId={userId} />;
+    return <NotesPageClient folders={folders} notes={notes} userId={userId} initialFolders={[]} initialNotes={[]} isLoadingFolders={false} isLoadingNotes={false} />;
 }
 
 // "use client";

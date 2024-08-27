@@ -1,10 +1,10 @@
 "use server";
 
+import { generateId } from "@/core/helpers/generate-id";
 import { db } from "@/core/server/db";
 import { eq } from "drizzle-orm";
-import { nanoid } from "nanoid";
-import { v4 as uuidv4 } from "uuid";
-import { users, wishlistItems, wishlists } from "../db/schema";
+import { users } from "../db/schema/relation-remodel";
+import { wishlistItems, wishlists } from "../db/schema/wishlist";
 
 export async function deleteWishlistItem(itemId: string) {
   await db.delete(wishlistItems).where(eq(wishlistItems.id, itemId));
@@ -31,7 +31,7 @@ export async function createWishlist(
       throw new Error("User not found");
     }
 
-    const id = uuidv4();
+    const id = generateId("wishlist"); // Use generateId instead of uuidv4
     await db.insert(wishlists).values({ id, name, budget, userId });
 
     return { success: true, id };
@@ -99,7 +99,7 @@ export async function createWishlistItem(
   category: string,
 ) {
   const newItem = {
-    id: nanoid(),
+    id: generateId("wishlistItem"), // Use generateId instead of nanoid
     name,
     price,
     description,
