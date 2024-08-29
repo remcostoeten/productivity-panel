@@ -22,21 +22,25 @@ export const designSystemItems = [
     label: "Vercel/geist design system",
     alias: "Vercel/geist",
   },
+
+
+  { href: "/edit-action", label: "Accessible edit form", alias: "Edit form" },
   {
     href: "/tailwind-colors",
     label: "Theme tailwind colors",
     alias: "Config Colors",
-  },      {href:'/section-seperator', label: "Section seperator", alias :"Divider"},
+  },
   { href: "/kbd-variants", label: "KBD variants", alias: "KBD's" },
   { href: "/theme-buttons", label: "Theme buttons", alias: "Buttons" },
-  { href: "/pattern-cards", label: "Pattern cards", alias: "Cards" },
+  { href: "/pattern-cards", label: "Pattern cards", alias: "Cards", disabled: true },
 ].map((item) => ({ ...item, href: `${prefix}${item.href}` }));
 
 export const dashboardMenuItems = [
   { href: "/clerk-flow", label: "Clerk flow" },
   { href: "/dashboard", label: "Dashboard" },
-  { href: "/dashboard/notes", label: "Notes" },
+  { href: "/dashboard/note", label: "Notes" },
   { href: "/dashboard/settings", label: "Settings" },
+  { href: "/dashboard/assets", label: "Assets" },
 ];
 
 export const footerLinks = [

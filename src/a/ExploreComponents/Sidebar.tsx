@@ -5,9 +5,9 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import IconButton from "./IconButton";
 import SidebarItem from "./SidebarItem";
-import { getFolders } from "@/core/server/server-actions/folder-actions";
+import { getFolders } from "@/core/server/server-actions/notes";
 
-const Sidebar: React.FC = () => {
+const Sidebar = () => {
   const [folders, setFolders] = useState<Folder[]>([]);
   const [activeFolder, setActiveFolder] = useState<string | null>(null);
 

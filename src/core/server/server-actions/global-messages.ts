@@ -5,8 +5,8 @@ import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { db } from "../db";
-import { users } from "../db/schema";
 import { globalMessages } from "../db/schema/relation-remodel/messages/global-messages";
+import { users } from "@/core/server/db/schema/relation-remodel";
 
 type CreateGlobalMessageInput = {
   content: string;

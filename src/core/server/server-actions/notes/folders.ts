@@ -5,6 +5,7 @@ import { db } from "@/core/server/db";
 import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { folders, notes } from "../../db/schema/notes";
+import { revalidatePath } from "next/cache";
 
 export async function getFolders() {
   const { userId } = auth();
@@ -16,14 +17,16 @@ export async function getFolders() {
   return await db.select().from(folders).where(eq(folders.userId, userId));
 }
 
-export async function createFolder(
-  name: string,
-  parentId: string | null = null,
-) {
+export async function createFolder(formData: FormData) {
+  const name = formData.get('folderName') as string;
   const { userId } = auth();
 
   if (!userId) {
     throw new Error("Unauthorized");
+  }
+
+  if (!name) {
+    throw new Error("Folder name is required");
   }
 
   const newFolder = await db
@@ -32,11 +35,10 @@ export async function createFolder(
       id: generateId("folder"),
       userId,
       name,
-      parentId,
     })
     .returning();
 
-  //   revalidatePath("/dashboard/notes");
+  revalidatePath("/dashboard/notes");
   return newFolder[0];
 }
 
@@ -49,10 +51,7 @@ export async function deleteFolder(folderId: string) {
 
   await db.transaction(async (tx) => {
     // Move all notes in this folder to have no folder (or to a default folder if you prefer)
-    await tx
-      .update(notes)
-      .set({ folderId: null })
-      .where(eq(notes.folderId, folderId));
+    await tx.update(notes), set.where(eq(notes.folderId, folderId));
 
     // Recursively delete all sub-folders
     await deleteSubFolders(tx, folderId);

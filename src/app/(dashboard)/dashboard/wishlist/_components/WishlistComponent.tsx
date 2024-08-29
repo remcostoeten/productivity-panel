@@ -21,7 +21,7 @@ import {
     deleteEntireWishlist,
     updateWishlistItem,
 } from "@/core/server/server-actions/wishlist";
-import useWishlistStore from "@/core/stores/useWishlistStore";
+import { useWishlistStore } from "@/core/stores/useWishlistStore";
 import { WishlistItem } from "@/core/types/types.wishlist";
 import { AnimatePresence, motion } from "framer-motion";
 import { EditIcon, LinkIcon, Trash2Icon, TrashIcon } from "lucide-react";

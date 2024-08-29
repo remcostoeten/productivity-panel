@@ -95,7 +95,17 @@ const Button = forwardRef<HTMLAnchorElement | HTMLButtonElement, ButtonProps>(
           </span>
         ) : (
           <>
-            {variant === "shimmer" && (
+            {variant === "shimmer" ? (
+              <>
+                {arrowPosition === "left" && withArrow && (
+                  <ArrowLeftIcon className="mr-1 size-4 transition-transform duration-300 ease-in-out group-hover:translate-x-1" />
+                )}
+                {props.children}
+                {arrowPosition === "right" && withArrow && (
+                  <ArrowRightIcon className="ml-1 size-4 transition-transform duration-300 ease-in-out group-hover:translate-x-1" />
+                )}
+              </>
+            ) : (
               <>
                 {arrowPosition === "left" && withArrow && (
                   <ArrowLeftIcon className="mr-1 size-4 transition-transform duration-300 ease-in-out group-hover:translate-x-1" />
@@ -106,15 +116,6 @@ const Button = forwardRef<HTMLAnchorElement | HTMLButtonElement, ButtonProps>(
                 )}
               </>
             )}
-            <>
-              {arrowPosition === "left" && withArrow && (
-                <ArrowLeftIcon className="mr-1 size-4 transition-transform duration-300 ease-in-out group-hover:translate-x-1" />
-              )}
-              {props.children}
-              {arrowPosition === "right" && withArrow && (
-                <ArrowRightIcon className="ml-1 size-4 transition-transform duration-300 ease-in-out group-hover:translate-x-1" />
-              )}
-            </>
           </>
         )}
       </Comp>

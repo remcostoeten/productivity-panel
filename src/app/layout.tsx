@@ -61,7 +61,7 @@ export default async function RootLayout({ children }: PageProps) {
               )}
               <QuickActions />
             </div>
-            <Footer />
+            {/* <Footer /> */}
           </ThemeProvider>
         </body>
       </html>

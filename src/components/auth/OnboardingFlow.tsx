@@ -180,9 +180,8 @@ export default function OnboardingFlow() {
               initial={{ scale: 0.5, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: 1 + index * 0.1 }}
-              className={`w-3 h-3 rounded-full mx-1 ${
-                index === currentStep ? "bg-[#ff6c00]" : "bg-zinc-700"
-              }`}
+              className={`w-3 h-3 rounded-full mx-1 ${index === currentStep ? "bg-[#ff6c00]" : "bg-zinc-700"
+                }`}
             />
           ))}
         </motion.div>
@@ -390,9 +389,8 @@ function ThemeOption({
     <motion.div
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
-      className={`relative border border-zinc-700 rounded-lg p-2 cursor-pointer ${
-        isSelected ? "ring-2 ring-[#ff6c00]" : ""
-      }`}
+      className={`relative border border-zinc-700 rounded-lg p-2 cursor-pointer ${isSelected ? "ring-2 ring-[#ff6c00]" : ""
+        }`}
       onClick={onClick}
     >
       <div className="w-full h-20 bg-zinc-800 rounded mb-2 overflow-hidden">

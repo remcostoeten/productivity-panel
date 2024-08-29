@@ -49,9 +49,8 @@ export default function CodeHighlight({
 
   return (
     <section
-      className={`relative flex flex-col text-xs rounded-md border border-solid bg-blend-normal border-zinc-800 ${
-        disableMinWidth ? "" : "max-w-[813px]"
-      }`}
+      className={`relative flex flex-col text-xs rounded-md border border-solid bg-blend-normal border-zinc-800 ${disableMinWidth ? "" : "max-w-[813px]"
+        }`}
     >
       <FileHeader
         title={title}

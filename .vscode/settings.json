@@ -1,5 +1,5 @@
 {
   "editor.renderWhitespace": "boundary",
-  "editor.cursorStyle": "underline-thin",
-  "editor.fontFamily": "Comid Sans"
+  "editor.cursorStyle": "underline",
+  "editor.fontFamily": "Geist mono"
 }

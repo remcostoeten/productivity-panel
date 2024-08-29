@@ -1,6 +1,10 @@
 {
   "compilerOptions": {
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
@@ -32,15 +36,33 @@
     "incremental": false,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "@c/*": ["./src/components/*"],
-      "@ui/*": ["./src/components/ui/*"],
-      "@actions/*": ["./src/core/server/server-actions/*"],
-      "@core/*": ["./src/core/*"],
-      "@dash/*": ["./src/app/(dashboard)/dashboard/*"],
-      "@pages/*": ["./src/app/(marketing)/*"],
-      "@styles/*": ["./src/styles/*"],
-      "~/*": ["./*"]
+      "@/*": [
+        "./src/*"
+      ],
+      "@c/*": [
+        "./src/components/*"
+      ],
+      "@ui/*": [
+        "./src/components/ui/*"
+      ],
+      "@actions/*": [
+        "./src/core/server/server-actions/*"
+      ],
+      "@core/*": [
+        "./src/core/*"
+      ],
+      "@dash/*": [
+        "./src/app/(dashboard)/dashboard/*"
+      ],
+      "@pages/*": [
+        "./src/app/(marketing)/*"
+      ],
+      "@styles/*": [
+        "./src/styles/*"
+      ],
+      "~/*": [
+        "./*"
+      ]
     },
     "plugins": [
       {
@@ -55,5 +77,7 @@
     ".next/types/**/*.ts",
     "src/core/types/global.d.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }

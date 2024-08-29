@@ -103,6 +103,18 @@ CREATE TABLE `shared_notes` (
 	FOREIGN KEY (`shared_with_user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
+CREATE TABLE `assets` (
+	`id` text PRIMARY KEY NOT NULL,
+	`user_id` text NOT NULL,
+	`file_name` text NOT NULL,
+	`file_type` text NOT NULL,
+	`file_size` integer NOT NULL,
+	`url` text NOT NULL,
+	`created_at` integer DEFAULT (strftime('%s', 'now')) NOT NULL,
+	`updated_at` integer DEFAULT (strftime('%s', 'now')) NOT NULL,
+	FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE no action
+);
+--> statement-breakpoint
 CREATE UNIQUE INDEX `user_preferences_user_id_unique` ON `user_preferences` (`user_id`);--> statement-breakpoint
 CREATE UNIQUE INDEX `user_settings_user_id_unique` ON `user_settings` (`user_id`);--> statement-breakpoint
 CREATE UNIQUE INDEX `users_email_unique` ON `users` (`email`);--> statement-breakpoint

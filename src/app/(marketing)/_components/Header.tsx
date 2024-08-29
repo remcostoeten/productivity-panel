@@ -1,8 +1,7 @@
 "use client";
 
 import BrandLogo from "@/components/theme/BrandLogo";
-import { Button, Tooltip, TooltipTrigger } from "@/components/ui";
-import { ModernKbd } from "@/components/ui/kbd";
+import { Button } from "@/components/ui";
 import UniqueBadge from "@/components/ui/UniqueBadge";
 import menuItems, {
   dashboardMenuItems,
@@ -14,8 +13,7 @@ import {
   mobilenavbarVariant,
 } from "@/core/helpers/animations/menu-animations";
 import { cn } from "@/core/helpers/cn";
-import { TooltipContent } from "@c/ui";
-import { SignedIn, SignedOut, UserButton, useClerk } from "@clerk/nextjs";
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { HamburgerMenuIcon } from "@radix-ui/react-icons";
 import { AnimatePresence, motion } from "framer-motion";
 import { AlignJustify, XIcon } from "lucide-react";
@@ -27,46 +25,9 @@ import ShinyCircularButton from "~/src/components/effect/button/circular-btn";
 import SettingsModal from "../../(dashboard)/dashboard/settings/_components/modal/SettingsModal";
 import ReusableDropdownMenu from "./dash-header-dropdown";
 
-const useKeyboardShortcut = () => {
-  const router = useRouter();
-  const { signOut, openSignIn } = useClerk();
-
-  const handleLogin = useCallback(() => {
-    console.log("Logging in...");
-    openSignIn();
-  }, [openSignIn]);
-
-  const handleLogout = useCallback(() => {
-    console.log("Logging out...");
-    signOut(() => router.push("/"));
-  }, [signOut, router]);
-
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      const modifierKey = event.ctrlKey || event.metaKey;
-
-      if (modifierKey && event.key === "l") {
-        event.preventDefault();
-        handleLogin();
-      } else if (modifierKey && event.key === "o") {
-        event.preventDefault();
-        handleLogout();
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [handleLogin, handleLogout]);
-
-  return { handleLogin, handleLogout };
-};
-
 export default function Header() {
   const [isPending, startTransition] = useTransition();
-  const [isLoading, setIsLoading] = useState(false); // Add loading state
+  const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
   const [hamburgerMenuIsOpen, setHamburgerMenuIsOpen] = useState(false);
   const [notification, setNotification] = useState("");
@@ -138,27 +99,11 @@ export default function Header() {
 
           <div className="hidden md:flex ml-auto space-x-4 h-full items-center mr-4">
             <SignedOut>
-              <Tooltip>
-                <TooltipTrigger>
-                  <Flex gap="4">
-                    <ShinyCircularButton href="/sign-in">
-                      Login
-                    </ShinyCircularButton>
-                  </Flex>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <ModernKbd variant="login" />
-                </TooltipContent>
-              </Tooltip>
+              <Flex gap="4">
+                <ShinyCircularButton href="/sign-in">Login</ShinyCircularButton>
+              </Flex>
             </SignedOut>
-            <Tooltip>
-              <TooltipTrigger>
-                <UserButton />
-              </TooltipTrigger>
-              <TooltipContent>
-                <ModernKbd variant="logout" />
-              </TooltipContent>
-            </Tooltip>
+            <UserButton />
           </div>
           <button className="ml-6 md:hidden" onClick={toggleHamburgerMenu}>
             <span className="sr-only">Toggle menu</span>
