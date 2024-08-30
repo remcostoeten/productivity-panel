@@ -87,7 +87,7 @@ export function InboxMessages({ filter }: InboxMessagesProps) {
   }
 
   if (error) {
-    return <div className="text-red-500">{error}</div>;
+    return <div className="text-errorw">{error}</div>;
   }
 
   return (

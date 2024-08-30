@@ -3,12 +3,12 @@ import {
 } from '@/components/ui/';
 import Link from "next/link";
 
-import { Folder, Plus } from "lucide-react";
 import { createFolder } from "@/core/server/server-actions/notes";
+import { Folder, Plus } from "lucide-react";
 
 export default function FolderNavigation({ folders }) {
   return (
-    <div className="w-64 h-screen bg-gray-100 p-4">
+    <div>
       <h2 className="text-lg font-semibold mb-4">Folders</h2>
       <form action={createFolder} className="flex mb-4">
         <Input

@@ -1,18 +1,17 @@
-export * from "./messages/global-messages";
-export * from "./messages/messages";
+export * from "../assets/assets";
+export * from "../notes";
+export * from './messages/index';
 export * from "./users/user_preferences";
 export * from "./users/user_settings";
 export * from "./users/users";
-export * from "../notes";
-export * from "../assets/assets";
 
+import { assets } from "@/core/server/db/schema/assets/assets";
 import { relations } from "drizzle-orm";
-import { messages } from "./messages/messages";
+import { folders, notes, sharedNotes, tags } from "../notes";
+import { messages } from "./messages/index";
 import { userPreferences } from "./users/user_preferences";
 import { userSettings } from "./users/user_settings";
 import { users } from "./users/users";
-import { notes, folders, tags, sharedNotes } from "../notes";
-import { assets } from "@/core/server/db/schema/assets/assets";
 
 export const usersRelations = relations(users, ({ one, many }) => ({
   settings: one(userSettings, {

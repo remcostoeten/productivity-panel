@@ -32,6 +32,7 @@ export default async function DashboardPage() {
       id: userId,
       email: primaryEmail.emailAddress,
       firstName: user.firstName ?? "",
+      isAdmin: user.metadata?.admin ?? false,
       lastName: user.lastName ?? "",
       profileImageUrl: user.imageUrl ?? "",
       emailVerified: primaryEmail.verification?.status === "verified" ?? false,

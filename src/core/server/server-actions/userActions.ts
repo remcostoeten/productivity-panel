@@ -1,44 +1,10 @@
-
-"use server";
-
-import { db } from "@/core/server/db";
-import {
-  messages,
-  userPreferences,
-  users,
-  userSettings,
-} from "@/core/server/db/schema/relation-remodel";
-import { auth } from "@clerk/nextjs/server";
-import crypto from "crypto";
-import { eq, sql } from "drizzle-orm";
-
-// Fallback admin emails for testing
-const FALLBACK_ADMIN_EMAILS = ["admin1@example.com", "admin2@example.com"];
-
-export async function updateLastSignIn() {
-  const { userId } = auth();
-
-  if (!userId) {
-    throw new Error("Not authenticated");
-  }
-
-  try {
-    await db
-      .update(userSettings)
-      .set({ lastSignIn: sql`CAST(strftime('%s', 'now') AS INTEGER)` })
-      .where(eq(userSettings.userId, userId));
-    return { success: true };
-  } catch (error) {
-    console.error("Error updating last sign-in:", error);
-    throw new Error("Failed to update last sign-in");
-  }
-}
 export async function createOrUpdateUser(userData: {
   id: string;
   email: string;
   firstName: string | null;
   lastName: string | null;
   profileImageUrl?: string;
+  admin: boolean;
   emailVerified: boolean;
 }) {
   const { id, email, firstName, lastName, profileImageUrl, emailVerified } =
@@ -59,6 +25,11 @@ export async function createOrUpdateUser(userData: {
       .where(eq(users.id, id))
       .limit(1);
 
+    const isAdmin =
+      FALLBACK_ADMIN_EMAILS.includes(email) ||
+      email === process.env.NEXT_PUBLIC_ADMIN_EMAIL_MAIN ||
+      email === process.env.NEXT_PUBLIC_ADMIN_EMAIL_SECONDARY;
+
     if (existingUser.length > 0) {
       await db.transaction(async (tx) => {
         await tx
@@ -69,6 +40,7 @@ export async function createOrUpdateUser(userData: {
             lastName,
             profileImageUrl,
             emailVerified: emailVerified ? 1 : 0,
+            isAdmin,
             updatedAt: sql`(strftime('%s', 'now'))`,
           })
           .where(eq(users.id, id));
@@ -93,14 +65,10 @@ export async function createOrUpdateUser(userData: {
           lastName,
           profileImageUrl,
           emailVerified: emailVerified ? 1 : 0,
+          isAdmin,
           createdAt: sql`(strftime('%s', 'now'))`,
           updatedAt: sql`(strftime('%s', 'now'))`,
         });
-
-        const isAdmin =
-          FALLBACK_ADMIN_EMAILS.includes(email) ||
-          email === process.env.NEXT_PUBLIC_ADMIN_EMAIL_MAIN ||
-          email === process.env.NEXT_PUBLIC_ADMIN_EMAIL_SECONDARY;
 
         console.log("Is admin:", isAdmin, "for email:", email);
 
@@ -147,144 +115,4 @@ export async function createOrUpdateUser(userData: {
     console.error("Error creating or updating user:", error);
     throw new Error("Failed to create or update user");
   }
-}
-
-export async function getUserProfile() {
-  const { userId } = auth();
-
-  if (!userId) {
-    throw new Error("Not authenticated");
-  }
-  try {
-    const userProfile = await db.query.users.findFirst({
-      where: eq(users.id, userId),
-      with: {
-        settings: true,
-        preferences: true,
-      },
-    });
-
-    if (!userProfile) {
-      throw new Error("User not found");
-    }
-
-    return userProfile;
-  } catch (error) {
-    console.error("Error retrieving user profile:", error);
-    throw new Error("Failed to retrieve user profile");
-  }
-}
-
-export async function updateUserProfile(updateData: {
-  firstName?: string;
-  lastName?: string;
-  username?: string;
-  dateOfBirth?: string;
-  bio?: string;
-  profileImageUrl?: string;
-  showPreloader?: boolean;
-  allowNotifications?: boolean;
-}) {
-  const { userId } = auth();
-  if (!userId) {
-    throw new Error("Not authenticated");
-  }
-  try {
-    const { dateOfBirth, showPreloader, allowNotifications, ...userData } =
-      updateData;
-    await db.transaction(async (tx) => {
-      await tx
-        .update(users)
-        .set({
-          ...userData,
-          dateOfBirth: dateOfBirth
-            ? new Date(dateOfBirth).getTime() / 1000
-            : undefined,
-          updatedAt: sql`(strftime('%s', 'now'))`,
-        })
-        .where(eq(users.id, userId));
-
-      if (showPreloader !== undefined || allowNotifications !== undefined) {
-        await tx
-          .update(userSettings)
-          .set({
-            showPreloader,
-            allowNotifications,
-            updatedAt: sql`(strftime('%s', 'now'))`,
-          })
-          .where(eq(userSettings.userId, userId));
-      }
-    });
-    return { success: true };
-  } catch (error) {
-    console.error("Error updating user profile:", error);
-    throw new Error("Failed to update user profile");
-  }
-}
-
-export async function checkUsernameAvailability(username: string) {
-  try {
-    const existingUser = await db
-      .select({ id: users.id })
-      .from(users)
-      .where(eq(users.username, username))
-      .limit(1);
-    return existingUser.length === 0;
-  } catch (error) {
-    console.error("Error checking username availability:", error);
-    throw new Error("Failed to check username availability");
-  }
-}
-
-export async function deleteUserAccount() {
-  const { userId } = auth();
-  if (!userId) {
-    throw new Error("Not authenticated");
-  }
-
-  try {
-    await db.transaction(async (tx) => {
-      await tx
-        .delete(userPreferences)
-        .where(eq(userPreferences.userId, userId));
-      await tx.delete(userSettings).where(eq(userSettings.userId, userId));
-      await tx.delete(users).where(eq(users.id, userId));
-    });
-    return { success: true };
-  } catch (error) {
-    console.error("Error deleting user account:", error);
-    throw new Error("Failed to delete user account");
-  }
-}
-
-export async function updateNotificationPreference(
-  allowNotifications: boolean,
-) {
-  const { userId } = auth();
-
-  if (!userId) {
-    throw new Error("User not authenticated");
-  }
-
-  await db
-    .update(userSettings)
-    .set({ allowNotifications })
-    .where(eq(userSettings.userId, userId));
-
-  return allowNotifications;
-}
-
-export async function getUserNotificationPreference() {
-  const { userId } = auth();
-
-  if (!userId) {
-    throw new Error("User not authenticated");
-  }
-
-  const settings = await db.query.userSettings.findFirst({
-    where: eq(userSettings.userId, userId),
-    columns: { allowNotifications: true },
-  });
-
-  return settings?.allowNotifications ?? true;
 }

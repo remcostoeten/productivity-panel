@@ -14,10 +14,13 @@ import {
   MessageCircleIcon,
   MoonIcon,
   PlusIcon,
+
   SearchIcon,
   SettingsIcon,
   UserIcon,
 } from "lucide-react";
+
+const DASHBOARD_ROUTE_PREFIX = "/dashboard";
 
 export const sidebarItems: MenuItemType[] = [
   { icon: PlusIcon, label: "Add", href: "/add" },
@@ -28,15 +31,16 @@ export const sidebarItems: MenuItemType[] = [
   { icon: BellIcon, label: "Notifications", href: "/notifications" },
 ];
 
+
 export const menuItems: MenuItemType[] = [
-  { icon: HomeIcon, label: "Dashboard", href: "/dashboard" },
-  { icon: BellDotIcon, label: "Inbox", href: "/dashboard/inbox" },
-  { icon: HeartIcon, label: "Wishlist", href: "/dashboard/wishlist" },
-  { icon: BookOpenIcon, label: "Notes", href: "/dashboard/notes" },
-  { icon: LockIcon, label: "Assets", href: "/dashboard/assets" },
+  { icon: HomeIcon, label: "Dashboard", href: "/" },
+  { icon: BellDotIcon, label: "Inbox", href: "/inbox" },
+  { icon: HeartIcon, label: "Wishlist", href: "/wishlist" },
+  { icon: BookOpenIcon, label: "Notes", href: "/note" },
+  { icon: LockIcon, label: "Assets", href: "/assets" },
   { icon: CalendarIcon, label: "Agenda", href: "/agenda", disabled: true },
   { icon: CheckSquareIcon, label: "Todo", href: "/todo", disabled: true },
-];
+].map((item) => ({ ...item, href: `${DASHBOARD_ROUTE_PREFIX}${item.href}` }));
 
 export const accountItems: MenuItemType[] = [
   { icon: UserIcon, label: "My account", href: "/dashboard/account" },

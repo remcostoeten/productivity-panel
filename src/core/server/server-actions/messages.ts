@@ -4,7 +4,7 @@ import { auth } from "@clerk/nextjs/server";
 import { desc, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { db } from "../db";
-import { messages } from "../db/schema/relation-remodel/messages/messages";
+import { messages } from "../db/schema/relation-remodel/messages";
 
 export async function markMessageAsRead(messageId: number) {
   await db
