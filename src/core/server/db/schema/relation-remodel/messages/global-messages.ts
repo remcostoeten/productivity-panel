@@ -9,4 +9,6 @@ export const globalMessages = sqliteTable("global_messages", {
     .default(sql`(strftime('%s', 'now'))`),
   expiresAt: integer("expires_at"),
   isActive: integer("is_active", { mode: "boolean" }).notNull().default(true),
-});
+  isUrgent: integer("is_urgent", { mode: "boolean" }).notNull().default(false),
+  createdBy: text("created_by").notNull(),
+})

@@ -1,3 +1,4 @@
+
 import { sql } from "drizzle-orm";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { users } from "../users/users";
@@ -13,3 +14,5 @@ export const messages = sqliteTable("messages", {
     .notNull()
     .default(sql`(strftime('%s', 'now'))`),
 });
+
+

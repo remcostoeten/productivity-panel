@@ -1,4 +1,4 @@
-import { createOrUpdateUser } from "@/core/server/server-actions/userActions";
+import { createOrUpdateUser } from "@/core/server/server-actions";
 import { WebhookEvent } from "@clerk/nextjs/server";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
@@ -51,18 +51,11 @@ export async function POST(req: Request) {
   const eventType = evt.type;
 
   if (eventType === "user.created" || eventType === "user.updated") {
-    const {
-      id,
-      email_addresses,
-      first_name,
-      last_name,
-      image_url,
-      primary_email_address_id,
-    } = evt.data;
+    const { id, email_addresses, username, first_name, last_name, image_url, primary_email_address_id } = evt.data;
 
     if (email_addresses && primary_email_address_id) {
       const primaryEmail = email_addresses.find(
-        (email) => email.id === primary_email_address_id,
+        (email) => email.id === primary_email_address_id
       );
 
       if (primaryEmail) {
@@ -92,7 +85,5 @@ export async function POST(req: Request) {
   }
 
   console.log("Webhook received", eventType);
-  return new NextResponse("Webhook received", {
-    status: 200,
-  });
+  return new NextResponse("Webhook received", { status: 200 });
 }

@@ -9,11 +9,13 @@ export default function RootLayout({ children }: { children: PageProps }) {
       <div className="flex h-screen bg-[#0D0D0C] text-white relative">
         <Sidebar />
         <Aside />
-        <main className="flex-1 overflow-auto">{children}</main>
+        <main className="flex-1 overflow-auto p-6 w-full">
+          {children}
+        </main>
         <DotPattern
-          color="rgba(255,255,255,.2"
+          color="rgba(255,255,255,.2)"
           className={cn(
-            "[mask-image:radial-gradient(300px_circle_at_center,white,transparent)]",
+            "[mask-image:radial-gradient(300px_circle_at_center,white,transparent)]"
           )}
         />
       </div>

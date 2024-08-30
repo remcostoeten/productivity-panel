@@ -13,7 +13,7 @@ export default function Aside() {
   const { user } = useUser();
 
   return (
-    <aside className="w-64 bg-[#0D0D0C] p-4">
+    <aside className="w-64 bg-[#0D0D0C] p-4 border-r ">
       <div className="flex items-center gap-3 mb-6">
         <UserButton />
         <div>

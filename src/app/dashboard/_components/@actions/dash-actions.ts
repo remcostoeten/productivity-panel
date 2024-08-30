@@ -1,10 +1,11 @@
 "use server"
 
-import { generateId } from "@/core/helpers/generate-id"
 import { db } from "@/core/server/db"
-import { folders, notes, sharedNotes, tags } from "@/core/server/db/schema/notes"
 import { auth } from "@clerk/nextjs/server"
-import { and, desc, eq, sql } from "drizzle-orm"
+import { eq, and, desc, sql } from "drizzle-orm"
+import { notes, folders, tags, noteTags, sharedNotes } from "@/core/server/db/schema/notes"
+import { users } from "@/core/server/db/schema/relation-remodel/users/users"
+import { generateId } from "@/core/helpers/generate-id"
 import { revalidatePath } from "next/cache"
 
 export async function getStats() {

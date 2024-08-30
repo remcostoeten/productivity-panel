@@ -1,39 +1,29 @@
 'use client'
 
-import { Input } from '@/components/ui/input'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { useState, useTransition } from 'react'
+import { Input } from "@/components/ui/input"
+import { Search } from "lucide-react"
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
 export function SearchBar() {
+    const [query, setQuery] = useState('')
     const router = useRouter()
-    const searchParams = useSearchParams()
-    const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '')
-    const [isPending, startTransition] = useTransition()
 
-    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const newSearchQuery = e.target.value
-        setSearchQuery(newSearchQuery)
-
-        startTransition(() => {
-            const params = new URLSearchParams(searchParams)
-            if (newSearchQuery) {
-                params.set('search', newSearchQuery)
-            } else {
-                params.delete('search')
-            }
-            router.push(`/dashboard?${params.toString()}`)
-        })
+    const handleSearch = (e: React.FormEvent) => {
+        e.preventDefault()
+        router.push(`/dashboard/search?q=${encodeURIComponent(query)}`)
     }
 
     return (
-        <div className="flex justify-between items-center">
-            <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
+        <form onSubmit={handleSearch} className="relative">
+            <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
             <Input
-                className="max-w-sm"
+                type="search"
                 placeholder="Search notes..."
-                value={searchQuery}
-                onChange={handleSearch}
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                className="pl-8"
             />
-        </div>
+        </form>
     )
-}
+} 

@@ -1,43 +1,25 @@
-import { Suspense } from 'react'
- import { ActionButtons } from './_components/ActionButton'
-import { FolderList } from './_components/FolderList'
-import { GlobalMessages } from './_components/GlobalMessages'
-import { NoteList } from './_components/NoteList'
-import { SearchBar } from './_components/SearchBar'
-import { FolderListSkeleton, NoteListSkeleton, StatsCardsSkeleton } from './_components/Skeletons'
-import { StatsCards } from './_components/StatsCards'
-import { WelcomeMessage } from './_components/WelcomeMessage'
+import { db } from "@/core/server/db";
+import { users } from '@/core/server/db/schema/relation-remodel';
+import { auth } from '@clerk/nextjs/server';
+import { eq } from "drizzle-orm";
+import DashboardClient from './DashboardClient';
 
-export default function DashboardPage() {
-    return (
-        <div className="flex flex-col space-y-6 p-6 bg-background">
-            <Suspense fallback={<div>Loading welcome message...</div>}>
-                <WelcomeMessage />
-            </Suspense>
-            <SearchBar />
+export default async function DashboardPage() {
+  const { userId } = auth();
 
-            <Suspense fallback={<div>Loading messages...</div>}>
-                <GlobalMessages />
-            </Suspense>
+  if (!userId) {
+    // Redirect to sign-in page if user is not authenticated
+    if (typeof window !== 'undefined') {
+      window.location.href = '/sign-in';
+    }
+    return null;
+  }
 
-            <Suspense fallback={<StatsCardsSkeleton />}>
-                <StatsCards />
-            </Suspense>
+  let user = null;
+  if (userId) {
+    const result = await db.select().from(users).where(eq(users.id, userId));
+    user = result[0];
+  }
 
-            <div className="flex space-x-4">
-                <div className="w-1/4">
-                    <Suspense fallback={<FolderListSkeleton />}>
-                        <FolderList />
-                    </Suspense>
-                </div>
-                <div className="w-3/4">
-                    <Suspense fallback={<NoteListSkeleton />}>
-                        <NoteList />
-                    </Suspense>
-                </div>
-            </div>
-
-            <ActionButtons />
-        </div>
-    )
+  return <DashboardClient user={user} userId={userId} />;
 }
