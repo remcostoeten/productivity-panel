@@ -1,15 +1,10 @@
 "use client";
-import DangerZone from "@/app/(dashboard)/dashboard/settings/_components/DangerZone";
-import { useUserSettings } from "@/app/(dashboard)/dashboard/settings/_hooks/useUserSettings";
-import UserPreferences from "@/app/(dashboard)/dashboard/settings/UserPreferences";
-import { Button } from "@/components/ui/button";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { UserProfile } from "@clerk/nextjs";
+  Button, Dialog, DialogContent, DialogHeader, DialogTitle
+} from '@/components/ui/';
+import DangerZone from "@/app/dashboard/settings/_components/DangerZone";
+import { useUserSettings } from "@/app/dashboard/settings/_hooks/useUserSettings";
+import UserPreferences from "@/app/dashboard/settings/UserPreferences";
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -42,14 +37,10 @@ export function OldSettingsModal({ isOpen, onClose }: SettingsModalProps) {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-[#1C2128] border-gray-700 text-gray-300 max-w-3xl">
         <DialogHeader>
-          <DialogTitle>User Settings</DialogTitle>
+          <DialogTitle>Users Settings</DialogTitle>
         </DialogHeader>
         <div className="mt-4">
-          <UserProfile
-            user={user}
-            formData={formData}
-            handleInputChange={handleInputChange}
-          />
+
           <UserPreferences settings={settings} handleToggle={handleToggle} />
           <div className="flex justify-start space-x-4 mt-8">
             <Button

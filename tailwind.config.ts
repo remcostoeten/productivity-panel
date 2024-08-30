@@ -22,7 +22,7 @@ const config = {
       },
       colors: {
         // Darks (bg, cards etc)
-        'dark-bg': 'var(--dark-bg)', // used in footer
+        'dark-bg': 'var(--dark-bg)', // used in footer 
         'dark-section': 'var(--dark-section)', // used as sections (cards for example)
         'dark-section--lighter': 'var(--dark-section--lighter)', // used as sections (cards for example)
         'body-gradient': 'var(--body-gradient)', // used in footer
@@ -157,8 +157,13 @@ const config = {
             backgroundPosition: '-200% 0',
           },
         },
+        "skeleton-shimmer": {
+          '0%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(100%)' },
+        },
       },
       animation: {
+        "skeleton-shimmer": 'shimmer 2s infinite',
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         'border-beam': 'border-beam calc(var(--duration)*1s) infinite linear',

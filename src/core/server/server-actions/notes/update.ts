@@ -1,6 +1,6 @@
 "use server";
 
-import { Note } from "@/app/(dashboard)/dashboard/notes/notes.types";
+import { Note } from "@/app/dashboard/notes/notes.types";
 import { db } from "@/core/server/db";
 import { notes } from "@/core/server/db/schema/notes/notes";
 import { eq } from "drizzle-orm";

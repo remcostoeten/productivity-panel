@@ -18,11 +18,11 @@ import { HamburgerMenuIcon } from "@radix-ui/react-icons";
 import { AnimatePresence, motion } from "framer-motion";
 import { AlignJustify, XIcon } from "lucide-react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useState, useTransition } from "react";
 import Flex from "~/src/components/atoms/Flex";
 import ShinyCircularButton from "~/src/components/effect/button/circular-btn";
-import SettingsModal from "../../(dashboard)/dashboard/settings/_components/modal/SettingsModal";
+import SettingsModal from "../../dashboard/settings/_components/modal/SettingsModal";
 import ReusableDropdownMenu from "./dash-header-dropdown";
 
 export default function Header() {
@@ -33,10 +33,6 @@ export default function Header() {
   const [notification, setNotification] = useState("");
 
   const pathname = usePathname();
-
-  if (pathname.includes("dash")) {
-    return null;
-  }
 
   const toggleHamburgerMenu = useCallback(() => {
     startTransition(() => {
@@ -65,6 +61,11 @@ export default function Header() {
 
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
+
+  // Early return to avoid rendering the header for dashboard routes
+  if (pathname.includes("dash")) {
+    return null;
+  }
 
   return (
     <>

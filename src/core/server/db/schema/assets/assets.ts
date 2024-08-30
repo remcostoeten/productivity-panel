@@ -13,10 +13,25 @@ export const assets = sqliteTable("assets", {
   fileType: text("file_type").notNull(),
   fileSize: integer("file_size").notNull(),
   url: text("url").notNull(),
+  visibility: text("visibility").notNull().default("private"),
   createdAt: integer("created_at")
     .notNull()
     .default(sql`(strftime('%s', 'now'))`),
   updatedAt: integer("updated_at")
     .notNull()
     .default(sql`(strftime('%s', 'now'))`),
+});
+
+export const assetCategories = sqliteTable("asset_categories", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull().unique(),
+});
+
+export const assetCategoryRelations = sqliteTable("asset_category_relations", {
+  assetId: text("asset_id")
+    .notNull()
+    .references(() => assets.id),
+  categoryId: text("category_id")
+    .notNull()
+    .references(() => assetCategories.id),
 });

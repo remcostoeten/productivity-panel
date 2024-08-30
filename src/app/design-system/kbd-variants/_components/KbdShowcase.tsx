@@ -1,16 +1,12 @@
 "use client";
 
-import { Kbd } from "@/components/atoms/Kbd";
-import { Button } from "@/components/ui/button";
-import CodeHighlight from "@/components/ui/CodeHighlight/CodeHighlight";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+  Button, Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle
+} from '@/components/ui/';
+import { Kbd } from "@/components/atoms/Kbd";
+
+import CodeHighlight from "@/components/ui/CodeHighlight/CodeHighlight";
+
 import { useKeyboard } from "@/core/hooks/useKbdKeyyboard";
 import { useCallback, useEffect, useState } from "react";
 import { DesignSystemWrapper } from "../../_components/DesignSystemWrapper";

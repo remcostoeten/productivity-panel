@@ -52,7 +52,7 @@
         "./src/core/*"
       ],
       "@dash/*": [
-        "./src/app/(dashboard)/dashboard/*"
+        "src/app/dashboard/*"
       ],
       "@pages/*": [
         "./src/app/(marketing)/*"

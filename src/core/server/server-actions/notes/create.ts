@@ -1,5 +1,5 @@
 "use server";
-import { Note } from "@/app/(dashboard)/dashboard/notes/notes.types";
+import { Note } from "@/app/dashboard/notes/notes.types";
 import { generateId } from "@/core/helpers/generate-id";
 import { db } from "@/core/server/db";
 import { notes } from "@/core/server/db/schema/notes/notes";

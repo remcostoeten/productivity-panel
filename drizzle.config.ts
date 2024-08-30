@@ -1,3 +1,4 @@
+
 import type { Config } from 'drizzle-kit'
 
 /** @type {import('drizzle-kit').Config} */

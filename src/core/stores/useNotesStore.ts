@@ -1,7 +1,7 @@
 "use client";
 
-import { getNote } from "@/app/(dashboard)/dashboard/note/actions/action";
-import { Folder, Note } from "@/app/(dashboard)/dashboard/notes/notes.types";
+import { getNote } from "@/app/dashboard/note/actions/action";
+import { Folder, Note } from "@/app/dashboard/notes/notes.types";
 import {
   createFolder,
   createNote,

@@ -1,8 +1,10 @@
 "use client";
 
+import {
+  BorderBeam, Button
+} from '@/components/ui/';
 import { HomeImageSkeleton } from "@/components/effect/skeletons";
-import { BorderBeam } from "@/components/ui/border-beam";
-import { Button } from "@/components/ui/button";
+
 import TextShimmer from "@/components/ui/text-shimmer";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 import { useInView } from "framer-motion";
@@ -25,7 +27,7 @@ export default function HeroSection() {
           <ArrowRightIcon className="ml-1 size-3 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" />
         </TextShimmer>
       </div>
-      <h1 className="-translate-y-4 text-balance bg-gradient-to-br from-black from-30% to-black/40 bg-clip-text py-6 text-5xl font-medium leading-none tracking-tighter text-transparent  sm:text-6xl md:text-7xl lg:text-8xl dark:from-white dark:to-white/40">
+      <h1 className="lg:!text-nowrap -translate-y-4 text-balance bg-gradient-to-br from-black from-30% to-black/40 bg-clip-text py-6 text-5xl font-medium leading-none tracking-tighter text-transparent  sm:text-6xl md:text-7xl lg:text-7xl dark:from-white dark:to-white/40">
         A platform for keeping <br className="hidden md:block" /> track of{" "}
         <i>anything</i>.
       </h1>
@@ -49,8 +51,9 @@ export default function HeroSection() {
         className="relative mt-32  [perspective:2000px] after:absolute after:inset-0 after:z-50 after:[background:linear-gradient(to_top,hsl(var(--background))_30%,transparent)]"
       >
         <div
-          className={`rounded-xl border border-white/10 bg-white bg-opacity-[0.01] before:absolute before:bottom-1/2 before:left-0 before:top-0 before:size-full before: before:[background-image:linear-gradient(to_bottom,var(--color-one),var(--color-one),transparent_40%)] before:[filter:blur(180px)] ${inView ? "before:animate-image-glow" : ""
-            }`}
+          className={`rounded-xl border border-white/10 bg-white bg-opacity-[0.01] before:absolute before:bottom-1/2 before:left-0 before:top-0 before:size-full before: before:[background-image:linear-gradient(to_bottom,var(--color-one),var(--color-one),transparent_40%)] before:[filter:blur(180px)] ${
+            inView ? "before:animate-image-glow" : ""
+          }`}
         >
           <BorderBeam
             size={200}

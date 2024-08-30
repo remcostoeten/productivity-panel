@@ -1,7 +1,10 @@
 "use client";
 
+import {
+  Tabs, TabsContent, TabsList, TabsTrigger
+} from '@/components/ui/';
 import { Button } from "@/components/ui";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 import { useState } from "react";
 import { DesignSystemWrapper } from "../_components/DesignSystemWrapper";
 

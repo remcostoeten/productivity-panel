@@ -1,4 +1,4 @@
-import { MenuItemType } from "@/app/(dashboard)/dashboard.types";
+import { MenuItemType } from "@/app/dashboard/dashboard.types";
 import {
   BellDotIcon,
   BellIcon,
@@ -33,7 +33,7 @@ export const menuItems: MenuItemType[] = [
   { icon: BellDotIcon, label: "Inbox", href: "/dashboard/inbox" },
   { icon: HeartIcon, label: "Wishlist", href: "/dashboard/wishlist" },
   { icon: BookOpenIcon, label: "Notes", href: "/dashboard/notes" },
-  { icon: LockIcon, label: "Vault", href: "/vault", disabled: true },
+  { icon: LockIcon, label: "Assets", href: "/dashboard/assets" },
   { icon: CalendarIcon, label: "Agenda", href: "/agenda", disabled: true },
   { icon: CheckSquareIcon, label: "Todo", href: "/todo", disabled: true },
 ];

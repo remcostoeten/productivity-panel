@@ -1,14 +1,8 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from "@/components/ui/popover";
-import { Textarea } from "@/components/ui/textarea";
+  Button, Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, Input, Popover, PopoverContent, PopoverTrigger, Textarea
+} from '@/components/ui/';
 import { Loader2, Pencil } from "lucide-react";
 import dynamic from 'next/dynamic';
 import React, { useEffect, useState, useTransition } from 'react';
@@ -47,6 +41,7 @@ export default function AccessibleEditForm({
     onEdit,
     ariaLabel,
     inputType = 'input',
+    
     triggerStyle = 'button',
     customTrigger,
     popoverWidth = 'w-80',

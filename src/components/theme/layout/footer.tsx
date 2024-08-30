@@ -1,4 +1,7 @@
-import { Button } from "@/components/ui/button";
+
+import {
+  Button
+} from '@/components/ui/';
 import { footerLinks } from "@/core/data/landing-menu-items";
 import { siteConfig } from "@/core/data/site-config";
 import { getLatestDeploymentInfo } from "@/core/server/server-actions/latest-deployment";

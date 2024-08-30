@@ -1,17 +1,10 @@
 "use client";
 
+import {
+  Dialog, DialogContent, DialogHeader, DialogTitle, Popover, PopoverContent, PopoverTrigger
+} from '@/components/ui/';
 import { Button } from "@/components/ui";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+
 import { ArrowLeftIcon, ArrowRightIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
 import ShinyCircularButton from "~/src/components/effect/button/circular-btn";

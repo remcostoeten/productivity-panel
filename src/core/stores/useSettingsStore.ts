@@ -1,6 +1,6 @@
 "use client";
 
-import { UserSettingsState } from "@/app/(dashboard)/dashboard/settings/types.settings";
+import { UserSettingsState } from "@/app/dashboard/settings/types.settings";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
